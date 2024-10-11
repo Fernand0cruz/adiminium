@@ -16,7 +16,7 @@ Este sistema de **Gerenciamento de Produtos e Clientes** foi desenvolvido utiliz
   
 ## Nota de Atenção
 
-Ao rodar o sistema com Docker, as **migrations** serão executadas automaticamente, juntamente com o **seeding** do banco de dados. Isso criará dois usuários:
+Ao rodar o sistema com Docker, as **migrations** serão executadas automaticamente. Após rodar o seeding do banco de dados, serão criados dois usuários:
 
 - **Admin**: um único usuário administrador com as seguintes credenciais:
   - **Email**: admin@gmail.com
