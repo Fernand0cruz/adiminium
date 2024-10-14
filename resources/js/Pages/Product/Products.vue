@@ -8,6 +8,7 @@ import TextInput from '@/Components/TextInput.vue';
 import { usePage } from '@inertiajs/vue3';
 
 // rever: inserir paginação
+// criar funcao para requisicao
 const { props } = usePage();
 const userId = props.auth.user.id;
 
@@ -23,12 +24,23 @@ onMounted(async () => await fetchProducts());
 
 const fetchProducts = async () => {
     try {
-        const response = await axios.get('/api/products');
+        const token = localStorage.getItem('auth_token');
+        if (!token) {
+            errorMessage.value = 'Token de autenticação não encontrado, favor sair e entrar no sistema novamente.';
+            return;
+        }
+
+        const response = await axios.get('/api/products', {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
         products.value = response.data.products;
     } catch (error) {
         errorMessage.value = 'Erro ao carregar produtos';
     }
 };
+
 
 const getProductPhotoUrl = (photoPath) => photoPath.startsWith('http') ? photoPath : `/storage/${photoPath}`;
 
@@ -67,10 +79,19 @@ const handleStockQuantityInput = (event) => {
 
 const submit = async () => {
     try {
+        const token = localStorage.getItem('auth_token');
+        if (!token) {
+            errorMessage.value = 'Token de autenticação não encontrado, favor sair e entrar no sistema novamente.';
+            return;
+        }
         const response = await axios.post('/api/order', {
             client_id: userId,
             product_id: selectedProduct.value.id,
             quantity: stock_quantity.value
+        }, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
         });
 
         if (response.data.success) {

@@ -34,7 +34,17 @@ onMounted(async () => await fetchProduct());
 const fetchProduct = async () => {
     try {
         const id = getProductIdFromUrl();
-        const response = await axios.get(`/api/product/${id}`);
+        const token = localStorage.getItem('auth_token');
+        if (!token) {
+            errorMessage.value = 'Token de autenticação não encontrado, favor sair e entrar no sistema novamente.';
+            return;
+        }
+
+        const response = await axios.get(`/api/product/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
         product.value = response.data.product;
     } catch (error) {
         errorMessage.value = 'Erro ao carregar produto';
@@ -45,10 +55,20 @@ const getProductPhotoUrl = (photoPath) => photoPath.startsWith('http') ? photoPa
 
 const makeOrder = async () => {
     try {
+        const token = localStorage.getItem('auth_token');
+        if (!token) {
+            errorMessage.value = 'Token de autenticação não encontrado, favor sair e entrar no sistema novamente.';
+            return;
+        }
+
         const response = await axios.post('/api/order', {
             client_id: props.auth.user.id,
             product_id: product.value.id,
             quantity: stock_quantity.value
+        }, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
         });
 
         if (response.data.success) {
@@ -78,7 +98,7 @@ const openModal = (product) => {
 const closeModal = () => {
     isModalOpen.value = false;
     errorMessage.value = '';
-} 
+}
 
 const formatPrice = (value) => {
     const cleaned = value.replace(/\D/g, '');
@@ -94,10 +114,10 @@ const handleInputChange = (event) => {
 
     if (name === 'price') {
         if (numericValue < 1) {
-            form.value.price = formatPrice('1'); 
+            form.value.price = formatPrice('1');
             errorMessage.value = 'O valor mínimo para o preço é R$ 0,01.';
-        } else if (numericValue > 1000000) { 
-            form.value.price = formatPrice('1000000'); 
+        } else if (numericValue > 1000000) {
+            form.value.price = formatPrice('1000000');
             errorMessage.value = 'O valor máximo para o preço é R$ 10.000,00.';
         } else {
             form.value.price = formatPrice(cleanedValue);
@@ -147,7 +167,19 @@ const submit = async () => {
     formData.append('stock_quantity', form.value.stock_quantity);
 
     try {
-        const response = await axios.patch(`/api/product/${product.value.id}`, Object.fromEntries(formData.entries()));
+        const token = localStorage.getItem('auth_token');
+        if (!token) {
+            errorMessage.value = 'Token de autenticação não encontrado, favor sair e entrar no sistema novamente.';
+            return;
+        }
+        const response = await axios.patch(`/api/product/${product.value.id}`,
+            Object.fromEntries(formData.entries()),
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
 
         if (response.data.success) {
             successMessage.value = response.data.success || 'Produto atualizado com sucesso!';

@@ -30,7 +30,16 @@ onMounted(async () => await fetchOrders());
 
 const fetchOrders = async () => {
     try {
-        const response = await axios.get('/api/orders');
+        const token = localStorage.getItem('auth_token');
+        if (!token) {
+            errorMessage.value = 'Token de autenticação não encontrado, favor sair e entrar no sistema novamente.';
+            return; 
+        }
+        const response = await axios.get('/api/orders', {
+            headers: {
+                Authorization: `Bearer ${token}` 
+            }
+        });
         ordersOpen.value = response.data.ordersOpen;
         ordersPending.value = response.data.ordersPending;
     } catch (error) {
@@ -40,7 +49,16 @@ const fetchOrders = async () => {
 
 const updateOrder = async (order) => {
     try {
-        await axios.patch(`/api/order/${order.id}`, { quantity: order.quantity });
+        const token = localStorage.getItem('auth_token');
+        if (!token) {
+            errorMessage.value = 'Token de autenticação não encontrado, favor sair e entrar no sistema novamente.';
+            return; 
+        }
+        await axios.patch(`/api/order/${order.id}`, { quantity: order.quantity }, {
+            headers: {
+                Authorization: `Bearer ${token}` 
+            }
+        });
     } catch (error) {
         errorMessage.value = 'Erro ao atualizar o pedido.';
     }
@@ -64,7 +82,17 @@ const decrementQuantity = (order) => {
 
 const deleteOrder = async (order) => {
     try {
-        const response = await axios.delete(`/api/order/${order.id}`);
+        const token = localStorage.getItem('auth_token');
+        if (!token) {
+            errorMessage.value = 'Token de autenticação não encontrado, favor sair e entrar no sistema novamente.';
+            return; 
+        }
+
+        const response = await axios.delete(`/api/order/${order.id}`, {
+            headers: {
+                Authorization: `Bearer ${token}` 
+            }
+        });
         if (response.data.success) {
             successMessage.value = response.data.success || 'Pedido excluído com sucesso!';
             ordersOpen.value = ordersOpen.value.filter(o => o.id !== order.id);
@@ -78,11 +106,20 @@ const deleteOrder = async (order) => {
 
 const sendOrder = async () => {
     try {
+        const token = localStorage.getItem('auth_token');
+        if (!token) {
+            errorMessage.value = 'Token de autenticação não encontrado, favor sair e entrar no sistema novamente.';
+            return; 
+        }
         const response = await axios.post('/api/sendorder', {
             client_id: userId,
             order_data: ordersOpen.value,
             status: 'pending',
-        })
+        }, {
+            headers: {
+                Authorization: `Bearer ${token}` 
+            }
+        });
         fetchOrders();
         if (response.data.success) {
             successMessage.value = response.data.success || 'Pedidos criado com sucesso!';

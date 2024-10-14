@@ -62,7 +62,17 @@ const submit = async () => {
     formData.append('password_confirmation', form.value.password_confirmation);
 
     try {
-        const response = await axios.post('/api/client', formData);
+        const token = localStorage.getItem('auth_token'); 
+        if (!token) {
+            errorMessage.value = 'Token de autenticação não encontrado, favor sair e entrar no sistema novamente.';
+            return; 
+        }
+        
+        const response = await axios.post('/api/client', formData, {
+            headers: {
+                Authorization: `Bearer ${token}` 
+            }
+        });
         if(response.data.success) {
             successMessage.value = response.data.success || 'Cliente registrado com sucesso!';
             resetForm();

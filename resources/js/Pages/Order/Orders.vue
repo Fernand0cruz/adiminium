@@ -8,10 +8,19 @@ import { onMounted, ref } from 'vue';
 
 const allOrders = ref([]);
 
-onMounted(async () => await fetchOrders() );
+onMounted(async () => await fetchOrders());
 
 const fetchOrders = async () => {
-    const response = await axios('/api/allorders')
+    const token = localStorage.getItem('auth_token');
+    if (!token) {
+        errorMessage.value = 'Token de autenticação não encontrado, favor sair e entrar no sistema novamente.';
+        return;
+    }
+    const response = await axios('/api/allorders', {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
     allOrders.value = response.data.allOrders
 }
 </script>

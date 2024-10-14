@@ -91,7 +91,16 @@ const submit = async () => {
     }
 
     try {
-        const response = await axios.post('/api/product', formData);
+        const token = localStorage.getItem('auth_token'); 
+        if (!token) {
+            errorMessage.value = 'Token de autenticação não encontrado, favor sair e entrar no sistema novamente.';
+            return; 
+        }
+        const response = await axios.post('/api/product', formData, {
+            headers: {
+                Authorization: `Bearer ${token}` 
+            }
+        });
         if (response.data.success) {
             successMessage.value = response.data.success || 'Produto registrado com sucesso!';
             errorMessage.value = '';

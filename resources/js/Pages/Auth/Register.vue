@@ -5,6 +5,7 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import axios from 'axios';
 
 const form = useForm({
     name: '',
@@ -13,11 +14,33 @@ const form = useForm({
     password_confirmation: '',
 });
 
-const submit = () => {
-    form.post(route('register'), {
-        onFinish: () => form.reset('password', 'password_confirmation'),
-    });
+const submit = async () => {
+    form.clearErrors();
+    try {
+        const response = await axios.post('register', form);
+        if (response.data.success) {
+            localStorage.setItem('auth_token', response.data.token);
+            window.location.href = response.data.redirect_url;
+        } else if (response.data.error) {
+            form.errors.error = response.data.error
+        }
+    } catch (error) {
+        if (error.response) {
+           
+            if (error.response.data.errors) {
+                for (const [key, messages] of Object.entries(error.response.data.errors)) {
+                    form.setError(key, messages[0]);
+                }
+            } else {
+                form.setError('error', error.response.data.error || 'Ocorreu um erro inesperado.');
+            }
+        } else {
+            console.error('An unexpected error occurred:', error);
+        }
+    }
 };
+
+
 </script>
 
 <template>

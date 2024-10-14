@@ -17,7 +17,17 @@ onMounted(async () => {
 
 const fetchClients = async () => {
     try {
-        const response = await axios.get('/api/clients');
+        const token = localStorage.getItem('auth_token'); 
+        if (!token) {
+            errorMessage.value = 'Token de autenticação não encontrado, favor sair e entrar no sistema novamente.';
+            return; 
+        }
+
+        const response = await axios.get('/api/clients', {
+            headers: {
+                Authorization: `Bearer ${token}` 
+            }
+        });
         clients.value = response.data.clients;
     } catch (error) {
         errorMessage.value = 'Erro ao carregar clientes';
@@ -27,7 +37,17 @@ const fetchClients = async () => {
 const deleteItem = async () => {
     if (!itemToDelete.value) return;
     try {
-        const response = await axios.delete(`/api/client/${itemToDelete.value}`);
+        const token = localStorage.getItem('auth_token'); 
+        if (!token) {
+            errorMessage.value = 'Token de autenticação não encontrado, favor sair e entrar no sistema novamente.';
+            return; 
+        }
+
+        const response = await axios.delete(`/api/client/${itemToDelete.value}`, {
+            headers: {
+                Authorization: `Bearer ${token}` 
+            }
+        });
         if (response.data.success) {
             successMessage.value = response.data.success || 'Cliente excluído com sucesso!';
             closeModal();

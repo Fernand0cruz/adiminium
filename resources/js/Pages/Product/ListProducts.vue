@@ -18,17 +18,37 @@ onMounted(async () => {
 
 const fetchProducts = async () => {
     try {
-        const response = await axios.get('/api/products');
+        const token = localStorage.getItem('auth_token'); 
+        if (!token) {
+            errorMessage.value = 'Token de autenticação não encontrado, favor sair e entrar no sistema novamente.';
+            return; 
+        }
+        
+        const response = await axios.get('/api/products', {
+            headers: {
+                Authorization: `Bearer ${token}` 
+            }
+        });
         products.value = response.data.products;
     } catch (error) {
         errorMessage.value = 'Erro ao carregar produtos';
     }
 };
 
+
 const deleteItem = async () => {
     if (!itemToDelete.value) return;
     try {
-        const response = await axios.delete(`/api/product/${itemToDelete.value}`);
+        const token = localStorage.getItem('auth_token'); 
+        if (!token) {
+            errorMessage.value = 'Token de autenticação não encontrado, favor sair e entrar no sistema novamente.';
+            return; 
+        }
+        const response = await axios.delete(`/api/product/${itemToDelete.value}`, {
+            headers: {
+                Authorization: `Bearer ${token}` 
+            }
+        });
         if (response.data.success) {
             successMessage.value = response.data.success || 'Produto excluído com sucesso!';
             closeModal();

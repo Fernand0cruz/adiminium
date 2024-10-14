@@ -51,7 +51,16 @@ onMounted(async () => await fetchClient());
 
 const fetchClient = async () => {
     const id = getClientFromUrl();
-    const response = await axios.get(`/api/client/${id}`);
+    const token = localStorage.getItem('auth_token');
+    if (!token) {
+        errorMessage.value = 'Token de autenticação não encontrado, favor sair e entrar no sistema novamente.';
+        return;
+    }
+    const response = await axios.get(`/api/client/${id}`, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
     client.value = response.data.client;
 };
 
@@ -88,7 +97,7 @@ const submit = async () => {
         } else {
             errorMessage.value = 'Erro inesperado ao atualizar o cliente';
         }
-        
+
     } catch (error) {
         errorMessage.value = error.response?.data?.message || 'Erro ao atualizar cliente';
     }
@@ -150,7 +159,8 @@ const submit = async () => {
                     <div class="flex gap-5">
                         <div class="w-1/2">
                             <InputLabel for="password" value="Senha" />
-                            <TextInput id="password" type="password" class="mt-1 block w-full" v-model="form.password" />
+                            <TextInput id="password" type="password" class="mt-1 block w-full"
+                                v-model="form.password" />
                         </div>
                         <div class="w-1/2">
                             <InputLabel for="confirmPassword" value="Confirmar Senha" />

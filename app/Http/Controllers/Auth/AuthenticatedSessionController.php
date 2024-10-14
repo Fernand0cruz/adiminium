@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -24,32 +25,43 @@ class AuthenticatedSessionController extends Controller
         ]);
     }
 
-    /**
-     * Handle an incoming authentication request.
-     */
-    public function store(LoginRequest $request): RedirectResponse
+    //funcao alterada para gerar token para a auth da api ao logar user
+    public function store(LoginRequest $request): JsonResponse
     {
-        $request->authenticate();
+        try {
+            $request->authenticate();
+        } catch (\Illuminate\Auth\AuthenticationException $e) {
+            return response()->json([
+                'error' => 'Credenciais inválidas.',
+            ], 401); 
+        }
 
         $request->session()->regenerate();
 
         $user = $request->user();
 
-        if ($user->role === 'admin') {
-            return redirect()->intended(route('home', absolute: false));
-        } elseif ($user->role === 'client') {
-            return redirect()->intended(route('products', absolute: false));
-        }
+        $token = $user->createToken($user->name . 'Auth-Token')->plainTextToken;
 
-        return redirect()->intended(route('home', absolute: false));
+        return response()->json([
+            'success' => 'Login bem-sucedido',
+            'token_type' => 'Bearer',
+            'token' => $token,
+            'redirect_url' => $user->role === 'admin' ? route('home') : route('products'),
+        ], 200); 
     }
 
 
     /**
      * Destroy an authenticated session.
      */
+    //funcao alterada para destruir o token de auth da api ao deslogar user
     public function destroy(Request $request): RedirectResponse
     {
+        $user = $request->user();
+
+        if ($user) {
+            $user->tokens()->delete(); 
+        }
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();

@@ -4,8 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -28,7 +27,8 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request): RedirectResponse
+     //funcao alterada para gerar token para a auth da api ao registrar user
+    public function store(Request $request): JsonResponse
     {
         $request->validate([
             'name' => 'required|string|max:255',
@@ -37,7 +37,9 @@ class RegisteredUserController extends Controller
         ]);
 
         if (User::where('role', 'admin')->exists()) {
-            return redirect()->route('register')->withErrors(['error' => 'Já possui um Administrador no sistema.']);
+            return response()->json([
+                'error' => 'Já existe um ADMIN no sistema',
+            ], 409);
         }
 
         $user = User::create([
@@ -49,10 +51,21 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        event(new Registered($user));
-
+        $token = $user->createToken($user->name . 'Auth-Token')->plainTextToken;
+        
         Auth::login($user);
 
-        return redirect(route('home', absolute: false));
+        if ($user) {
+
+            return response()->json([
+                'success' => 'Cadastro bem-sucedido',
+                'token_type' => 'Bearer',
+                'token' => $token,
+                'redirect_url' => route('home'), 
+            ], 201);
+        }
+        return response()->json([
+            'error' => 'Erro no cadastro',
+        ], 500);
     }
 }
