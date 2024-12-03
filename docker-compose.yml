@@ -1,0 +1,74 @@
+services:
+    # Serviço do banco de dados MySQL
+    mysql:
+        image: mysql:5.7 # Usa a imagem oficial do MySQL versão 5.7
+        container_name: mysql # Nome do container para o serviço
+        restart: unless-stopped # Reinicia o container a menos que seja parado manualmente
+        environment:
+            MYSQL_DATABASE: ${DB_DATABASE} # Nome do banco de dados, configurado via variável de ambiente
+            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD} # Senha do root do MySQL, configurada via variável de ambiente
+            MYSQL_USER: ${DB_USERNAME} # Usuário do MySQL, configurado via variável de ambiente
+            MYSQL_PASSWORD: ${DB_PASSWORD} # Senha do usuário do MySQL, configurada via variável de ambiente
+        ports:
+            - "3306:3306" # Mapeia a porta 3306 do container para a porta 3306 do host
+        volumes:
+            - dbdata:/var/lib/mysql # Monta o volume 'dbdata' no diretório de dados do MySQL para persistência
+        networks:
+            - app-network # Conecta o container à rede 'app-network'
+
+    # Serviço do PHP-FPM (Aplicação)
+    app:
+        build: . # Usa o Dockerfile no diretório atual para construir a imagem
+        container_name: app # Nome do container para o serviço
+        restart: unless-stopped # Reinicia o container a menos que seja parado manualmente
+        working_dir: /var/www/html # Diretório de trabalho dentro do container
+        volumes:
+            - ./:/var/www/html # Monta o diretório atual como /var/www/html dentro do container
+        depends_on:
+            - mysql # O serviço 'app' depende do serviço 'mysql' estar pronto antes de iniciar
+        networks:
+            - app-network # Conecta o container à rede 'app-network'
+
+    # phpmyadmin:
+        image: phpmyadmin # Usa a imagem oficial do phpMyAdmin
+        container_name: phpmyadmin # Nome do container para o serviço
+        restart: unless-stopped # Reinicia o container a menos que seja parado manualmente
+        environment: 
+            PMA_HOST: mysql # Nome do serviço do MySQL (container) para o phpMyAdmin se conectar
+            PMA_PORT: 3306 # Porta do MySQL para o phpMyAdmin se conectar
+        ports:
+            - "8080:80"  # Mapeia a porta 8080 do container para a porta 80 do host
+        networks:
+            - app-network # Conecta o container à rede 'app-network'
+
+    # Serviço do Nginx (Webserver)
+    webserver:
+        image: nginx:alpine # Usa a imagem oficial do Nginx com base no Alpine Linux
+        container_name: nginx # Nome do container para o serviço
+        restart: unless-stopped # Reinicia o container a menos que seja parado manualmente
+        ports:
+            - "80:80" # Mapeia a porta 80 do container para a porta 80 do host
+        volumes:
+            - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf # Monta o arquivo de configuração do Nginx
+            - ./:/var/www/html # Monta o diretório atual como /var/www/html dentro do container
+        depends_on:
+            - app # O serviço 'webserver' depende do serviço 'app' estar pronto antes de iniciar
+        networks:
+            - app-network # Conecta o container à rede 'app-network'
+
+    # Serviço do Redis
+    redis:
+        image: redis:alpine # Usa a imagem oficial do Redis com base no Alpine Linux
+        container_name: redis # Nome do container para o serviço
+        restart: unless-stopped # Reinicia o container a menos que seja parado manualmente
+        networks:
+            - app-network # Conecta o container à rede 'app-network'
+
+# Definindo volumes para persistência de dados
+volumes:
+    dbdata: # Volume que armazena os dados do MySQL, garantindo que os dados sejam persistentes
+
+# Definindo redes para comunicação entre os containers
+networks:
+    app-network: # Rede de comunicação interna entre os containers
+        driver: bridge # Usa o driver de rede bridge, que é o padrão para containers Docker

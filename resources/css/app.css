@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/* Success variant of the notification */
+.Vue-Toastification__toast--success.custom {
+    @apply bg-indigo-400 text-white;
+}
