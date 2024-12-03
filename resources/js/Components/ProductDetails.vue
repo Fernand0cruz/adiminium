@@ -40,8 +40,6 @@ const getProductPhotoUrl = (photoPath) =>
             />
         </div>
 
-        {{ getProductPhotoUrl(product.photo) }}
-
         <div
             class="w-1/2 bg-gray-100 rounded-md border p-6 flex flex-col gap-6"
         >
