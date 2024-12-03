@@ -1,8 +1,8 @@
 
-# 🌟 Bem-vindo ao Adminium: A Plataforma Definitiva para Gestão de Produtos e Pedidos
+# 🌟 Bem-vindo ao Adiminium: A Plataforma Definitiva para Gestão de Produtos e Pedidos
 
 ## 📋 Descrição
-O **Adminium** é uma solução inovadora projetada para otimizar a gestão de produtos e pedidos. Nossa plataforma oferece uma interface moderna e intuitiva, permitindo que empresas e administradores gerenciem estoques com precisão e acompanhem os pedidos em tempo real.
+O **Adiminium** é uma solução inovadora projetada para otimizar a gestão de produtos e pedidos. Nossa plataforma oferece uma interface moderna e intuitiva, permitindo que empresas e administradores gerenciem estoques com precisão e acompanhem os pedidos em tempo real.
 
 Desde o cadastro de produtos até a análise detalhada dos pedidos, o Adminium foi criado para melhorar fluxos de trabalho, garantir a disponibilidade de produtos e proporcionar informações valiosas para a tomada de decisões.
 
@@ -53,8 +53,8 @@ Certifique-se de ter as seguintes ferramentas instaladas antes de começar:
 
 ### 1. Clone o Repositório
 ```bash
-git clone https://github.com/Fernand0cruz/adminium.git
-cd adminium
+git clone https://github.com/Fernand0cruz/adiminium.git
+cd adiminium
 ```
 
 ### 2. Configure o Ambiente
