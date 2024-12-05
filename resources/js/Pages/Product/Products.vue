@@ -81,7 +81,7 @@ const submit = async () => {
 
             <ProductsGrid :products="products" @openModal="openModal" />
 
-            <Pagination
+            <Pagination v-if="products.length > 0"
                 :currentPage="currentPage"
                 :lastPage="lastPage"
                 @changePage="loadProducts"

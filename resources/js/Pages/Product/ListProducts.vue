@@ -72,7 +72,7 @@ const deleteItem = async () => {
             <ProductsTable :products="products" @openModal="openModal" />
         </div>
 
-        <Pagination
+        <Pagination v-if="products.length > 0"
             :currentPage="currentPage"
             :lastPage="lastPage"
             @changePage="loadProducts"
