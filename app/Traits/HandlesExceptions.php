@@ -20,7 +20,7 @@ trait HandlesExceptions
         } catch (AdminAlreadyExistsException $e) {
             return $this->error('An ADMIN is already registered in the system.', 422);
         } catch (MaxQuantityExceededException $e) {
-            return $this->error('Maximum stock limit reached.', 422);
+            return $this->error('Maximum stock added to order.', 422);
         } catch (QueryException $e) {
             Log::error('Database query error: ' . $e->getMessage());
             return $this->error('Database error. Please try again later.', 500);
