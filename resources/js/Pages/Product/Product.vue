@@ -56,7 +56,13 @@ const handleSubmit = async () => {
         });
         toast.success(response);
     } catch (error) {
-        toast.error(error.message);
+        if (error.errors) {
+            Object.entries(error.errors).forEach(([key, messages]) => {
+                form.setError(key, messages[0]);
+            });
+        } else {
+            toast.error(error.message);
+        }
     }
 };
 
@@ -71,7 +77,13 @@ const submit = async () => {
         loadProduct();
         toast.success(response);
     } catch (error) {
-        toast.error(error.message);
+        if (error.errors) {
+            Object.entries(error.errors).forEach(([key, messages]) => {
+                form.setError(key, messages[0]);
+            });
+        } else {
+            toast.error(error.message);
+        }
     }
 };
 
@@ -94,7 +106,7 @@ const closeModal = () => {
 <template>
     <authenticatedLayout>
         <LoadingPlaceholder v-if="isLoading" />
-        
+
         <ProductDetails
             v-else
             :product="product"

@@ -6,7 +6,7 @@ import LoadingPlaceholder from "@/Components/LoadingPlaceholder.vue";
 import ModalContainer from "@/Components/ModalContainer.vue";
 import ModalContentPlaceOrder from "@/Components/ModalContentPlaceOrder.vue";
 import { onMounted, ref } from "vue";
-import { usePage } from "@inertiajs/vue3";
+import { useForm, usePage } from "@inertiajs/vue3";
 import { fetchProducts, createOrder } from "@/Services/api";
 import { useToast } from "vue-toastification";
 
@@ -18,7 +18,10 @@ const lastPage = ref(1);
 const isLoading = ref(false);
 const isModalOpen = ref(false);
 const selectedProduct = ref(null);
-const stockQuantity = ref(1);
+
+const form = useForm({
+    orderQuantity: 1,
+});
 
 const loadProducts = async (page) => {
     isLoading.value = true;
@@ -44,7 +47,8 @@ const openModal = (product) => {
 
 const closeModal = () => {
     isModalOpen.value = false;
-    stockQuantity.value = 1;
+    form.reset();
+    form.clearErrors();
 };
 
 const submit = async () => {
@@ -55,14 +59,20 @@ const submit = async () => {
                 {
                     product_id: selectedProduct.value.id,
                     price: selectedProduct.value.price,
-                    quantity: stockQuantity.value,
+                    quantity: form.orderQuantity,
                 },
             ],
         });
         toast.success(response);
         closeModal();
-    } catch (error) {
-        toast.error(error.message);
+    } catch (error) {       
+        if (error.errors) {
+            Object.entries(error.errors).forEach(([key, messages]) => {
+                form.setError(key, messages[0]);
+            });
+        } else {
+            toast.error(error.message);
+        }
     }
 };
 </script>
@@ -81,7 +91,8 @@ const submit = async () => {
 
             <ProductsGrid :products="products" @openModal="openModal" />
 
-            <Pagination v-if="products.length > 0"
+            <Pagination
+                v-if="products.length > 0"
                 :currentPage="currentPage"
                 :lastPage="lastPage"
                 @changePage="loadProducts"
@@ -89,11 +100,9 @@ const submit = async () => {
         </div>
 
         <ModalContainer v-if="isModalOpen">
-            <!-- ? @update:stock-quantity="stockQuantity = $event" e responsavel por fazer uma comunicacao e sicronizacao entre o dado em questao no componente pai e filho-->
             <ModalContentPlaceOrder
                 :product="selectedProduct"
-                :stockQuantity="stockQuantity"
-                @update:stock-quantity="stockQuantity = $event"
+                :form="form"
                 @submit="submit"
                 @closeModal="closeModal"
             />

@@ -22,29 +22,40 @@ class OrderStoreRequest extends FormRequest
      */
     public function rules(): array
     {
-
-        $product = Product::find($this->product_id);
-
-        $availableStock = $product ? $product->stock_quantity : 0;
-
-        $products = $this->products; 
-
         $rules = [
             'client_id' => 'required|exists:users,id',
             'products_data' => 'required|array',
-            'products.*.product_id' => 'required|exists:products,id', 
-            'products.*.price' => 'required|numeric|min:1|max:10000',
-            'products.*.quantity' => 'required|integer|min:1', 
+            'products_data.*.product_id' => 'required|exists:products,id',
+            'products_data.*.price' => 'required|numeric|min:1|max:10000',
+            'products_data.*.quantity' => 'required|integer|min:1',
         ];
+
+        $products = $this->input('products_data');
 
         if ($products) {
             foreach ($products as $index => $product) {
-                $availableStock = Product::find($product['product_id'])->stock_quantity ?? 0;
-               
-                $rules["products.$index.quantity"] .= "|max:$availableStock";
+                $productModel = Product::find($product['product_id']);
+
+                if ($productModel) {
+                    $availableStock = $productModel->stock_quantity ?? 0;
+
+                    $rules["products_data.{$index}.quantity"] = [
+                        'required',
+                        'integer',
+                        'min:1',
+                        'max:' . $availableStock,
+                    ];
+                } 
             }
         }
 
         return $rules;
+    }
+
+    public function messages(): array
+    {
+        return [
+            'products_data.*.quantity.max' => 'The quantity for product cannot be greater than :max.',
+        ];
     }
 }

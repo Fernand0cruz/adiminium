@@ -1,8 +1,10 @@
 <script setup>
+import { watch } from "vue"; 
 import InputLabel from "./InputLabel.vue";
 import TextInput from "./TextInput.vue";
 import TextArea from "./TextArea.vue";
 import NumberInput from "./NumberInput.vue";
+import InputError from "./InputError.vue";
 import PrimaryButton from "./PrimaryButton.vue";
 import DangerButton from "./DangerButton.vue";
 
@@ -11,6 +13,22 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["closeModal", "submit"]);
+
+const clearErrorOnChange = (field) => {
+    watch(
+        () => props.form[field],
+        (newValue) => {
+            if (newValue) {
+                props.form.errors[field] = null;
+            }
+        }
+    );
+};
+
+clearErrorOnChange('name');
+clearErrorOnChange('description');
+clearErrorOnChange('price');
+clearErrorOnChange('stock_quantity');
 </script>
 
 <template>
@@ -29,12 +47,16 @@ const emit = defineEmits(["closeModal", "submit"]);
                 required
                 autofocus
             />
+
+            <InputError class="mt-2" :message="form.errors.name" />
         </div>
 
         <div>
             <InputLabel for="description" value="Product Description" />
 
             <TextArea class="mt-1 block w-full" v-model="form.description" />
+
+            <InputError class="mt-2" :message="form.errors.description" />
         </div>
 
         <div class="flex gap-6">
@@ -56,6 +78,8 @@ const emit = defineEmits(["closeModal", "submit"]);
                     ]"
                     required
                 />
+
+                <InputError class="mt-2" :message="form.errors.price" />
             </div>
 
             <div class="w-1/2">
@@ -68,6 +92,8 @@ const emit = defineEmits(["closeModal", "submit"]);
                     v-mask="'####'"
                     required
                 />
+
+                <InputError class="mt-2" :message="form.errors.stock_quantity" />
             </div>
         </div>
 

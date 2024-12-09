@@ -27,25 +27,13 @@ class OrderService
             ];
         }
 
-        // Itera sobre os produtos que o cliente deseja pedir.
-        foreach ($products as $product) {
-            // Busca o produto pelo ID e verifica a quantidade disponível em estoque.
-            $availableStock = Product::findOrFail($product['product_id'])->stock_quantity;
-
-            // Se a quantidade do produto for maior que a quantidade disponível no estoque, lança uma exceção.
-            if ($product['quantity'] > $availableStock) {
-                // Exceção customizada quando a quantidade solicitada excede o estoque
-                throw new MaxQuantityExceededException(); 
-            }
-        }
-
         // Verifica se já existe um pedido "open" (aberto) para esse cliente.
         $existingOrder = Order::where('client_id', $clientId)
             ->where('status', 'open')
             // Retorna o primeiro pedido aberto, caso exista.
             ->first(); 
 
-        // Se já existir um pedido aberto, atualiza o pedido com os novos produtos.
+    // Se já existir um pedido aberto, atualiza o pedido com os novos produtos.
         if ($existingOrder) {
             // Recupera os produtos já existentes nesse pedido e decodifica o JSON para um array PHP.
             $existingProducts = json_decode($existingOrder->products_data, true) ?? [];

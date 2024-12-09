@@ -1,7 +1,9 @@
 <script setup>
 import InputLabel from "@/Components/InputLabel.vue";
 import NumberInput from "@/Components/NumberInput.vue";
+import InputError from "./InputError.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
+import { watch } from "vue";
 
 const props = defineProps({
     product: Object,
@@ -12,10 +14,10 @@ const props = defineProps({
 const emits = defineEmits(["handleSubmit", "edit"]);
 
 const formatCurrency = (value) => {
-    if (!value) return "R$ 0,00"; 
+    if (!value) return "R$ 0,00";
 
     const number = parseFloat(value);
-    if (isNaN(number)) return "R$ 0,00"; 
+    if (isNaN(number)) return "R$ 0,00";
 
     return `R$ ${number.toLocaleString("pt-BR", {
         minimumFractionDigits: 2,
@@ -24,7 +26,19 @@ const formatCurrency = (value) => {
 };
 
 const getProductPhotoUrl = (photoPath) =>
-    photoPath && photoPath.startsWith("http") ? photoPath : `/storage/${photoPath}`;
+    photoPath && photoPath.startsWith("http")
+        ? photoPath
+        : `/storage/${photoPath}`;
+
+const clearErrorOnChange = () => {
+    watch(
+        () => props.form.orderQuantity,
+        () => {
+            props.form.errors["products_data.0.quantity"] = null;
+        }
+    );
+};
+clearErrorOnChange();
 </script>
 
 <template>
@@ -48,7 +62,10 @@ const getProductPhotoUrl = (photoPath) =>
             <div class="text-gray-500 flex flex-col gap-4">
                 <p><strong>Description:</strong> {{ product.description }}</p>
 
-                <p><strong>Unit Price:</strong> {{ formatCurrency(product.price) }}</p>
+                <p>
+                    <strong>Unit Price:</strong>
+                    {{ formatCurrency(product.price) }}
+                </p>
 
                 <p>
                     <strong>Stock Quantity:</strong>
@@ -68,12 +85,19 @@ const getProductPhotoUrl = (photoPath) =>
                             for="orderQuantity"
                             value="Select Quantity"
                         />
-                        
+
                         <NumberInput
                             id="orderQuantity"
                             class="mt-1 block w-full"
                             v-model="form.orderQuantity"
                             required
+                        />
+
+                        <InputError
+                            class="mt-2"
+                            :message="
+                                props.form.errors['products_data.0.quantity']
+                            "
                         />
                     </div>
 
@@ -103,6 +127,6 @@ const getProductPhotoUrl = (photoPath) =>
 }
 
 .product-image-container img:hover {
-    transform: scale(1.1); 
+    transform: scale(1.1);
 }
 </style>

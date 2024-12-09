@@ -2,14 +2,26 @@
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import DangerButton from "@/Components/DangerButton.vue";
 import InputLabel from "@/Components/InputLabel.vue";
+import InputError from "./InputError.vue";
 import NumberInput from "@/Components/NumberInput.vue";
+import { watch } from "vue";
 
 const props = defineProps({
     product: Object,
-    stockQuantity: Number,
+    form: Object,
 });
 
-const emit = defineEmits(["submit", "closeModal", "update:stock-quantity"]);
+const emit = defineEmits(["submit", "closeModal"]);
+
+const clearErrorOnChange = () => {
+    watch(
+        () => props.form.orderQuantity,
+        () => {
+            props.form.errors["products_data.0.quantity"] = null;
+        }
+    );
+};
+clearErrorOnChange();
 </script>
 
 <template>
@@ -17,13 +29,10 @@ const emit = defineEmits(["submit", "closeModal", "update:stock-quantity"]);
 
     <div class="flex flex-col gap-4 text-gray-500">
         <p><strong>Description:</strong> {{ product.description }}</p>
-
         <p><strong>Unit Price:</strong> R$ {{ product.price }}</p>
-
         <p><strong>Stock Quantity:</strong> {{ product.stock_quantity }}</p>
     </div>
 
-    <!-- Todo - componentizar form -->
     <form @submit.prevent="$emit('submit')" class="flex flex-col gap-6">
         <div>
             <InputLabel for="stock_quantity" value="Select Quantity" />
@@ -31,14 +40,19 @@ const emit = defineEmits(["submit", "closeModal", "update:stock-quantity"]);
             <NumberInput
                 id="stock_quantity"
                 class="mt-1 block w-full"
-                :modelValue="stockQuantity"
-                @update:modelValue="$emit('update:stock-quantity', $event)"
+                v-model="form.orderQuantity"
+                required
+                autofocus
+            />
+
+            <InputError
+                class="mt-2"
+                :message="props.form.errors['products_data.0.quantity']"
             />
         </div>
 
         <div class="flex gap-6 justify-end">
             <PrimaryButton>Place Order</PrimaryButton>
-
             <DangerButton @click="$emit('closeModal')">Cancel</DangerButton>
         </div>
     </form>
