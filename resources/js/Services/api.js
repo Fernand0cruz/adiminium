@@ -48,29 +48,40 @@ const handleFetchResponse = async (method, url, data = null) => {
 };
 
 const handleFetchError = (error) => {
-    console.error(error);
+    console.error("Error details:", {
+        message: error.message,
+        response: error.response?.data,
+        request: error.request,
+    });
 
     let message = "An unexpected error occurred.";
+    let formattedErrors = null;
 
     if (error.response) {
-        const statusHandlers = {
-            422: () => error.response.data.message || message,
-            default: () =>
-                error.response.data.message ||
-                error.response.data.error ||
-                message,
-        };
+        const responseData = error.response.data;
 
-        const handleStatus = statusHandlers[error.response.status] || statusHandlers.default;
-        message = handleStatus();
+        if (error.response.status === 422 && responseData.errors) {
+            formattedErrors = { errors: responseData.errors };
+            message = "Validation errors occurred.";
+        } else {
+            message =
+                responseData.message ||
+                responseData.error ||
+                "Something went wrong on the server.";
+        }
     } else if (error.request) {
         message = "Network error: Unable to contact the server.";
     } else {
         message = `Unexpected error: ${error.message}`;
     }
 
+    if (formattedErrors) {
+        throw { message, ...formattedErrors };
+    }
+
     throw new Error(message);
 };
+
 
 const callToApi = async (method, url, data = null) => {
     return await handleFetchResponse(method, url, data);
