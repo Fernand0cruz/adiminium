@@ -2,11 +2,14 @@ import axios from "axios";
 
 const getAuthHeaders = () => {
     const token = localStorage.getItem("auth_token");
+    
     if (!token) {
+        // !!Todo: Implementar um mecanismo para tratar tokens expirados, como logout automático ou renovação do token.
         throw new Error(
             "Authentication token not found, please log out and log back in."
         );
     }
+    
     return {
         headers: {
             Authorization: `Bearer ${token}`,
@@ -14,258 +17,135 @@ const getAuthHeaders = () => {
     };
 };
 
+const handleFetchResponse = async (method, url, data = null) => {
+    try {
+        const authHeaders = getAuthHeaders();
+
+        const config = {
+            method,
+            url,
+            ...authHeaders,
+        };
+
+        if (["post", "patch"].includes(method.toLowerCase()) && data) {
+            config.data = data;
+        }
+
+        const response = await axios(config);
+
+        if (!response.data.status) {
+            throw new Error(response.data.message || "Unexpected error.");
+        }
+
+        if(["post", "patch", "delete"].includes(method.toLowerCase())){
+            return response.data.message
+        }
+        
+        return response.data.data;
+    } catch (error) {
+        return handleFetchError(error);
+    }
+};
+
 const handleFetchError = (error) => {
     console.error(error);
+
     let message = "An unexpected error occurred.";
 
     if (error.response) {
-        if (error.response.status === 422) {
-            message = error.response.data.message || message;
-        } else {
-            message =
+        const statusHandlers = {
+            422: () => error.response.data.message || message,
+            default: () =>
                 error.response.data.message ||
                 error.response.data.error ||
-                message;
-        }
+                message,
+        };
+
+        const handleStatus = statusHandlers[error.response.status] || statusHandlers.default;
+        message = handleStatus();
     } else if (error.request) {
         message = "Network error: Unable to contact the server.";
     } else {
-        message = `Error: ${error.message}`;
+        message = `Unexpected error: ${error.message}`;
     }
 
     throw new Error(message);
 };
 
+const callToApi = async (method, url, data = null) => {
+    return await handleFetchResponse(method, url, data);
+};
+
 const fetchProducts = async (page = 1) => {
-    try {
-        const response = await axios.get(
-            `/api/products?page=${page}`,
-            getAuthHeaders()
-        );
-        if (!response.data.status) throw new Error(response.data.message);
-        return response.data.data;
-    } catch (error) {
-        handleFetchError(error);
-    }
+    return await callToApi("get", `/api/products?page=${page}`);
 };
 
 const fetchProduct = async (id) => {
-    try {
-        const response = await axios.get(
-            `/api/products/${id}`,
-            getAuthHeaders()
-        );
-        return response.data.data;
-    } catch (error) {
-        handleFetchError(error);
-    }
+    return await callToApi("get", `/api/products/${id}`);
 };
 
-const createProduct = async (productData) => {
-    try {
-        const response = await axios.post(
-            `/api/products`,
-            productData,
-            getAuthHeaders()
-        );
-        if (!response.data.status) throw new Error(response.data.message);
-        return response.data.message;
-    } catch (error) {
-        handleFetchError(error);
-    }
+const createProduct = async (data) => {
+    return await callToApi("post", `/api/products`, data);
 };
 
-const updateProduct = async (id, productData) => {
-    try {
-        const response = await axios.patch(
-            `/api/products/${id}`,
-            productData,
-            getAuthHeaders()
-        );
-        if (!response.data.status) throw new Error(response.data.message);
-        return response.data.message;
-    } catch (error) {
-        handleFetchError(error);
-    }
+const updateProduct = async (id, data) => {
+    return await callToApi("patch", `/api/products/${id}`, data);
 };
 
-const deleteProduct = async (productId) => {
-    try {
-        const response = await axios.delete(
-            `/api/products/${productId}`,
-            getAuthHeaders()
-        );
-        if (!response.data.status) throw new Error(response.data.message);
-        return response.data.message;
-    } catch (error) {
-        handleFetchError(error);
-    }
+const deleteProduct = async (id) => {
+    return await callToApi("delete", `/api/products/${id}`);
 };
 
 const fetchClients = async (page = 1) => {
-    try {
-        const response = await axios.get(
-            `/api/clients?page=${page}`,
-            getAuthHeaders()
-        );
-        if (!response.data.status) throw new Error(response.data.message);
-        return response.data.data;
-    } catch (error) {
-        handleFetchError(error);
-    }
+    return await callToApi("get", `/api/clients?page-=${page}`);
 };
 
 const fetchClient = async (id) => {
-    try {
-        const response = await axios.get(
-            `/api/clients/${id}`,
-            getAuthHeaders()
-        );
-        return response.data.data;
-    } catch (error) {
-        handleFetchError(error);
-    }
+    return await callToApi("get", `/api/clients/${id}`);
 };
 
-const createClient = async (clientData) => {
-    try {
-        const response = await axios.post(
-            `/api/clients`,
-            clientData,
-            getAuthHeaders()
-        );
-        if (!response.data.status) throw new Error(response.data.message);
-        return response.data.message;
-    } catch (error) {
-        handleFetchError(error);
-    }
+const createClient = async (data) => {
+    return await callToApi("post", `/api/clients`, data);
 };
 
-const updateClient = async (id, clientData) => {
-    try {
-        const response = await axios.patch(
-            `/api/clients/${id}`,
-            clientData,
-            getAuthHeaders()
-        );
-        if (!response.data.status) throw new Error(response.data.message);
-        return response.data.message;
-    } catch (error) {
-        handleFetchError(error);
-    }
+const updateClient = async (id, data) => {
+    return await callToApi("patch", `/api/clients/${id}`, data);
 };
 
-const deleteClient = async (clientId) => {
-    try {
-        const response = await axios.delete(
-            `/api/clients/${clientId}`,
-            getAuthHeaders()
-        );
-        if (!response.data.status) throw new Error(response.data.message);
-        return response.data.message;
-    } catch (error) {
-        handleFetchError(error);
-    }
+const deleteClient = async (id) => {
+    return await callToApi("delete", `/api/clients/${id}`);
 };
 
-const createOrder = async (orderData) => {
-    try {
-        const response = await axios.post(
-            `/api/orders`,
-            orderData,
-            getAuthHeaders()
-        );
-        if (!response.data.status) throw new Error(response.data.message);
-        return response.data.message;
-    } catch (error) {
-        handleFetchError(error);
-    }
+const createOrder = async (data) => {
+    return await callToApi("post", `/api/orders`, data);
 };
 
 const fetchOrder = async () => {
-    try {
-        const response = await axios.get("/api/orders", getAuthHeaders());
-        if (!response.data.status) throw new Error(response.data.message);
-        return response.data.data;
-    } catch (error) {
-        handleFetchError(error);
-    }
+    return await callToApi("get", `/api/orders`);
 };
 
-const updateOrder = async (id, orderData) => {
-    try {
-        const response = await axios.patch(
-            `/api/orders/${id}`,
-            orderData,
-            getAuthHeaders()
-        );
-        if (!response.data.status) throw new Error(response.data.message);
-        return response.data.message;
-    } catch (error) {
-        handleFetchError(error);
-    }
+const updateOrder = async (id, data) => {
+    return await callToApi("patch", `/api/orders/${id}`, data);
 };
 
 const deleteOrder = async (id) => {
-    try {
-        const response = await axios.delete(
-            `/api/orders/${id}`,
-            getAuthHeaders()
-        );
-        if (!response.data.status) throw new Error(response.data.message);
-        return response.data.message;
-    } catch (error) {
-        handleFetchError(error);
-    }
+    return await callToApi("delete", `/api/orders/${id}`);
 };
 
 const ordersInProgress = async () => {
-    try {
-        const response = await axios.get(
-            "/api/orders/in-progress",
-            getAuthHeaders()
-        );
-        if (!response.data.status) throw new Error(response.data.message);
-        return response.data.data;
-    } catch (error) {
-        handleFetchError(error);
-    }
+    return await callToApi("get", `/api/orders/in-progress`);
 };
 
 const ordersCompleted = async () => {
-    try {
-        const response = await axios.get(
-            "/api/orders/completed",
-            getAuthHeaders()
-        );
-        if (!response.data.status) throw new Error(response.data.message);
-        return response.data.data;
-    } catch (error) {
-        handleFetchError(error);
-    }
-};
-
-const allOrders = async () => {
-    try {
-        const response = await axios.get("/api/orders/all", getAuthHeaders());
-        if (!response.data.status) throw new Error(response.data.message);
-        return response.data.data;
-    } catch (error) {
-        handleFetchError(error);
-    }
+    return await callToApi("get", `/api/orders/completed`);
 };
 
 const allOrdersInProgress = async () => {
-    try {
-        const response = await axios.get(
-            "/api/orders/all-in-progress",
-            getAuthHeaders()
-        );
-        if (!response.data.status) throw new Error(response.data.message);
-        return response.data.data;
-    } catch (error) {
-        handleFetchError(error);
-    }
+    return await callToApi("get", `/api/orders/all-in-progress`);
+};
+
+const allOrders = async () => {
+    return await callToApi("get", `/api/orders/all`);
 };
 
 export {
