@@ -3,11 +3,32 @@ import PrimaryButton from './PrimaryButton.vue';
 import DangerButton from './DangerButton.vue';
 import TextInput from './TextInput.vue';
 import InputLabel from './InputLabel.vue';
+import InputError from './InputError.vue';
+import { watch } from 'vue';
+
 const props = defineProps({
     form: Object,
 });
 
 const emit = defineEmits(["closeModal", "submit"]);
+
+const clearErrorOnChange = (field) => {
+    watch(
+        () => props.form[field],
+        (newValue) => {
+            if (newValue) {
+                props.form.errors[field] = null;
+            }
+        }
+    );
+};
+
+clearErrorOnChange('company');
+clearErrorOnChange('name'); 
+clearErrorOnChange('email');
+clearErrorOnChange('phone');
+clearErrorOnChange('password');
+clearErrorOnChange('confirmPassword');
 </script>
 
 <template>
@@ -26,6 +47,8 @@ const emit = defineEmits(["closeModal", "submit"]);
                 required
                 autofocus
             />
+
+            <InputError class="mt-2" :message="form.errors.company" />
         </div>
 
         <div>
@@ -38,6 +61,8 @@ const emit = defineEmits(["closeModal", "submit"]);
                 v-model="form.name"
                 required
             />
+
+            <InputError class="mt-2" :message="form.errors.name" />
         </div>
 
         <div>
@@ -50,6 +75,8 @@ const emit = defineEmits(["closeModal", "submit"]);
                 v-model="form.email"
                 required
             />
+
+            <InputError class="mt-2" :message="form.errors.email" />
         </div>
 
         <div>
@@ -63,6 +90,8 @@ const emit = defineEmits(["closeModal", "submit"]);
                 v-mask="'(##) #####-####'"
                 required
             />
+
+            <InputError class="mt-2" :message="form.errors.phone" />
         </div>
 
         <span class="text-red-600"
@@ -79,6 +108,8 @@ const emit = defineEmits(["closeModal", "submit"]);
                     class="mt-1 block w-full"
                     v-model="form.password"
                 />
+
+                <InputError class="mt-2" :message="form.errors.password" />
             </div>
 
             <div class="w-1/2">
@@ -90,6 +121,8 @@ const emit = defineEmits(["closeModal", "submit"]);
                     class="mt-1 block w-full"
                     v-model="form.password_confirmation"
                 />
+
+                <InputError class="mt-2" :message="form.errors.password_confirmation" />
             </div>
         </div>
 

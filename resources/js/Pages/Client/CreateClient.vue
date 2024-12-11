@@ -6,6 +6,8 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
 import { useForm } from "@inertiajs/vue3";
 import { createClient } from "@/Services/api";
 import { useToast } from "vue-toastification";
+import InputError from "@/Components/InputError.vue";
+import { watch } from "vue";
 
 const toast = useToast();
 
@@ -24,9 +26,33 @@ const submit = async () => {
         form.reset();
         toast.success(response);
     } catch (error) {
-        toast.error(error.message);
+        if(error.errors){
+            Object.entries(error.errors).forEach(([key, messages]) => {
+                form.setError(key, messages[0])
+            })
+        } else {
+            toast.error(error.message);
+        }
     }
 };
+const clearErrorOnChange = (field) => {
+    watch(
+        () => form[field],
+        (newValue) => {
+            if (newValue) {
+                form.errors[field] = null;
+            }
+        }
+    );
+}
+
+clearErrorOnChange('company')
+clearErrorOnChange('name')
+clearErrorOnChange('email')
+clearErrorOnChange('phone')
+clearErrorOnChange('password')
+clearErrorOnChange('confirmPassword')
+
 </script>
 
 <template>
@@ -46,6 +72,8 @@ const submit = async () => {
                     required
                     autofocus
                 />
+
+                <InputError class="mt-2" :message="form.errors.company" />
             </div>
 
             <div>
@@ -58,6 +86,8 @@ const submit = async () => {
                     v-model="form.name"
                     required
                 />
+
+                <InputError class="mt-2" :message="form.errors.name" />
             </div>
 
             <div>
@@ -70,6 +100,8 @@ const submit = async () => {
                     v-model="form.email"
                     required
                 />
+
+                <InputError class="mt-2" :message="form.errors.email" />
             </div>
 
             <div>
@@ -83,6 +115,8 @@ const submit = async () => {
                     v-mask="'(##) #####-####'"
                     required
                 />
+
+                <InputError class="mt-2" :message="form.errors.phone" />
             </div>
 
             <div class="flex gap-6">
@@ -96,6 +130,8 @@ const submit = async () => {
                         v-model="form.password"
                         required
                     />
+
+                    <InputError class="mt-2" :message="form.errors.password" />
                 </div>
 
                 <div class="w-1/2">
@@ -111,6 +147,8 @@ const submit = async () => {
                         v-model="form.password_confirmation"
                         required
                     />
+
+                    <InputError class="mt-2" :message="form.errors.password_confirmation" />
                 </div>
             </div>
 

@@ -46,6 +46,7 @@ const openModal = (client) => {
 const closeModal = () => {
     isModalOpen.value = false;
     form.reset();
+    form.clearErrors();
 };
 
 const form = useForm({
@@ -64,7 +65,13 @@ const submit = async () => {
         loadClient();
         toast.success(response);
     } catch (error) {
-        toast.error(error.message);
+        if (error.errors) {
+            Object.entries(error.errors).forEach(([key, messages]) => {
+                form.setError(key, messages[0]);
+            });
+        } else {
+            toast.error(error.message);
+        }
     }
 };
 </script>

@@ -5,9 +5,11 @@ import TextInput from "@/Components/TextInput.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import NumberInput from "@/Components/NumberInput.vue";
 import TextArea from "@/Components/TextArea.vue";
+import InputError from "@/Components/InputError.vue";
 import { createProduct } from "@/Services/api";
 import { useToast } from "vue-toastification";
 import { useForm } from "@inertiajs/vue3";
+import { watch } from "vue";
 
 const toast = useToast();
 
@@ -41,9 +43,32 @@ const submit = async () => {
         form.reset();
         toast.success(response);
     } catch (error) {
-        toast.error(error.message);
+        if(error.errors){
+            Object.entries(error.errors).forEach(([key, messages]) => {
+                form.setError(key, messages[0]);
+            });
+        } else {
+            toast.error(error.message);
+        }
     }
 };
+
+const clearErrorOnChange = (field) => {
+    watch(
+        () => form[field],
+        (newValue) => {
+            if (newValue) {
+                form.errors[field] = null;
+            }
+        }
+    );
+};
+
+clearErrorOnChange('name')
+clearErrorOnChange('description')
+clearErrorOnChange('price')
+clearErrorOnChange('stock_quantity')
+clearErrorOnChange('photo')
 </script>
 
 <template>
@@ -64,6 +89,8 @@ const submit = async () => {
                     required
                     autofocus
                 />
+
+                <InputError class="mt-2" :message="form.errors.name" />
             </div>
 
             <div>
@@ -75,6 +102,8 @@ const submit = async () => {
                     class="mt-1 block w-full"
                     v-model="form.description"
                 />
+
+                <InputError class="mt-2" :message="form.errors.description" />
             </div>
 
             <div class="flex gap-6">
@@ -96,6 +125,8 @@ const submit = async () => {
                         ]"
                         required
                     />
+
+                    <InputError class="mt-2" :message="form.errors.price" />
                 </div>
 
                 <div class="w-1/2">
@@ -108,6 +139,8 @@ const submit = async () => {
                         v-mask="'####'"
                         required
                     />
+
+                    <InputError class="mt-2" :message="form.errors.stock_quantity" />
                 </div>
             </div>
 
@@ -129,6 +162,8 @@ const submit = async () => {
                         @change="onPhotoInput"
                     />
                 </label>
+                
+                <InputError class="mt-2" :message="form.errors.photo" />
             </div>
             
             <div>
