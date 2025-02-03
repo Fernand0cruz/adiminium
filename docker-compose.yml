@@ -22,6 +22,8 @@ services:
         container_name: app # Nome do container para o serviço
         restart: unless-stopped # Reinicia o container a menos que seja parado manualmente
         working_dir: /var/www/html # Diretório de trabalho dentro do container
+        ports:
+            - '5173:5173'
         volumes:
             - ./:/var/www/html # Monta o diretório atual como /var/www/html dentro do container
         depends_on:
@@ -29,7 +31,7 @@ services:
         networks:
             - app-network # Conecta o container à rede 'app-network'
 
-    # phpmyadmin:
+    phpmyadmin:
         image: phpmyadmin # Usa a imagem oficial do phpMyAdmin
         container_name: phpmyadmin # Nome do container para o serviço
         restart: unless-stopped # Reinicia o container a menos que seja parado manualmente
