@@ -10,24 +10,25 @@ class Order extends Model
     use HasFactory;
 
     protected $fillable = [
-        'client_id',
-        'status',
-        'products_data',
+        'user_id',
+        'order_status_id',
     ];
 
-    protected $casts = [
-        'products_data' => 'array',
-    ];
-
-    // Relacionamento com User (cliente)
-    public function client()
+    public function user()
     {
-        return $this->belongsTo(User::class, 'client_id');
+        return $this->belongsTo(User::class);
     }
 
-    // Relacionamento com Product
-    public function product()
+    public function products()
     {
-        return $this->belongsToMany(Product::class);
+        return $this->belongsToMany(Product::class, 'order_product')
+            ->using(OrderProduct::class)
+            ->withPivot('quantity', 'price')
+            ->withTimestamps();
+    }
+
+    public function orderStatus()
+    {
+        return $this->belongsTo(OrderStatus::class, 'order_status_id');
     }
 }

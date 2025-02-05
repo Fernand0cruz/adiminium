@@ -6,23 +6,17 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('client_id')->constrained('users')->onDelete('cascade');
-            $table->enum('status', ['open', 'in progress', 'accepted', 'denied', 'cancelled'])->default('open');
-            $table->json('products_data');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('order_status_id')->constrained('order_statuses')->onDelete('restrict');
             $table->timestamps();
         });
+        
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('orders');
