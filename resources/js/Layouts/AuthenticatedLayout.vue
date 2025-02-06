@@ -1,160 +1,303 @@
 <script setup>
-import { ref } from "vue";
-import ApplicationLogo from "@/Components/ApplicationLogo.vue";
+import { ref, onMounted, watchEffect } from "vue";
 import Dropdown from "@/Components/Dropdown.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
-import NavLink from "@/Components/NavLink.vue";
-import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
+import ApplicationLogo from "@/Components/ApplicationLogo.vue";
+import {
+    Home,
+    SquareChartGantt,
+    Menu,
+    CircleUserRound,
+    ChevronRight,
+    ChevronDown,
+    Users,
+} from "lucide-vue-next";
 import { Link, usePage } from "@inertiajs/vue3";
 
-const showingNavigationDropdown = ref(false);
+const showingAside = ref(false);
+
+const toggleAside = () => {
+    showingAside.value = !showingAside.value;
+};
+
+const closeAside = () => {
+    showingAside.value = false;
+};
+
+const toggleSubmenus = ref({
+    produtos: false,
+    clients: false,
+    pedidos: false,
+});
+
+const toggleSubmenu = (menu) => {
+    toggleSubmenus.value[menu] = !toggleSubmenus.value[menu];
+};
+
+onMounted(() => {
+    const currentRoute = route().current();
+
+    toggleSubmenus.value.produtos = ["listProducts", "createProduct"].includes(
+        currentRoute
+    );
+    toggleSubmenus.value.clients = ["listClients", "createClient"].includes(
+        currentRoute
+    );
+    toggleSubmenus.value.pedidos = ["listOrders", "createOrder"].includes(
+        currentRoute
+    );
+});
+
+const isActive = (routes) => {
+    return routes.some((r) => route().current(r));
+};
 
 const { props } = usePage();
 const userRole = props.auth.user.role;
 </script>
 
 <template>
-    <div>
-        <div class="min-h-screen bg-gray-100">
-            <nav class="border bg-white">
-                <div class="mx-auto max-w-7xl px-4">
-                    <div class="flex h-16 justify-between items-center">
-                        <div class="flex">
-                            <Link :href="userRole === 'admin' ? route('home') : route('products')" class="flex items-center">
-                            <ApplicationLogo class="block h-9 w-auto" />
-                            </Link>
+    <header
+        class="sticky top-0 inset-x-0 flex flex-wrap md:justify-start md:flex-nowrap z-[48] w-full bg-white border-b py-3 px-6"
+    >
+        <nav class="flex basis-full items-center w-full mx-auto">
+            <div class="lg:hidden">
+                <Link
+                    :href="
+                        userRole === 'admin' ? route('home') : route('products')
+                    "
+                >
+                    <ApplicationLogo class="h-16" />
+                </Link>
+            </div>
 
-                            <div v-if="userRole === 'client'" class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink :href="route('products')" :active="route().current('products')">Products
-                                </NavLink>
-                                <NavLink :href="route('myorders')" :active="route().current('myorders')">My Orders
-                                </NavLink>
-                            </div>
-
-                            <div v-if="userRole === 'admin'" class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink :href="route('home')" :active="route().current('home')">Home</NavLink>
-                                <NavLink :href="route('listProducts')" :active="route().current('listProducts')">
-                                    Products</NavLink>
-                                <NavLink :href="route('listClients')" :active="route().current('listClients')">Clients
-                                </NavLink>
-                                <NavLink :href="route('createProduct')" :active="route().current('createProduct')">
-                                    Register Products</NavLink>
-                                <NavLink :href="route('createClient')" :active="route().current('createClient')">
-                                    Register Clients</NavLink>
-                                <NavLink :href="route('orders')" :active="route().current('orders')">View Orders
-                                </NavLink>
-                            </div>
-                        </div>
-
-                        <div class="hidden sm:ms-6 sm:flex sm:items-center">
+            <div
+                class="w-full flex items-center justify-end md:justify-between"
+            >
+                <span></span>
+                <div class="flex flex-row items-center justify-end">
+                    <div class="relative inline-flex">
+                        <div class="sm:ms-6 sm:flex sm:items-center">
                             <div class="relative ms-3">
                                 <Dropdown align="right" width="48">
                                     <template #trigger>
-                                        <button type="button"
-                                            class="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 transition duration-150 ease-in-out focus:outline-none uppercase">
+                                        <button
+                                            type="button"
+                                            class="inline-flex items-center p-2 gap-2 transition duration-150 ease-in-out focus:outline-none capitalize"
+                                        >
                                             {{ $page.props.auth.user.name }}
-                                            <svg class="-me-0.5 ms-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg"
-                                                viewBox="0 0 20 20" fill="currentColor">
-                                                <path fill-rule="evenodd"
-                                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                    clip-rule="evenodd" />
-                                            </svg>
+                                            <CircleUserRound />
                                         </button>
                                     </template>
                                     <template #content>
-                                        <DropdownLink :href="route('profile.edit')">Profile</DropdownLink>
-                                        <DropdownLink :href="route('logout')" method="post" as="button">Log Out
+                                        <DropdownLink
+                                            :href="route('profile.edit')"
+                                        >
+                                            Profile
+                                        </DropdownLink>
+                                        <DropdownLink
+                                            :href="route('logout')"
+                                            method="post"
+                                            as="button"
+                                        >
+                                            Log Out
                                         </DropdownLink>
                                     </template>
                                 </Dropdown>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
 
-                        <div class="-me-2 flex items-center sm:hidden">
-                            <button @click="
-                                showingNavigationDropdown =
-                                !showingNavigationDropdown
-                                "
-                                class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 transition duration-150 ease-in-out hover:bg-gray-100 hover:text-gray-500 focus:bg-gray-100 focus:text-gray-500 focus:outline-none">
-                                <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                                    <path :class="{
-                                        hidden: showingNavigationDropdown,
-                                        'inline-flex':
-                                            !showingNavigationDropdown,
-                                    }" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M4 6h16M4 12h16M4 18h16" />
-                                    <path :class="{
-                                        hidden: !showingNavigationDropdown,
-                                        'inline-flex':
-                                            showingNavigationDropdown,
-                                    }" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M6 18L18 6M6 6l12 12" />
-                                </svg>
+    <div
+        class="sticky top-0 inset-x-0 z-20 bg-white border-b px-4 sm:px-6 lg:px-8 lg:hidden"
+    >
+        <div class="flex items-center py-2">
+            <button
+                @click="toggleAside"
+                type="button"
+                class="size-8 flex justify-center items-center gap-x-2 border border-gray-200 text-gray-800 hover:text-gray-500 rounded-lg focus:outline-none"
+            >
+                <Menu />
+            </button>
+            <ol class="flex items-center whitespace-nowrap ml-3">
+                <Link
+                    :href="
+                        userRole === 'admin' ? route('home') : route('products')
+                    "
+                    class="text-gray-800 hover:text-gray-500"
+                >
+                    Adminium
+                </Link>
+                <li
+                    class="text-gray-800 flex items-center"
+                >
+                    <ChevronRight size="14" class="mx-2" />
+                    <Link
+                        
+                        class="text-gray-800 hover:text-gray-500 capitalize"
+                    >
+                        teste
+                    </Link>
+                </li>
+            </ol>
+        </div>
+    </div>
+    <div
+        :class="{
+            'translate-x-0': showingAside,
+            '-translate-x-full': !showingAside,
+            'lg:translate-x-0': true,
+        }"
+        class="fixed inset-y-0 start-0 z-[60] w-[260px] h-full bg-white border-e border-gray-200 transition-transform duration-300 lg:block lg:end-auto lg:bottom-0"
+    >
+        <div class="relative flex flex-col h-full max-h-full">
+            <div class="py-3 mx-auto">
+                <Link
+                    :href="
+                        userRole === 'admin' ? route('home') : route('products')
+                    "
+                >
+                    <ApplicationLogo class="h-14" />
+                </Link>
+            </div>
+            <div
+                class="h-full overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100"
+            >
+                <nav class="p-3 flex flex-col space-y-1">
+                    <ul class="flex flex-col space-y-1">
+                        <li>
+                            <Link
+                                class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100"
+                                :href="route('home')"
+                                :class="{
+                                    'bg-gray-100': route().current('home'),
+                                }"
+                            >
+                                <Home />
+                                Dashboard
+                            </Link>
+                        </li>
+                        <li>
+                            <button
+                                @click="toggleSubmenu('produtos')"
+                                class="w-full flex justify-between items-center py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100"
+                                :class="{
+                                    'bg-gray-100': isActive([
+                                        'listProducts',
+                                        'createProduct',
+                                    ]),
+                                }"
+                            >
+                                <div class="flex items-center gap-3">
+                                    <SquareChartGantt />
+                                    Produtos
+                                </div>
+                                <ChevronDown
+                                    size="16"
+                                    :class="{
+                                        'rotate-180': toggleSubmenus.produtos,
+                                    }"
+                                />
                             </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div :class="{
-                    block: showingNavigationDropdown,
-                    hidden: !showingNavigationDropdown,
-                }" class="sm:hidden">
-                    <div class="space-y-1 pb-3 pt-2">
-                        <ResponsiveNavLink :href="route('home')" :active="route().current('home')">Home
-                        </ResponsiveNavLink>
-                        <div v-if="userRole === 'client'">
-                            <ResponsiveNavLink :href="route('products')" :active="route().current('products')">Products
-                            </ResponsiveNavLink>
-                            <ResponsiveNavLink :href="route('myorders')" :active="route().current('myorders')">My Orders
-                            </ResponsiveNavLink>
-                        </div>
-                        <div v-if="userRole === 'admin'">
-                            <ResponsiveNavLink :href="route('listProducts')" :active="route().current('listProducts')">
-                                Products
-                            </ResponsiveNavLink>
-                            <ResponsiveNavLink :href="route('listClients')" :active="route().current('listClients')">
-                                Clients
-                            </ResponsiveNavLink>
-                            <ResponsiveNavLink :href="route('createProduct')"
-                                :active="route().current('createProduct')">Register
-                                Products</ResponsiveNavLink>
-                            <ResponsiveNavLink :href="route('createClient')" :active="route().current('createClient')">
-                                Register Clients
-                            </ResponsiveNavLink>
-                            <ResponsiveNavLink :href="route('orders')" :active="route().current('orders')">View Orders
-                            </ResponsiveNavLink>
-                        </div>
-                    </div>
-
-                    <div class="border-t border-gray-200 pb-1 pt-4">
-                        <div class="px-4">
-                            <div class="text-base font-medium text-gray-800">
-                                {{ $page.props.auth.user.name }}
-                            </div>
-                            <div class="text-sm font-medium text-gray-500">
-                                {{ $page.props.auth.user.email }}
-                            </div>
-                        </div>
-                        <div class="mt-3 space-y-1">
-                            <ResponsiveNavLink :href="route('profile.edit')">Profile</ResponsiveNavLink>
-                            <ResponsiveNavLink :href="route('logout')" method="post" as="button">Log Out
-                            </ResponsiveNavLink>
-                        </div>
-                    </div>
-                </div>
-            </nav>
-
-            <main>
-                <div class="py-12">
-                    <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                        <div class="overflow-hidden bg-white border sm:rounded-lg">
-                            <div class="p-6 flex flex-col gap-6">
-                                <slot />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </main>
+                            <ul
+                                v-if="toggleSubmenus.produtos"
+                                class="mt-1 space-y-1"
+                            >
+                                <li>
+                                    <Link
+                                        :href="route('listProducts')"
+                                        :class="{
+                                            'bg-gray-100':
+                                                route().current('listProducts'),
+                                        }"
+                                        class="block py-2 px-2.5 text-gray-700 hover:bg-gray-100 rounded-lg pl-[43px]"
+                                        >Listar Produtos</Link
+                                    >
+                                </li>
+                                <li>
+                                    <Link
+                                        :href="route('createProduct')"
+                                        :class="{
+                                            'bg-gray-100':
+                                                route().current(
+                                                    'createProduct'
+                                                ),
+                                        }"
+                                        class="block py-2 px-2.5 text-gray-700 hover:bg-gray-100 rounded-lg pl-[43px]"
+                                        >Novo Produto</Link
+                                    >
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <button
+                                @click="toggleSubmenu('clients')"
+                                class="w-full flex justify-between items-center py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100"
+                                :class="{
+                                    'bg-gray-100': isActive([
+                                        'listClients',
+                                        'createClient',
+                                    ]),
+                                }"
+                            >
+                                <div class="flex items-center gap-3">
+                                    <Users />
+                                    Clientes
+                                </div>
+                                <ChevronDown
+                                    size="16"
+                                    :class="{
+                                        'rotate-180': toggleSubmenus.clients,
+                                    }"
+                                />
+                            </button>
+                            <ul
+                                v-if="toggleSubmenus.clients"
+                                class="mt-1 space-y-1"
+                            >
+                                <li>
+                                    <Link
+                                        :href="route('listClients')"
+                                        :class="{
+                                            'bg-gray-100': isActive([
+                                                'listClients',
+                                            ]),
+                                        }"
+                                        class="block py-2 px-2.5 text-gray-700 hover:bg-gray-100 rounded-lg pl-[43px]"
+                                        >Listar Clientes</Link
+                                    >
+                                </li>
+                                <li>
+                                    <Link
+                                        :href="route('createClient')"
+                                        :class="{
+                                            'bg-gray-100': isActive([
+                                                'createClient',
+                                            ]),
+                                        }"
+                                        class="block py-2 px-2.5 text-gray-700 hover:bg-gray-100 rounded-lg pl-[43px]"
+                                        >Novo Cliente</Link
+                                    >
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <div
+        v-if="showingAside"
+        @click="closeAside"
+        class="fixed inset-0 bg-black bg-opacity-50 z-50 lg:hidden"
+    ></div>
+    <div class="max-w-[1920px] mx-auto lg:ps-64">
+        <div class="p-4 sm:p-6 space-y-4 sm:space-y-6">
+            <slot />
         </div>
     </div>
 </template>
