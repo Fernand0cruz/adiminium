@@ -9,7 +9,7 @@ Route::get('/', [PagesController::class, 'welcome'])->name('welcome');
 Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::middleware(['can:admin'])->group(function () {
-        Route::get('/home', [PagesController::class, 'home'])->name('home');
+        Route::get('/dashboard', [PagesController::class, 'dashboard'])->name('dashboard');
         
         Route::get('/create_product', [PagesController::class, 'createProduct'])->name('createProduct');
         Route::get('/list_products', [PagesController::class, 'listProducts'])->name('listProducts');
@@ -20,6 +20,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         
         Route::get('/orders', [PagesController::class, 'orders'])->name('orders');
     });
+
     Route::get('/products', [PagesController::class, 'products'])->name('products');
 
     Route::get('/myorders', [PagesController::class, 'myorders'])->name('myorders');
@@ -33,3 +34,6 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+
+

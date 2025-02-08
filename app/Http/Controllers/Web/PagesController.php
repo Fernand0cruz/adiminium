@@ -16,9 +16,9 @@ class PagesController extends Controller
         ]);
     }
 
-    public function home()
+    public function dashboard()
     {
-        return Inertia::render('Home');
+        return Inertia::render('Dashboard');
     }
 
     public function products()

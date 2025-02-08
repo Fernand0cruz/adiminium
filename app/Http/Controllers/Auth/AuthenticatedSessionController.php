@@ -33,7 +33,7 @@ class AuthenticatedSessionController extends Controller
         return $this->success([
             'token_type' => 'Bearer',
             'token' => $token,
-            'redirect_url' => $user->role === 'admin' ? route('home') : route('products'),
+            'redirect_url' => $user->role === 'admin' ? route('dashboard') : route('products'),
         ], 'Login successfully', 200);
     }
 

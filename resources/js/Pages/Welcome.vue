@@ -20,7 +20,7 @@ defineProps({
                 </div>
                 <nav v-if="canLogin" class="flex gap-4">
                     <template v-if="$page.props.auth.user">
-                        <Link v-if="$page.props.auth.user.role === 'admin'" :href="route('home')">Home Page</Link>
+                        <Link v-if="$page.props.auth.user.role === 'admin'" :href="route('dashboard')">Home Page</Link>
                         <Link v-else-if="$page.props.auth.user.role === 'client'" :href="route('products')">Home Page
                         </Link>
                     </template>
