@@ -36,7 +36,7 @@ class RegisteredUserController extends Controller
             return $this->success([
                 'token_type' => 'Bearer',
                 'token' => $token,
-                'redirect_url' => route('dashboard'),
+                'redirect_url' => route('admin.dashboard'),
             ], 'User created successfully.', 201);
         });
     }

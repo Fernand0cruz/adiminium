@@ -7,7 +7,7 @@ const props = defineProps({
 });
 
 const viewProduct = (productId) => {
-    window.location.href = `/product/${productId}`;
+    window.location.href = route('products.show', productId)
 };
 
 const emits = defineEmits(["openModal"]);

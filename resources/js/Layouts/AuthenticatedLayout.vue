@@ -39,10 +39,10 @@ const toggleSubmenu = (menu) => {
 onMounted(() => {
     const currentRoute = route().current();
 
-    toggleSubmenus.value.products = ["listProducts", "createProduct"].includes(
+    toggleSubmenus.value.products = ["admin.products.index", "admin.products.create"].includes(
         currentRoute
     );
-    toggleSubmenus.value.clients = ["listClients", "createClient"].includes(
+    toggleSubmenus.value.clients = ["admin.clients.index", "admin.clients.create"].includes(
         currentRoute
     );
     toggleSubmenus.value.order = ["listOrders", "createOrder"].includes(
@@ -66,7 +66,7 @@ const userRole = props.auth.user.role;
             <div class="lg:hidden">
                 <Link
                     :href="
-                        userRole === 'admin' ? route('dashboard') : route('products')
+                        userRole === 'admin' ? route('admin.dashboard') : route('products.index')
                     "
                 >
                     <ApplicationLogo class="h-16" />
@@ -128,7 +128,7 @@ const userRole = props.auth.user.role;
             <ol class="flex items-center whitespace-nowrap ml-3">
                 <Link
                     :href="
-                        userRole === 'admin' ? route('dashboard') : route('products')
+                        userRole === 'admin' ? route('admin.dashboard') : route('products.index')
                     "
                     class="text-gray-800 hover:text-gray-500"
                 >
@@ -156,7 +156,7 @@ const userRole = props.auth.user.role;
             <div class="py-3 mx-auto">
                 <Link
                     :href="
-                        userRole === 'admin' ? route('dashboard') : route('products')
+                        userRole === 'admin' ? route('admin.dashboard') : route('products.index')
                     "
                 >
                     <ApplicationLogo class="h-14" />
@@ -169,24 +169,25 @@ const userRole = props.auth.user.role;
                     <ul class="flex flex-col space-y-1">
                         <li>
                             <Link
-                                class="flex items-center gap-x-3.5 py-2 px-2.5 text-gray-800 rounded-lg hover:bg-gray-100"
-                                :href="
-                                    userRole === 'admin'
-                                        ? route('dashboard')
-                                        : route('products')
-                                "
-                                :class="{
-                                    'bg-gray-100': route().current('dashboard'),
-                                }"
-                            >
-                                <Home v-if="userRole === 'admin'" />
-                                <ScanBarcode v-else />
-                                {{
-                                    userRole === "admin"
-                                        ? "Dashboard"
-                                        : "Produtos"
-                                }}
-                            </Link>
+    class="flex items-center gap-x-3.5 py-2 px-2.5 text-gray-800 rounded-lg hover:bg-gray-100"
+    :href="
+        userRole === 'admin'
+            ? route('admin.dashboard')
+            : route('products.index')
+    "
+    :class="{
+        'bg-gray-100': userRole === 'admin' ? route().current('admin.dashboard') : route().current('products.index'),
+    }"
+>
+    <Home v-if="userRole === 'admin'" />
+    <ScanBarcode v-else />
+    {{
+        userRole === "admin"
+            ? "Dashboard"
+            : "Produtos"
+    }}
+</Link>
+
                         </li>
                         <li v-show="userRole === 'admin'">
                             <button
@@ -224,11 +225,11 @@ const userRole = props.auth.user.role;
                                 >
                                     <li>
                                         <Link
-                                            :href="route('listProducts')"
+                                            :href="route('admin.products.index')"
                                             :class="{
                                                 'bg-gray-100':
                                                     route().current(
-                                                        'listProducts'
+                                                        'admin.products.index'
                                                     ),
                                             }"
                                             class="block py-2 px-2.5 text-gray-700 hover:bg-gray-100 rounded-lg pl-[43px]"
@@ -237,11 +238,11 @@ const userRole = props.auth.user.role;
                                     </li>
                                     <li>
                                         <Link
-                                            :href="route('createProduct')"
+                                            :href="route('admin.products.create')"
                                             :class="{
                                                 'bg-gray-100':
                                                     route().current(
-                                                        'createProduct'
+                                                        'admin.products.create'
                                                     ),
                                             }"
                                             class="block py-2 px-2.5 text-gray-700 hover:bg-gray-100 rounded-lg pl-[43px]"
@@ -287,10 +288,10 @@ const userRole = props.auth.user.role;
                                 >
                                     <li>
                                         <Link
-                                            :href="route('listClients')"
+                                            :href="route('admin.clients.index')"
                                             :class="{
                                                 'bg-gray-100': isActive([
-                                                    'listClients',
+                                                    'admin.clients.index',
                                                 ]),
                                             }"
                                             class="block py-2 px-2.5 text-gray-700 hover:bg-gray-100 rounded-lg pl-[43px]"
@@ -299,10 +300,10 @@ const userRole = props.auth.user.role;
                                     </li>
                                     <li>
                                         <Link
-                                            :href="route('createClient')"
+                                            :href="route('admin.clients.create')"
                                             :class="{
                                                 'bg-gray-100': isActive([
-                                                    'createClient',
+                                                    'admin.clients.create',
                                                 ]),
                                             }"
                                             class="block py-2 px-2.5 text-gray-700 hover:bg-gray-100 rounded-lg pl-[43px]"

@@ -7,7 +7,7 @@ const props = defineProps({
 });
 
 const viewClient = (clientId) => {
-    window.location.href = `/client/${clientId}`;
+    window.location.href = route('admin.clients.show', clientId);
 };
 
 const emits = defineEmits(["openModal"]);
