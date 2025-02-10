@@ -43,7 +43,7 @@ const submit = async () => {
         form.reset();
         toast.success(response);
     } catch (error) {
-        if(error.errors){
+        if (error.errors) {
             Object.entries(error.errors).forEach(([key, messages]) => {
                 form.setError(key, messages[0]);
             });
@@ -64,18 +64,17 @@ const clearErrorOnChange = (field) => {
     );
 };
 
-clearErrorOnChange('name')
-clearErrorOnChange('description')
-clearErrorOnChange('price')
-clearErrorOnChange('stock_quantity')
-clearErrorOnChange('photo')
+clearErrorOnChange("name");
+clearErrorOnChange("description");
+clearErrorOnChange("price");
+clearErrorOnChange("stock_quantity");
+clearErrorOnChange("photo");
 </script>
 
 <template>
     <AuthenticatedLayout>
         <h1 class="font-semibold text-lg">Register Product</h1>
 
-        <!-- TODO: componentizar form -->
         <form @submit.prevent="submit" class="flex flex-col gap-6">
             <div>
                 <InputLabel for="name" value="Product Name" />
@@ -140,7 +139,10 @@ clearErrorOnChange('photo')
                         required
                     />
 
-                    <InputError class="mt-2" :message="form.errors.stock_quantity" />
+                    <InputError
+                        class="mt-2"
+                        :message="form.errors.stock_quantity"
+                    />
                 </div>
             </div>
 
@@ -162,10 +164,10 @@ clearErrorOnChange('photo')
                         @change="onPhotoInput"
                     />
                 </label>
-                
+
                 <InputError class="mt-2" :message="form.errors.photo" />
             </div>
-            
+
             <div>
                 <PrimaryButton type="submit"> Register Product </PrimaryButton>
             </div>

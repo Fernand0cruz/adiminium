@@ -59,7 +59,6 @@ clearErrorOnChange('confirmPassword')
     <AuthenticatedLayout>
         <h1 class="font-semibold text-lg">Register Clients</h1>
 
-        <!-- TODO: componentizar form -->
         <form @submit.prevent="submit" class="flex flex-col gap-6">
             <div>
                 <InputLabel for="company" value="Company Name" />
@@ -158,3 +157,5 @@ clearErrorOnChange('confirmPassword')
         </form>
     </AuthenticatedLayout>
 </template>
+
+

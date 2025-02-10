@@ -23,46 +23,46 @@ class PagesController extends Controller
 
     public function products()
     {
-        return Inertia::render('Product/Products');
+        return Inertia::render('Products/Index');
     }
+
     public function listProducts()
     {
-        return Inertia::render('Product/ListProducts');
+        return Inertia::render('Products/List');
     }
 
     public function createProduct()
     {
-        return Inertia::render('Product/CreateProduct');
+        return Inertia::render('Products/Create');
     }
 
     public function product()
     {
-        return Inertia::render('Product/Product');
+        return Inertia::render('Products/Show');
     }
 
     public function listClients()
     {
-        return Inertia::render('Client/ListClient');
+        return Inertia::render('Clients/List');
     }
 
     public function createClient()
     {
-        return Inertia::render('Client/CreateClient');
+        return Inertia::render('Clients/Create');
     }
 
     public function client()
     {
-        return Inertia::render('Client/Client');
+        return Inertia::render('Clients/Show');
     }
-
 
     public function orders()
     {
-        return Inertia::render('Order/Orders');
+        return Inertia::render('Orders/Index');
     }
 
-    public function myorders()
+    public function myOrders()
     {
-        return Inertia::render('Order/MyOrders');
+        return Inertia::render('Orders/MyOrders');
     }
 }

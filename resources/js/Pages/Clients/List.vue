@@ -2,26 +2,26 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import LoadingPlaceholder from "@/Components/LoadingPlaceholder.vue";
 import Pagination from "@/Components/Pagination.vue";
-import ProductsTable from "@/Components/ProductsTable.vue";
+import ClientsTable from "@/Components/ClientsTable.vue";
 import ModalContainer from "@/Components/ModalContainer.vue";
 import ModalContentDeleteItem from "@/Components/ModalContentDeleteItem.vue";
 import { onMounted, ref } from "vue";
-import { deleteProduct, fetchProducts } from "@/Services/api";
+import { deleteClient, fetchClients } from "@/Services/api";
 import { useToast } from "vue-toastification";
 
 const toast = useToast();
-const products = ref([]);
+const clients = ref([]);
 const currentPage = ref(1);
 const lastPage = ref(1);
 const isLoading = ref(false);
 const isModalOpen = ref(false);
-const selectedProduct = ref(null);
+const selectedClient = ref(null);
 
-const loadProducts = async (page) => {
+const loadClients = async (page) => {
     isLoading.value = true;
     try {
-        const response = await fetchProducts(page);
-        products.value = response.data;
+        const response = await fetchClients(page);
+        clients.value = response.data;
         currentPage.value = response.current_page;
         lastPage.value = response.last_page;
         window.scrollTo({ top: 0, behavior: "smooth" });
@@ -32,10 +32,10 @@ const loadProducts = async (page) => {
     }
 };
 
-onMounted(() => loadProducts(currentPage.value));
+onMounted(() => loadClients(currentPage.value));
 
 const openModal = (itemId) => {
-    selectedProduct.value = itemId;
+    selectedClient.value = itemId;
     isModalOpen.value = true;
 };
 
@@ -44,11 +44,11 @@ const closeModal = () => {
 };
 
 const deleteItem = async () => {
-    if (!selectedProduct.value) return;
+    if (!selectedClient.value) return;
     try {
-        const response = await deleteProduct(selectedProduct.value);
+        const response = await deleteClient(selectedClient.value);
         closeModal();
-        loadProducts(currentPage.value);
+        loadClients(currentPage.value);
         toast.success(response);
     } catch (error) {
         toast.error(error.message);
@@ -62,28 +62,29 @@ const deleteItem = async () => {
 
         <div v-else class="flex flex-col gap-6">
             <div class="flex items-center justify-between">
-                <h1 class="font-semibold text-lg">Products in the system</h1>
+                <h1 class="font-semibold text-lg">Clients in the system</h1>
 
-                <p v-if="products.length > 0" class="text-gray-500">
+                <p v-if="clients.length > 0" class="text-gray-500">
                     Current page: {{ currentPage }}
                 </p>
             </div>
 
-            <ProductsTable :products="products" @openModal="openModal" />
+            <ClientsTable :clients="clients" @openModal="openModal" />
         </div>
 
-        <Pagination v-if="products.length > 0"
+        <Pagination v-if="clients.length > 0"
             :currentPage="currentPage"
             :lastPage="lastPage"
-            @changePage="loadProducts"
+            @changePage="loadClients"
         />
 
         <ModalContainer v-if="isModalOpen">
             <ModalContentDeleteItem
-                label="product"
+                label="client"
                 @confirmDelete="deleteItem"
                 @closeModal="closeModal"
             />
         </ModalContainer>
     </AuthenticatedLayout>
 </template>
+
