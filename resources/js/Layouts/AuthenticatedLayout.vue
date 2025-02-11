@@ -39,12 +39,14 @@ const toggleSubmenu = (menu) => {
 onMounted(() => {
     const currentRoute = route().current();
 
-    toggleSubmenus.value.products = ["admin.products.index", "admin.products.create"].includes(
-        currentRoute
-    );
-    toggleSubmenus.value.clients = ["admin.clients.index", "admin.clients.create"].includes(
-        currentRoute
-    );
+    toggleSubmenus.value.products = [
+        "admin.products.index",
+        "admin.products.create",
+    ].includes(currentRoute);
+    toggleSubmenus.value.clients = [
+        "admin.clients.index",
+        "admin.clients.create",
+    ].includes(currentRoute);
     toggleSubmenus.value.order = ["listOrders", "createOrder"].includes(
         currentRoute
     );
@@ -66,7 +68,9 @@ const userRole = props.auth.user.role;
             <div class="lg:hidden">
                 <Link
                     :href="
-                        userRole === 'admin' ? route('admin.dashboard') : route('products.index')
+                        userRole === 'admin'
+                            ? route('admin.dashboard')
+                            : route('products.index')
                     "
                 >
                     <ApplicationLogo class="h-16" />
@@ -128,7 +132,9 @@ const userRole = props.auth.user.role;
             <ol class="flex items-center whitespace-nowrap ml-3">
                 <Link
                     :href="
-                        userRole === 'admin' ? route('admin.dashboard') : route('products.index')
+                        userRole === 'admin'
+                            ? route('admin.dashboard')
+                            : route('products.index')
                     "
                     class="text-gray-800 hover:text-gray-500"
                 >
@@ -156,7 +162,9 @@ const userRole = props.auth.user.role;
             <div class="py-3 mx-auto">
                 <Link
                     :href="
-                        userRole === 'admin' ? route('admin.dashboard') : route('products.index')
+                        userRole === 'admin'
+                            ? route('admin.dashboard')
+                            : route('products.index')
                     "
                 >
                     <ApplicationLogo class="h-14" />
@@ -169,25 +177,27 @@ const userRole = props.auth.user.role;
                     <ul class="flex flex-col space-y-1">
                         <li>
                             <Link
-    class="flex items-center gap-x-3.5 py-2 px-2.5 text-gray-800 rounded-lg hover:bg-gray-100"
-    :href="
-        userRole === 'admin'
-            ? route('admin.dashboard')
-            : route('products.index')
-    "
-    :class="{
-        'bg-gray-100': userRole === 'admin' ? route().current('admin.dashboard') : route().current('products.index'),
-    }"
->
-    <Home v-if="userRole === 'admin'" />
-    <ScanBarcode v-else />
-    {{
-        userRole === "admin"
-            ? "Dashboard"
-            : "Produtos"
-    }}
-</Link>
-
+                                class="flex items-center gap-x-3.5 py-2 px-2.5 text-gray-800 rounded-lg hover:bg-gray-100"
+                                :href="
+                                    userRole === 'admin'
+                                        ? route('admin.dashboard')
+                                        : route('products.index')
+                                "
+                                :class="{
+                                    'bg-gray-100':
+                                        userRole === 'admin'
+                                            ? route().current('admin.dashboard')
+                                            : route().current('products.index'),
+                                }"
+                            >
+                                <Home v-if="userRole === 'admin'" />
+                                <ScanBarcode v-else />
+                                {{
+                                    userRole === "admin"
+                                        ? "Dashboard"
+                                        : "Produtos"
+                                }}
+                            </Link>
                         </li>
                         <li v-show="userRole === 'admin'">
                             <button
@@ -225,12 +235,13 @@ const userRole = props.auth.user.role;
                                 >
                                     <li>
                                         <Link
-                                            :href="route('admin.products.index')"
+                                            :href="
+                                                route('admin.products.index')
+                                            "
                                             :class="{
-                                                'bg-gray-100':
-                                                    route().current(
-                                                        'admin.products.index'
-                                                    ),
+                                                'bg-gray-100': route().current(
+                                                    'admin.products.index'
+                                                ),
                                             }"
                                             class="block py-2 px-2.5 text-gray-700 hover:bg-gray-100 rounded-lg pl-[43px]"
                                             >Listar Produtos</Link
@@ -238,12 +249,13 @@ const userRole = props.auth.user.role;
                                     </li>
                                     <li>
                                         <Link
-                                            :href="route('admin.products.create')"
+                                            :href="
+                                                route('admin.products.create')
+                                            "
                                             :class="{
-                                                'bg-gray-100':
-                                                    route().current(
-                                                        'admin.products.create'
-                                                    ),
+                                                'bg-gray-100': route().current(
+                                                    'admin.products.create'
+                                                ),
                                             }"
                                             class="block py-2 px-2.5 text-gray-700 hover:bg-gray-100 rounded-lg pl-[43px]"
                                             >Novo Produto</Link
@@ -300,7 +312,9 @@ const userRole = props.auth.user.role;
                                     </li>
                                     <li>
                                         <Link
-                                            :href="route('admin.clients.create')"
+                                            :href="
+                                                route('admin.clients.create')
+                                            "
                                             :class="{
                                                 'bg-gray-100': isActive([
                                                     'admin.clients.create',
@@ -318,10 +332,7 @@ const userRole = props.auth.user.role;
                                 @click="toggleSubmenu('orders')"
                                 class="w-full flex justify-between items-center py-2 px-2.5 text-gray-800 rounded-lg hover:bg-gray-100"
                                 :class="{
-                                    'bg-gray-100': isActive([
-                                        '',
-                                        '',
-                                    ]),
+                                    'bg-gray-100': isActive(['', '']),
                                 }"
                             >
                                 <div class="flex items-center gap-3">
@@ -406,9 +417,11 @@ const userRole = props.auth.user.role;
         @click="closeAside"
         class="fixed inset-0 bg-black bg-opacity-50 z-50 lg:hidden"
     ></div>
-    <div class="max-w-[1920px] mx-auto lg:ps-64">
+    <div class="mx-auto lg:ps-64 bg-gray-50 min-h-screen">
         <div class="p-4 sm:p-6 space-y-4 sm:space-y-6">
-            <slot />
+            <div class="bg-white border p-4 rounded-lg shadow-sm max-w-screen-2xl mx-auto">
+                <slot />
+            </div>
         </div>
     </div>
 </template>

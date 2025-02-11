@@ -1,90 +1,40 @@
-<script setup>
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import LoadingPlaceholder from "@/Components/LoadingPlaceholder.vue";
-import Pagination from "@/Components/Pagination.vue";
-import ProductsTable from "@/Components/ProductsTable.vue";
-import ModalContainer from "@/Components/ModalContainer.vue";
-import ModalContentDeleteItem from "@/Components/ModalContentDeleteItem.vue";
-import { onMounted, ref } from "vue";
-import { deleteProduct, fetchProducts } from "@/Services/api";
-import { useToast } from "vue-toastification";
-
-const toast = useToast();
-const products = ref([]);
-const currentPage = ref(1);
-const lastPage = ref(1);
-const isLoading = ref(false);
-const isModalOpen = ref(false);
-const selectedProduct = ref(null);
-
-const loadProducts = async (page) => {
-    isLoading.value = true;
-    try {
-        const response = await fetchProducts(page);
-        products.value = response.data;
-        currentPage.value = response.current_page;
-        lastPage.value = response.last_page;
-        window.scrollTo({ top: 0, behavior: "smooth" });
-    } catch (error) {
-        toast.error(error.message);
-    } finally {
-        isLoading.value = false;
-    }
-};
-
-onMounted(() => loadProducts(currentPage.value));
-
-const openModal = (itemId) => {
-    selectedProduct.value = itemId;
-    isModalOpen.value = true;
-};
-
-const closeModal = () => {
-    isModalOpen.value = false;
-};
-
-const deleteItem = async () => {
-    if (!selectedProduct.value) return;
-    try {
-        const response = await deleteProduct(selectedProduct.value);
-        closeModal();
-        loadProducts(currentPage.value);
-        toast.success(response);
-    } catch (error) {
-        toast.error(error.message);
-    }
-};
-</script>
- 
 <template>
     <AuthenticatedLayout>
-
-        <LoadingPlaceholder v-if="isLoading" />
-        <div v-else class="flex flex-col gap-6">
-            <div class="flex items-center justify-between">
-                <h1 class="font-semibold text-lg">Products in the system</h1>
-
-                <p v-if="products.length > 0" class="text-gray-500">
-                    Current page: {{ currentPage }}
-                </p>
-            </div>
-
-            <ProductsTable :products="products" @openModal="openModal" />
+        <div class="mb-4">
+            <SectionTitle title="Produtos cadastrados no sistema" />
+            <SectionSubTitle
+                subTitle="Listagem dos produtos com opção de deletar produto ou editar"
+            />
         </div>
 
-        <Pagination v-if="products.length > 0"
-            :currentPage="currentPage"
-            :lastPage="lastPage"
-            @changePage="loadProducts"
-        />
+        <ErrorMessage v-if="errorMessage" :errorMessage="errorMessage" />
 
-        <ModalContainer v-if="isModalOpen">
-            <ModalContentDeleteItem
-                label="product"
-                @confirmDelete="deleteItem"
-                @closeModal="closeModal"
-            />
-        </ModalContainer>
+        <ProductTable v-if="products" :products="products" />
     </AuthenticatedLayout>
-</template> 
+</template>
 
+<script setup>
+import ErrorMessage from "@/Components/ErrorMessage.vue";
+import { ref, onMounted } from "vue";
+import Services from "@/Services/index.js";
+import ProductTable from "@/Components/TableProducts.vue";
+import SectionSubTitle from "@/Components/SectionSubTitle.vue";
+import SectionTitle from "@/Components/SectionTitle.vue";
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+
+const products = ref(null);
+const errorMessage = ref(null);
+
+const loadData = async () => {
+    try {
+        products.value = await Services.products.get();
+        errorMessage.value = null;
+    } catch (error) {
+        console.error("Erro ao carregar produtos:", error);
+        errorMessage.value =
+            "Erro ao carregar listagem com os produtos. Tente novamente mais tarde.";
+    }
+};
+
+onMounted(loadData);
+</script>
