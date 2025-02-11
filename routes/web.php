@@ -8,21 +8,21 @@ Route::get('/', [PagesController::class, 'welcome'])->name('welcome');
 
 Route::middleware(['auth'])->group(function () {
 
-    Route::prefix('admin')->middleware(['can:admin'])->group(function () {
-        Route::get('/dashboard', [PagesController::class, 'dashboard'])->name('admin.dashboard');
+    Route::prefix('admin')->name('admin.')->middleware(['can:admin'])->group(function () {
+        Route::get('/dashboard', [PagesController::class, 'dashboard'])->name('dashboard');
 
         Route::prefix('products')->group(function () {
-            Route::get('/create', [PagesController::class, 'createProduct'])->name('admin.products.create');
-            Route::get('/', [PagesController::class, 'listProducts'])->name('admin.products.index');
+            Route::get('/create', [PagesController::class, 'createProduct'])->name('products.create');
+            Route::get('/', [PagesController::class, 'listProducts'])->name('products.index');
         });
 
         Route::prefix('clients')->group(function () {
-            Route::get('/create', [PagesController::class, 'createClient'])->name('admin.clients.create');
-            Route::get('/', [PagesController::class, 'listClients'])->name('admin.clients.index');
-            Route::get('/{id}', [PagesController::class, 'client'])->name('admin.clients.show');
+            Route::get('/create', [PagesController::class, 'createClient'])->name('clients.create');
+            Route::get('/', [PagesController::class, 'listClients'])->name('clients.index');
+            Route::get('/{id}', [PagesController::class, 'client'])->name('clients.show');
         });
 
-        Route::get('/orders', [PagesController::class, 'orders'])->name('admin.orders.index');
+        Route::get('/orders', [PagesController::class, 'orders'])->name('orders.index');
     });
 
     Route::prefix('products')->group(function () {
