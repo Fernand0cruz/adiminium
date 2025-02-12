@@ -1,9 +1,9 @@
 import formatCurrency from "@/Utils/formatCurrency";
 
 export default (httpClient) => ({
-    get: async () => {
+    get: async (page = 1) => {
         try {
-            const response = await httpClient.get("/api/products");
+            const response = await httpClient.get(`/api/products?page=${page}`);
 
             const formattedData = response.data.data.data.map((product) => {
                 const price = parseFloat(product.price);

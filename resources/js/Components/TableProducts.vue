@@ -27,7 +27,7 @@
 
             <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
                 <tr
-                    v-for="product in props.products?.data?.data"
+                    v-for="product in props.products"
                     class="bg-white hover:bg-gray-50 dark:bg-neutral-900 dark:hover:bg-neutral-800"
                 >
                     <td class="size-px whitespace-nowrap">
