@@ -58,7 +58,7 @@
                         </span>
                     </td>
 
-                    <TableData data="R$" />
+                    <TableData :data="product.final_price" />
                     
                     <TableData :data="product.stock_quantity" />
 
