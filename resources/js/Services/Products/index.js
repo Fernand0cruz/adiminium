@@ -1,4 +1,4 @@
-import formatCurrency from "@/Utils/formatCurrency";
+import { formatCurrency } from "@/Utils/formatCurrency";
 
 export default (httpClient) => ({
     get: async (page = 1) => {

@@ -61,6 +61,7 @@ import Pagination from "@/Components/Pagination.vue";
 import { Package } from "lucide-vue-next";
 import { Link } from "@inertiajs/vue3";
 import InfoMessage from "@/Components/InfoMessage.vue";
+import { resetState } from "@/Utils/resetState";
 
 const products = ref([]);
 const errorMessage = ref(null);
@@ -70,15 +71,10 @@ const pagination = ref({
 const currentPage = ref(1);
 const loading = ref(false);
 
-const resetState = () => {
-    errorMessage.value = null;
-    loading.value = true;
-};
-
 const loadData = async (page = 1) => {
     if (loading.value) return;
 
-    resetState();
+    resetState({ products, errorMessage, pagination, currentPage, loading });
 
     try {
         const response = await Services.products.get(page);
