@@ -1,9 +1,9 @@
 <template>
     <div class="mx-auto overflow-hidden overflow-x-auto">
         <table
-            class="min-w-full divide-y divide-gray-200 dark:divide-neutral-700"
+            class="min-w-full divide-y divide-gray-200"
         >
-            <thead class="bg-gray-50 dark:bg-neutral-900">
+            <thead class="bg-gray-50">
                 <tr>
                     <TableHeader colTitle="#id" />
 
@@ -25,15 +25,15 @@
                 </tr>
             </thead>
 
-            <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
+            <tbody class="divide-y divide-gray-200">
                 <tr
                     v-for="product in props.products"
-                    class="bg-white hover:bg-gray-50 dark:bg-neutral-900 dark:hover:bg-neutral-800"
+                    class="bg-white hover:bg-gray-50"
                 >
                     <td class="size-px whitespace-nowrap">
                         <span class="block px-6 py-2">
                             <span
-                                class="font-mono text-sm text-blue-600 dark:text-blue-500"
+                                class="font-mono text-sm text-blue-600"
                                 >#{{ product.id }}</span
                             >
                         </span>
@@ -48,8 +48,8 @@
                             <span
                                 :class="
                                     product.discount > 0
-                                        ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-                                        : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-green-200'
+                                        ? 'bg-green-100 text-green-800 '
+                                        : 'bg-red-100 text-red-800'
                                 "
                                 class="inline-flex items-center gap-1.5 py-0.5 px-2 rounded-full text-xs font-medium"
                             >
@@ -64,7 +64,7 @@
 
                     <td class="size-px whitespace-nowrap">
                         <button type="button" class="block">
-                            <span class="py-1.5">
+                            <span class="">
                                 <span
                                     class="py-1 px-2 inline-flex justify-center items-center gap-2 rounded-lg border border-indigo-500 font-medium bg-indigo-100 text-indigo-700 align-middle hover:bg-indigo-200 transition-all text-sm"
                                 >

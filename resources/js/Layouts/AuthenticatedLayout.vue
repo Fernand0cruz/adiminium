@@ -419,7 +419,7 @@ const userRole = props.auth.user.role;
     ></div>
     <div class="mx-auto lg:ps-64 bg-gray-50 min-h-screen">
         <div class="p-4 sm:p-6 space-y-4 sm:space-y-6">
-            <div class="bg-white border p-4 rounded-lg shadow-sm max-w-screen-2xl mx-auto">
+            <div class="bg-white border p-4 rounded-lg shadow-sm max-w-screen-2xl mx-auto space-y-4">
                 <slot />
             </div>
         </div>
