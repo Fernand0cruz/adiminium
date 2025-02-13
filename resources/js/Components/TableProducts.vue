@@ -63,42 +63,29 @@
                     <TableData :data="product.stock_quantity" />
 
                     <td class="size-px whitespace-nowrap">
-                        <button type="button" class="block">
-                            <span class="">
-                                <span
-                                    class="py-1 px-2 inline-flex justify-center items-center gap-2 rounded-lg border border-indigo-500 font-medium bg-indigo-100 text-indigo-700 align-middle hover:bg-indigo-200 transition-all text-sm"
-                                >
+                        <Link href="" class="py-1 px-2 inline-flex justify-center items-center gap-2 rounded-lg border border-indigo-500 font-medium bg-indigo-100 text-indigo-700 align-middle hover:bg-indigo-200 transition-all text-sm">
+                         
                                     <ExternalLink />
                                     Visualizar
-                                </span>
-                            </span>
-                        </button>
+                               
+                        </Link>
                     </td>
 
                     <td class="size-px whitespace-nowrap">
-                        <button type="button" class="block">
-                            <span class="py-1.5">
-                                <span
-                                    class="py-1 px-2 inline-flex justify-center items-center gap-2 rounded-lg border border-green-500 font-medium bg-green-100 text-green-700 align-middle hover:bg-green-200 transition-all text-sm"
-                                >
+                        <Link href="" class="py-1 px-2 inline-flex justify-center items-center gap-2 rounded-lg border border-green-500 font-medium bg-green-100 text-green-700 align-middle hover:bg-green-200 transition-all text-sm">
+                            
                                     <Clipboard />
                                     Editar
-                                </span>
-                            </span>
-                        </button>
+                               
+                        </Link>
                     </td>
 
                     <td class="size-px whitespace-nowrap">
-                        <button type="button" class="block">
-                            <span class="py-1.5">
-                                <span
-                                    class="py-1 px-2 inline-flex justify-center items-center gap-2 rounded-lg border border-red-500 font-medium bg-red-100 text-red-700 align-middle hover:bg-red-200 transition-all text-sm"
-                                >
+                        <Link href="" class="py-1 px-2 inline-flex justify-center items-center gap-2 rounded-lg border border-red-500 font-medium bg-red-100 text-red-700 align-middle hover:bg-red-200 transition-all text-sm">
                                     <Trash />
                                     Excluir
-                                </span>
-                            </span>
-                        </button>
+                                
+                        </Link>
                     </td>
                 </tr>
             </tbody>
@@ -110,6 +97,7 @@
 import { Clipboard, ExternalLink, Trash } from "lucide-vue-next";
 import TableHeader from "./TableHeader.vue";
 import TableData from "./TableData.vue";
+import { Link } from "@inertiajs/vue3";
 
 const props = defineProps({
     products: Object,
