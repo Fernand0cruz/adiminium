@@ -11,23 +11,24 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('admin')->name('admin.')->middleware(['can:admin'])->group(function () {
         Route::get('/dashboard', [PagesController::class, 'dashboard'])->name('dashboard');
 
-        Route::prefix('products')->group(function () {
-            Route::get('/create', [PagesController::class, 'createProduct'])->name('products.create');
-            Route::get('/', [PagesController::class, 'listProducts'])->name('products.index');
+        Route::prefix('products')->name('products.')->group(function () {
+            Route::get('/create', [PagesController::class, 'createProduct'])->name('create');
+            Route::get('/', [PagesController::class, 'listProducts'])->name('index');
+            Route::get('/{id}', [PagesController::class, 'product'])->name('show');
         });
 
-        Route::prefix('clients')->group(function () {
-            Route::get('/create', [PagesController::class, 'createClient'])->name('clients.create');
-            Route::get('/', [PagesController::class, 'listClients'])->name('clients.index');
-            Route::get('/{id}', [PagesController::class, 'client'])->name('clients.show');
+        Route::prefix('clients')->name('clients.')->group(function () {
+            Route::get('/create', [PagesController::class, 'createClient'])->name('create');
+            Route::get('/', [PagesController::class, 'listClients'])->name('index');
+            Route::get('/{id}', [PagesController::class, 'client'])->name('show');
         });
 
         Route::get('/orders', [PagesController::class, 'orders'])->name('orders.index');
     });
 
-    Route::prefix('products')->group(function () {
-        Route::get('/', [PagesController::class, 'products'])->name('products.index');
-        Route::get('/{id}', [PagesController::class, 'product'])->name('products.show');
+    Route::prefix('products')->name('products.')->group(function () {
+        Route::get('/', [PagesController::class, 'products'])->name('index');
+        Route::get('/{id}', [PagesController::class, 'product'])->name('show');
     });
 
     Route::get('/my-orders', [PagesController::class, 'myorders'])->name('orders.my');
