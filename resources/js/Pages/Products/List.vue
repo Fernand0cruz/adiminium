@@ -23,7 +23,9 @@
 
         <!-- LOADING DATA -->
         <div v-if="loading">
-            <p class="text-gray-500 text-center py-[31px]">Carregando Produtos...</p>
+            <p class="text-gray-500 text-center py-[31px]">
+                Carregando Produtos...
+            </p>
         </div>
 
         <!-- ERROR MESSAGE -->
@@ -77,14 +79,13 @@ const loadData = async (page = 1) => {
     resetState({ products, errorMessage, pagination, currentPage, loading });
 
     try {
-        const response = await Services.products.get(page);
+        const response = await Services.products.getAll(page);
         products.value = response.data.data;
         pagination.value = response.data;
         currentPage.value = page;
 
         window.scrollTo({ top: 0 });
     } catch (error) {
-        console.error("Erro ao carregar produtos:", error);
         errorMessage.value =
             "Erro ao carregar listagem com os produtos. Tente novamente mais tarde!";
     } finally {
