@@ -1,7 +1,7 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import ProductsGrid from "@/Components/ProductsGrid.vue";
-import Pagination from "@/Components/Pagination.vue";
+import Pagination from "@/Components/Pagination_old.vue";
 import LoadingPlaceholder from "@/Components/LoadingPlaceholder.vue";
 import ModalContainer from "@/Components/ModalContainer.vue";
 import ModalContentPlaceOrder from "@/Components/ModalContentPlaceOrder.vue";
