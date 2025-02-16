@@ -1,8 +1,6 @@
 <template>
     <div class="mx-auto overflow-hidden overflow-x-auto">
-        <table
-            class="min-w-full divide-y divide-gray-200"
-        >
+        <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
                 <tr>
                     <TableHeader colTitle="#id" />
@@ -11,7 +9,7 @@
 
                     <TableHeader colTitle="Preço Base" />
 
-                    <TableHeader colTitle="Promoção" />
+                    <TableHeader colTitle="Desconto" />
 
                     <TableHeader colTitle="Preço Final" />
 
@@ -32,17 +30,16 @@
                 >
                     <td class="size-px whitespace-nowrap">
                         <span class="block px-6 py-2">
-                            <span
-                                class="font-mono text-sm text-blue-600"
+                            <span class="font-mono text-sm text-blue-600"
                                 >#{{ product.id }}</span
                             >
                         </span>
                     </td>
-                    
+
                     <TableData :data="product.name" />
 
                     <TableData :data="product.price" />
-                    
+
                     <td class="size-px whitespace-nowrap">
                         <span class="block px-6 py-2">
                             <span
@@ -59,32 +56,38 @@
                     </td>
 
                     <TableData :data="product.final_price" />
-                    
+
                     <TableData :data="product.stock_quantity" />
 
                     <td class="size-px whitespace-nowrap">
-                        <Link href="" class="py-1 px-2 inline-flex justify-center items-center gap-2 rounded-lg border border-indigo-500 font-medium bg-indigo-100 text-indigo-700 align-middle hover:bg-indigo-200 transition-all text-sm">
-                         
-                                    <ExternalLink />
-                                    Visualizar
-                               
+                        <Link
+                            :href="
+                                route('admin.products.show', { id: product.id })
+                            "
+                            class="py-1 px-2 inline-flex justify-center items-center gap-2 rounded-lg border border-indigo-500 font-medium bg-indigo-100 text-indigo-700 align-middle hover:bg-indigo-200 transition-all text-sm"
+                        >
+                            <ExternalLink />
+                            Visualizar
                         </Link>
                     </td>
 
                     <td class="size-px whitespace-nowrap">
-                        <Link href="" class="py-1 px-2 inline-flex justify-center items-center gap-2 rounded-lg border border-green-500 font-medium bg-green-100 text-green-700 align-middle hover:bg-green-200 transition-all text-sm">
-                            
-                                    <Clipboard />
-                                    Editar
-                               
+                        <Link
+                            href=""
+                            class="py-1 px-2 inline-flex justify-center items-center gap-2 rounded-lg border border-green-500 font-medium bg-green-100 text-green-700 align-middle hover:bg-green-200 transition-all text-sm"
+                        >
+                            <Clipboard />
+                            Editar
                         </Link>
                     </td>
 
                     <td class="size-px whitespace-nowrap">
-                        <Link href="" class="py-1 px-2 inline-flex justify-center items-center gap-2 rounded-lg border border-red-500 font-medium bg-red-100 text-red-700 align-middle hover:bg-red-200 transition-all text-sm">
-                                    <Trash />
-                                    Excluir
-                                
+                        <Link
+                            href=""
+                            class="py-1 px-2 inline-flex justify-center items-center gap-2 rounded-lg border border-red-500 font-medium bg-red-100 text-red-700 align-middle hover:bg-red-200 transition-all text-sm"
+                        >
+                            <Trash />
+                            Excluir
                         </Link>
                     </td>
                 </tr>
