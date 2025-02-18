@@ -17,7 +17,7 @@ return new class extends Migration
             $table->text('description');
             $table->decimal('price', 10, 2);
             $table->decimal('discount', 5, 2)->default(0);
-            $table->integer('stock_quantity');
+            $table->integer('quantity');
             $table->string('photo');
             $table->timestamps();
         });

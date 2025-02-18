@@ -57,7 +57,7 @@
 
                     <TableData :data="product.final_price" />
 
-                    <TableData :data="product.stock_quantity" />
+                    <TableData :data="product.quantity" />
 
                     <td class="size-px whitespace-nowrap">
                         <Link

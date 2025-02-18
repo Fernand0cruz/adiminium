@@ -25,8 +25,9 @@ class ProductStoreRequest extends FormRequest
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:1000',
             'price' => 'required|numeric|min:1|max:10000',
-            'stock_quantity' => 'required|integer|min:1|max:2500',
+            'quantity' => 'required|integer|min:1|max:2500',
             'photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'discount' => 'required|numeric|min:0|max:100'
         ];
     }
     public function messages()
