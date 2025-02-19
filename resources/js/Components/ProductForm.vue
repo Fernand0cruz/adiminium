@@ -1,4 +1,7 @@
 <template>
+    <!-- ERROR MESSAGE -->
+    <ErrorMessage v-if="errorMessage" :errorMessage="errorMessage" />
+
     <form @submit.prevent="createProduct">
         <div class="grid sm:grid-cols-12 gap-2 sm:gap-6">
             <!-- PHOTO PRODUCT -->
@@ -11,7 +14,10 @@
                     v-model="form.photo"
                     placeholderImage="/images/placeholder-product.png"
                 />
+                <FormErrorInput :message="formErrors.photo?.[0]" />
+
             </div>
+
 
             <!-- NAME PRODUCT -->
             <div class="sm:col-span-3">
@@ -23,6 +29,7 @@
                     v-model="form.name"
                     placeholder="Informe o nome do produto..."
                 />
+                <FormErrorInput :message="formErrors.name?.[0]" />
             </div>
 
             <!-- DESCRIPTION PRODUCT -->
@@ -35,6 +42,7 @@
                     v-model="form.description"
                     placeholder="Informe uma descrição detalhada do produto..."
                 />
+                <FormErrorInput :message="formErrors.description?.[0]" />
             </div>
 
             <!-- PRICE PRODUCT -->
@@ -47,6 +55,7 @@
                     v-model="form.price"
                     placeholder="Informe o preço do produto(ex:R$ 100,00)..."
                 />
+                <FormErrorInput :message="formErrors.price?.[0]" />
             </div>
 
             <!-- PRODUCT DISCOUNT -->
@@ -64,6 +73,7 @@
                     v-model="form.discount"
                     placeholder="Informe a % de desconto(ex:10.00 para 10%)..."
                 />
+                <FormErrorInput :message="formErrors.discount?.[0]" />
             </div>
 
             <!-- QUANTITY OF PRODUCT IN STOCK -->
@@ -76,6 +86,7 @@
                     v-model="form.quantity"
                     placeholder="Informe a quantidade disponível em estoque..."
                 />
+                <FormErrorInput :message="formErrors.quantity?.[0]" />
             </div>
         </div>
 
@@ -107,6 +118,14 @@ import FormCurrencyInput from "./FormCurrencyInput.vue";
 import FormPercentInput from "./FormPercentInput.vue";
 import FormNumberInput from "./FormNumberInput.vue";
 import FormPhotoUpload from "./FormPhotoUpload.vue";
+import Services from "@/Services";
+import ErrorMessage from "./ErrorMessage.vue";
+import { useToast } from "vue-toastification";
+import FormErrorInput from "./FormErrorInput.vue";
+
+const errorMessage = ref(null);
+const toast = useToast();
+const formErrors = ref({});
 
 const form = ref({
     photo: null,
@@ -117,12 +136,22 @@ const form = ref({
     quantity: "",
 });
 
-
 const resetForm = () => {
     clearForm(form, { photo: null });
 };
 
 const createProduct = async () => {
-   
+    try {
+        formErrors.value = {};
+        const response = await Services.products.create(form.value);
+        toast.success(response.message);
+        resetForm();
+    } catch (error) {
+        if (error) {
+            formErrors.value = error;
+        } else {
+            errorMessage.value = "Erro ao criar produto. Tente novamente!";    
+        }
+    }
 };
 </script>
