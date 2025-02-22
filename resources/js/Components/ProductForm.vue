@@ -10,14 +10,13 @@
             </div>
             <div class="sm:col-span-9">
                 <FormPhotoUpload
+                    :key="form.photo"
                     id="photo"
                     v-model="form.photo"
                     placeholderImage="/images/placeholder-product.png"
                 />
                 <FormErrorInput :message="formErrors.photo?.[0]" />
-
             </div>
-
 
             <!-- NAME PRODUCT -->
             <div class="sm:col-span-3">
@@ -149,9 +148,8 @@ const createProduct = async () => {
     } catch (error) {
         if (error) {
             formErrors.value = error;
-        } else {
-            errorMessage.value = "Erro ao criar produto. Tente novamente!";    
-        }
+        } 
+        errorMessage.value = error.message?.[0]
     }
 };
 </script>

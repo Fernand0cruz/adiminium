@@ -17,14 +17,46 @@ export default (httpClient) => ({
 
             return response.data;
         } catch (error) {
-            if (error.response && error.response.status === 422) {
-                throw error.response.data.errors;
-            } else {
-                console.error("Erro ao criar produto:", error);
-                throw error;
+            if (error.response) {
+                if (error.response.status === 422) {
+                    console.warn(
+                        "Erro de validação:",
+                        error.response.data.errors
+                    );
+                    throw error.response.data.errors;
+                }
+
+                if (error.response.status === 413) {
+                    console.warn("Erro: Arquivo muito grande.");
+                    throw { photo: ["O arquivo de imagem é muito grande."] };
+                }
+
+                console.error(
+                    "Erro do servidor:",
+                    error.response.status,
+                    error.response.data
+                );
+                throw {
+                    message: [
+                        "Ocorreu um erro no servidor. Tente novamente mais tarde!",
+                    ],
+                };
             }
+
+            if (error.message === "Network Error") {
+                console.error("Erro de rede. O backend pode estar offline.");
+                throw {
+                    message: [
+                        "Erro de conexão com o servidor. Verifique sua internet ou tente novamente mais tarde!",
+                    ],
+                };
+            }
+
+            console.error("Erro desconhecido:", error);
+            throw { message: ["Ocorreu um erro inesperado."] };
         }
     },
+
     getAll: async (page = 1) => {
         try {
             const response = await httpClient.get(`/api/products?page=${page}`);
@@ -53,5 +85,5 @@ export default (httpClient) => ({
             console.error("Erro ao buscar produtos:", error);
             throw error;
         }
-    }
+    },
 });
