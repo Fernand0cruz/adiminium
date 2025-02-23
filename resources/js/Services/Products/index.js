@@ -86,4 +86,24 @@ export default (httpClient) => ({
             throw error;
         }
     },
+    get: async (productId) => {
+        try {
+            const response = await httpClient.get(`/api/products/${productId}`);
+
+            const product = response.data.data;
+            const price = parseFloat(product.price);
+            const discount = parseFloat(product.discount);
+            const finalPrice = price - price * (discount / 100);
+
+            return {
+                ...product,
+                price: formatCurrency(price),
+                discount: discount.toFixed(2),
+                final_price: formatCurrency(finalPrice),
+            };
+        } catch (error) {
+            console.error("Erro ao buscar produto:", error);
+            throw error;
+        }
+    },
 });
