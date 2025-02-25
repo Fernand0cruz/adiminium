@@ -27,7 +27,7 @@ class ProductStoreRequest extends FormRequest
             'price' => 'required|numeric|min:1|max:10000',
             'quantity' => 'required|integer|min:1|max:2500',
             'photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'discount' => 'required|numeric|min:0|max:100'
+            'discount' => 'numeric|min:0|max:100'
         ];
     }
     public function messages()
@@ -35,7 +35,6 @@ class ProductStoreRequest extends FormRequest
         return [
             'price.min' => 'The price must be at least R$ 1.00.',
             'price.max' => 'The price cannot be greater than R$ 10,000.00.',
-
             'photo.required' => 'The photo field is required.'
         ];
         

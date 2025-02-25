@@ -92,7 +92,7 @@ export default (httpClient) => ({
 
             const product = response.data.data;
             const price = parseFloat(product.price);
-            const discount = parseFloat(product.discount);
+            const discount = product.discount ? parseFloat(product.discount) : 0;
             const finalPrice = price - price * (discount / 100);
 
             return {
