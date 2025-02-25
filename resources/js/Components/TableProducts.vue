@@ -85,7 +85,9 @@
 
                     <td class="size-px whitespace-nowrap">
                         <Link
-                            href=""
+                        :href="
+                                route('admin.products.edit', { id: product.id })
+                            "
                             class="py-1 px-2 mx-6 inline-flex justify-center items-center gap-2 rounded-lg border border-green-500 font-medium bg-green-100 text-green-700 align-middle hover:bg-green-200 transition-all text-sm"
                         >
                             <Clipboard />

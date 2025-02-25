@@ -41,6 +41,11 @@ class PagesController extends Controller
         return Inertia::render('Products/Show');
     }
 
+    public function editProduct()
+    {
+        return Inertia::render('Products/Edit');
+    }
+
     public function listClients()
     {
         return Inertia::render('Clients/List');

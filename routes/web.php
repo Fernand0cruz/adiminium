@@ -15,6 +15,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/create', [PagesController::class, 'createProduct'])->name('create');
             Route::get('/', [PagesController::class, 'listProducts'])->name('index');
             Route::get('/{id}', [PagesController::class, 'product'])->name('show');
+            Route::get('/edit/{id}', [PagesController::class, 'editProduct'])->name('edit');
         });
 
         Route::prefix('clients')->name('clients.')->group(function () {
