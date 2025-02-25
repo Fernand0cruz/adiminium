@@ -8,7 +8,8 @@ export default (httpClient) => ({
             formData.append("name", productData.name);
             formData.append("description", productData.description);
             formData.append("price", productData.price);
-            formData.append("discount", productData.discount);
+            const discount = productData.discount ? parseFloat(productData.discount) : 0;
+            formData.append("discount", discount);
             formData.append("quantity", productData.quantity);
 
             const response = await httpClient.post("/api/products", formData, {
@@ -92,7 +93,7 @@ export default (httpClient) => ({
 
             const product = response.data.data;
             const price = parseFloat(product.price);
-            const discount = product.discount ? parseFloat(product.discount) : 0;
+            const discount = parseFloat(product.discount);
             const finalPrice = price - price * (discount / 100);
 
             return {
