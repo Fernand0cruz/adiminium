@@ -25,7 +25,9 @@ class ProductUpdateRequest extends FormRequest
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:1000',
             'price' => 'required|numeric|min:1|max:10000',
-            'stock_quantity' => 'required|integer|min:1|max:2500',
+            'quantity' => 'required|integer|min:1|max:2500',
+            'photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'discount' => 'numeric|min:0|max:100'
         ];
     }
     public function messages()
@@ -33,6 +35,7 @@ class ProductUpdateRequest extends FormRequest
         return [
             'price.min' => 'The price must be at least R$ 1.00.',
             'price.max' => 'The price cannot be greater than R$ 10,000.00.',
+            'photo.required' => 'The photo field is required.'
         ];
         
     }
