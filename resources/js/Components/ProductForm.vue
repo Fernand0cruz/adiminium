@@ -2,7 +2,7 @@
     <!-- ERROR MESSAGE -->
     <ErrorMessage v-if="errorMessage" :errorMessage="errorMessage" />
 
-    <form @submit.prevent="createProduct">
+    <form @submit.prevent="createOrUpdateProduct">
         <div class="grid sm:grid-cols-12 gap-2 sm:gap-6">
             <!-- PHOTO PRODUCT -->
             <div class="sm:col-span-3">
@@ -108,7 +108,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { clearForm } from "@/Utils/clearForm";
 import FormLabel from "./FormLabel.vue";
 import FormTextInput from "./FormTextInput.vue";
@@ -122,9 +122,15 @@ import ErrorMessage from "./ErrorMessage.vue";
 import { useToast } from "vue-toastification";
 import FormErrorInput from "./FormErrorInput.vue";
 
+const props = defineProps({
+    product: Object,
+    errorMessage: String,
+});
+
 const errorMessage = ref(null);
 const toast = useToast();
 const formErrors = ref({});
+const isEditing = ref(false);
 
 const form = ref({
     photo: null,
@@ -135,21 +141,47 @@ const form = ref({
     quantity: "",
 });
 
+watch(
+    () => props.product,
+    (newProduct) => {
+        if (newProduct) {
+            form.value = { ...newProduct, id: newProduct.id ?? null };
+            isEditing.value = true;
+        }
+    },
+    { immediate: true }
+);
+
+watch(
+    () => props.errorMessage,
+    (newError) => {
+        if (newError) {
+            errorMessage.value = props.errorMessage;
+        }
+    },
+    { immediate: true }
+);
+
 const resetForm = () => {
     clearForm(form, { photo: null });
 };
 
-const createProduct = async () => {
+const createOrUpdateProduct = async () => {
     try {
-        formErrors.value = {};
-        const response = await Services.products.create(form.value);
-        toast.success(response.message);
-        resetForm();
+        formErrors.value = {};  
+        if (isEditing.value) {            
+            const response = await Services.products.update(form.value.id, form.value);
+            toast.success(response.message);
+        }else{
+            const response = await Services.products.create(form.value);
+            toast.success(response.message);
+            resetForm();
+        }
     } catch (error) {
         if (error) {
             formErrors.value = error;
-        } 
-        errorMessage.value = error.message?.[0]
+        }
+        errorMessage.value = error.message?.[0];
     }
 };
 </script>
