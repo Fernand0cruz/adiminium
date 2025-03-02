@@ -3,7 +3,9 @@
 namespace App\Services;
 
 use App\Models\Product;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Storage;
 
 class ProductService
 {
@@ -13,41 +15,58 @@ class ProductService
             ->paginate(25);
     }
 
-    public function getProductById($id)
+    public function getProductById(int $id): Product
     {
         return Product::findOrFail($id);
     }
 
-    public function createProduct(array $data)
+    public function createProduct(array $data): Product
     {
-        $photoPath = null;
-
-        if (isset($data['photo']) && $data['photo'] instanceof \Illuminate\Http\UploadedFile) {
-            $photoPath = $data['photo']->store('photos', 'public');
-        }
+        $photoPath = $this->handlePhotoUpload($data);
 
         $data['photo'] = $photoPath;
 
         return Product::create($data);
     }
 
-    public function updateProduct($id, array $data)
+    public function updateProduct(int $id, array $data): Product
     {
         $product = Product::findOrFail($id);
-        $product->fill($data);
-        $product->save();
+
+        if (isset($data['photo']) && $data['photo'] instanceof UploadedFile) {
+            $this->deleteOldPhoto($product);
+            $data['photo'] = $this->handlePhotoUpload($data);
+        }
+
+        $product->update($data);
 
         return $product;
     }
 
-    public function deleteProduct($id)
+    public function deleteProduct(int $id): Product
     {
         $product = Product::findOrFail($id);
 
-        if ($product->photo) {
-            \Illuminate\Support\Facades\Storage::disk('public')->delete($product->photo);
-        }
+        $this->deleteOldPhoto($product);
 
         $product->delete();
+
+        return $product;
+    }
+
+    private function handlePhotoUpload(array &$data): ?string
+    {
+        if (isset($data['photo']) && $data['photo'] instanceof UploadedFile) {
+            return $data['photo']->store('photos', 'public');
+        }
+
+        return null;
+    }
+
+    private function deleteOldPhoto(Product $product): void
+    {
+        if ($product->photo) {
+            Storage::disk('public')->delete($product->photo);
+        }
     }
 }
