@@ -4,19 +4,15 @@
             <!-- TITLE -->
             <div>
                 <SectionTitle title="Produtos cadastrados no sistema" />
-                <SectionSubTitle
-                    subTitle="Listagem dos produtos com opção de deletar produto ou editar"
-                />
+                <SectionSubTitle subTitle="Listagem dos produtos com opção de deletar produto ou editar" />
             </div>
 
             <!-- ADD NEW PRODUCT -->
             <div>
-                <Link
-                    :href="route('admin.products.create')"
-                    class="py-1 px-2 inline-flex justify-center items-center gap-2 rounded-lg border border-indigo-500 font-medium bg-indigo-100 text-indigo-700 align-middle hover:bg-indigo-200 transition-all text-sm"
-                >
-                    <Package />
-                    Novo Produto
+                <Link :href="route('admin.products.create')"
+                    class="py-1 px-2 inline-flex justify-center items-center gap-2 rounded-lg border border-indigo-500 font-medium bg-indigo-100 text-indigo-700 align-middle hover:bg-indigo-200 transition-all text-sm">
+                <Package />
+                Novo Produto
                 </Link>
             </div>
         </div>
@@ -32,21 +28,16 @@
         <ErrorMessage v-if="errorMessage" :errorMessage="errorMessage" />
 
         <!-- INFO MESSAGE -->
-        <InfoMessage
-            v-if="!loading && !errorMessage && products.length === 0"
-            infoMessage="Não foi encontrado produtos no sistema!"
-        />
+        <InfoMessage v-if="!loading && !errorMessage && products.length === 0"
+            infoMessage="Não foi encontrado produtos no sistema!" />
 
         <div v-if="products && products.length > 0" class="space-y-4">
             <!-- PRODUCT TABLE -->
-            <ProductTable :products="products" />
+            <ProductTable :products="products" @productDeleted="loadData(currentPage)" />
 
             <!-- PAGINATION -->
-            <Pagination
-                :currentPage="currentPage"
-                :lastPage="pagination?.last_page"
-                @update:currentPage="handlePageChange"
-            />
+            <Pagination :currentPage="currentPage" :lastPage="pagination?.last_page"
+                @update:currentPage="handlePageChange" />
         </div>
     </AuthenticatedLayout>
 </template>
@@ -83,11 +74,9 @@ const loadData = async (page = 1) => {
         products.value = response.data.data;
         pagination.value = response.data;
         currentPage.value = page;
-
         window.scrollTo({ top: 0 });
     } catch (error) {
-        errorMessage.value =
-            "Erro ao carregar listagem com os produtos. Tente novamente mais tarde!";
+        errorMessage.value = error.message[0]
     } finally {
         loading.value = false;
     }

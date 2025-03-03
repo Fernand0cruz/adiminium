@@ -2,7 +2,7 @@
     <!-- ERROR MESSAGE -->
     <ErrorMessage v-if="errorMessage" :errorMessage="errorMessage" />
 
-    <form @submit.prevent="createOrUpdateProduct">
+    <form v-if="!isEditing || product.id" @submit.prevent="createOrUpdateProduct">
         <div class="grid sm:grid-cols-12 gap-2 sm:gap-6">
             <div class="sm:col-span-3">
                 <FormLabel for="photo" label="Foto do Produto:" />
