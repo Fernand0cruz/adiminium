@@ -1,6 +1,6 @@
 <template>
     <div
-        class="bg-yellow-50 border-s-4 border border-yellow-500 rounded-xl p-4"
+        class="bg-yellow-50 border-s-4 border border-yellow-500 rounded-lg p-4"
     >
         <div class="flex">
             <div class="shrink-0">
