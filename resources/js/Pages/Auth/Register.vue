@@ -8,7 +8,6 @@ import { Link, useForm } from "@inertiajs/vue3";
 import axios from "axios";
 
 const form = useForm({
-    company: "",
     name: "",
     email: "",
     phone: "",
@@ -56,19 +55,6 @@ const submit = async () => {
                 class="mb-4 mt-2 p-4 text-center text-red-600 bg-red-100 rounded-md border border-red-600"
             >
                 {{ form.errors.error }}
-            </div>
-
-            <div>
-                <InputLabel for="company" value="Company Name" />
-                <TextInput
-                    id="company"
-                    type="text"
-                    class="mt-1 block w-full"
-                    v-model="form.company"
-                    required
-                    autofocus
-                />
-                <InputError class="mt-2" :message="form.errors.company" />
             </div>
 
             <div class="mt-4">

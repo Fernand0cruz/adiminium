@@ -27,7 +27,6 @@ class ClientStoreRequest extends FormRequest
         $id = $this->route('id');
 
         return [
-            'company' => ['required', 'string', 'max:255', Rule::unique(User::class)->ignore($id)],
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique(User::class)->ignore($id)],
             'phone' => ['required', 'string', 'min:15',Rule::unique(User::class)->ignore($id)],

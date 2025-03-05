@@ -11,7 +11,7 @@
             <div v-if="userRole === 'admin'">
                 <Link :href="route('admin.products.edit', { id: productId })"
                     class="py-1 px-2 inline-flex justify-center items-center gap-2 rounded-lg border border-indigo-500 font-medium bg-indigo-100 text-indigo-700 align-middle hover:bg-indigo-200 transition-all text-sm">
-                <Package />
+                <Package2 />
                 Editar Produto
                 </Link>
             </div>
@@ -86,7 +86,7 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import SectionTitle from "@/Components/SectionTitle.vue";
 import SectionSubTitle from "@/Components/SectionSubTitle.vue";
-import { Package } from "lucide-vue-next";
+import { Package2 } from "lucide-vue-next";
 import { Link } from "@inertiajs/vue3";
 import { usePage } from "@inertiajs/vue3";
 import { ref, onMounted } from "vue";

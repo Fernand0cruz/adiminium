@@ -4,14 +4,14 @@
             <!-- TITLE -->
             <div>
                 <SectionTitle title="Produtos cadastrados no sistema" />
-                <SectionSubTitle subTitle="Listagem dos produtos com opção de deletar produto ou editar" />
+                <SectionSubTitle subTitle="Listagem dos produtos com opção de deletar produto ou editar!" />
             </div>
 
             <!-- ADD NEW PRODUCT -->
             <div>
                 <Link :href="route('admin.products.create')"
                     class="py-1 px-2 inline-flex justify-center items-center gap-2 rounded-lg border border-indigo-500 font-medium bg-indigo-100 text-indigo-700 align-middle hover:bg-indigo-200 transition-all text-sm">
-                <Package />
+                <Package2 />
                 Novo Produto
                 </Link>
             </div>
@@ -51,7 +51,7 @@ import SectionSubTitle from "@/Components/SectionSubTitle.vue";
 import SectionTitle from "@/Components/SectionTitle.vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import Pagination from "@/Components/Pagination.vue";
-import { Package } from "lucide-vue-next";
+import { Package2 } from "lucide-vue-next";
 import { Link } from "@inertiajs/vue3";
 import InfoMessage from "@/Components/InfoMessage.vue";
 import { resetState } from "@/Utils/resetState";

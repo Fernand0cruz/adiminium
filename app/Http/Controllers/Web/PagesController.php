@@ -46,6 +46,26 @@ class PagesController extends Controller
         return Inertia::render('Products/Edit');
     }
 
+    public function listCompanies()
+    {
+        return Inertia::render('Companies/Index');
+    }
+
+    public function createCompanies()
+    {
+        return Inertia::render('Companies/Create');
+    }
+
+    public function company()
+    {
+        return Inertia::render('Companies/Show');
+    }
+
+    public function editCompanies()
+    {
+        return Inertia::render('Companies/Edit');
+    }
+
     public function listClients()
     {
         return Inertia::render('Clients/List');
