@@ -18,6 +18,13 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/edit/{id}', [PagesController::class, 'editProduct'])->name('edit');
         });
 
+        Route::prefix('companies')->name('companies.')->group(function () {
+            Route::get('/create', [PagesController::class, 'createCompanies'])->name('create');
+            Route::get('/', [PagesController::class, 'listCompanies'])->name('index');
+            Route::get('/{id}', [PagesController::class, 'company'])->name('show');
+            Route::get('/edit/{id}', [PagesController::class, 'editCompanies'])->name('edit');
+        });
+
         Route::prefix('clients')->name('clients.')->group(function () {
             Route::get('/create', [PagesController::class, 'createClient'])->name('create');
             Route::get('/', [PagesController::class, 'listClients'])->name('index');
@@ -28,8 +35,8 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::prefix('products')->name('products.')->group(function () {
-        Route::get('/', [PagesController::class, 'products'])->name('index');
-        Route::get('/{id}', [PagesController::class, 'product'])->name('show');
+        Route::get('/', [PagesController::class, 'products'])->name('list');
+        Route::get('/{id}', [PagesController::class, 'product'])->name('view');
     });
 
     Route::get('/my-orders', [PagesController::class, 'myorders'])->name('orders.my');
