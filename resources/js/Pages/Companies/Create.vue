@@ -20,6 +20,9 @@
                 </Link>
             </div>
         </div>
+        
+        <!-- FORM FOR REGISTER PRODUCT IN THE SYSTEM -->
+        <CompanyForm />
     </AuthenticatedLayout>
 </template>
 
@@ -29,4 +32,5 @@ import SectionTitle from "@/Components/SectionTitle.vue";
 import SectionSubTitle from "@/Components/SectionSubTitle.vue";
 import { SquareChartGantt } from "lucide-vue-next";
 import { Link } from "@inertiajs/vue3";
+import CompanyForm from "@/Components/CompanyForm.vue";
 </script>

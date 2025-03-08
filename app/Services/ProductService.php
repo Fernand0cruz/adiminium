@@ -11,7 +11,7 @@ class ProductService
 {
     public function getAllProducts(): LengthAwarePaginator
     {
-        return Product::select('id', 'name', 'description', 'price', 'discount', 'quantity')
+        return Product::select('id', 'photo', 'name', 'description', 'price', 'discount', 'quantity')
             ->paginate(25);
     }
 

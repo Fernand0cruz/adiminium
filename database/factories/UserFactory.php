@@ -2,26 +2,24 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
- */
 class UserFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
+    protected $model = User::class;
+
     public function definition(): array
     {
+        $this->faker = \Faker\Factory::create('pt_BR');
+
         return [
+            'company_id' => null,
             'name' => $this->faker->name(),
             'email' => $this->faker->unique()->safeEmail(),
-            'phone' => $this->formatPhone($this->faker->phoneNumber()),
+            'phone' => $this->generatePhoneNumber(),
             'role' => 'client',
             'email_verified_at' => now(),
             'password' => Hash::make('password'), 
@@ -29,21 +27,11 @@ class UserFactory extends Factory
         ];
     }
 
-    /**
-     * Format a phone number to a specific pattern.
-     *
-     * @param string $phoneNumber
-     * @return string
-     */
-    protected function formatPhone(string $phoneNumber): string
+    protected function generatePhoneNumber(): string
     {
-        $numberOnly = preg_replace('/\D/', '', $phoneNumber); 
-        return preg_replace('/(\d{2})(\d{5})(\d{4})/', '($1) $2-$3', $numberOnly);
+        return $this->faker->numerify('###########'); 
     }
 
-    /**
-     * Indicate that the model's email address should be unverified.
-     */
     public function unverified(): static
     {
         return $this->state(fn (array $attributes) => [
@@ -51,15 +39,12 @@ class UserFactory extends Factory
         ]);
     }
 
-    /**
-     * Configure the factory to create the first user with specific attributes.
-     *
-     * @return static
-     */
     public static function firstUser(): static
     {
+        $faker = \Faker\Factory::create('pt_BR');
+
         return (new static())->state([
-            'phone' => '(00) 00000-0000', 
+            'phone' => $faker->numerify('###########'), 
             'role' => 'admin',
             'name' => 'Admin',
             'email' => 'admin@gmail.com',
@@ -67,15 +52,12 @@ class UserFactory extends Factory
         ]);
     }
 
-    /**
-     * Configure the factory to create a second user with specific attributes.
-     *
-     * @return static
-     */
     public static function secondUser(): static
     {
+        $faker = \Faker\Factory::create('pt_BR');
+
         return (new static())->state([
-            'phone' => fake()->phoneNumber(),
+            'phone' => $faker->numerify('###########'),
             'role' => 'client',
             'name' => 'User',
             'email' => 'user@gmail.com',

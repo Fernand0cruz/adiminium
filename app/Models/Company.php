@@ -16,16 +16,22 @@ class Company extends Model
         'cnpj',
         'business_name',
         'phone',
+        'address',
         'street',
         'neighborhood',
         'state',
         'number',
         'city',
-        'postal_code',
+        'zip_code',
     ];
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
     }
 }

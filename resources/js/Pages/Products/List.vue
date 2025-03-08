@@ -33,7 +33,7 @@
 
         <div v-if="products && products.length > 0" class="space-y-4">
             <!-- PRODUCT TABLE -->
-            <ProductTable :products="products" @productDeleted="loadData(currentPage)" />
+            <TableProducts :products="products" @productDeleted="loadData(currentPage)" />
 
             <!-- PAGINATION -->
             <Pagination :currentPage="currentPage" :lastPage="pagination?.last_page"
@@ -46,7 +46,7 @@
 import ErrorMessage from "@/Components/ErrorMessage.vue";
 import { ref, onMounted } from "vue";
 import Services from "@/Services/index.js";
-import ProductTable from "@/Components/TableProducts.vue";
+import TableProducts from "@/Components/TableProducts.vue";
 import SectionSubTitle from "@/Components/SectionSubTitle.vue";
 import SectionTitle from "@/Components/SectionTitle.vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
