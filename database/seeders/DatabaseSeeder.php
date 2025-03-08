@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Company;
 use App\Models\Product;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -17,7 +18,9 @@ class DatabaseSeeder extends Seeder
 
         User::factory()->firstUser()->create();
         User::factory()->secondUser()->create();
-        User::factory()->count(25)->create();
+        User::factory()->count(50)->create();
+
+        Company::factory()->count(50)->create();
 
         $peripherals = [
             [

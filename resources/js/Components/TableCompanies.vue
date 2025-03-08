@@ -8,6 +8,7 @@
                     <TableHeader colTitle="Razao Social" />
                     <TableHeader colTitle="CNPJ" />
                     <TableHeader colTitle="Telefone" />
+                    <TableHeader colTitle="Email" />
                     <TableHeader colTitle="Cidade" />
                     <TableHeader colTitle="Responsavel" />
                     <TableHeader colTitle="Ver" />
@@ -24,17 +25,20 @@
                         </span>
                     </td>
 
-                     <td class="size-px whitespace-nowrap">
+                    <td class="size-px whitespace-nowrap">
                         <span class="block pl-3">
-                            <img class="border object-cover size-10 rounded-lg ring-2 ring-white" :src="getProductPhotoUrl(company.photo)" />
+                            <img class="border object-cover size-10 rounded-lg ring-2 ring-white"
+                                :src="getProductPhotoUrl(company.photo)" />
                         </span>
-                     </td>
+                    </td>
 
                     <TableData :data="company.business_name" />
-                    
+
                     <TableData :data="company.cnpj" />
 
                     <TableData :data="company.phone" />
+
+                    <TableData :data="company.email" />
 
                     <TableData :data="company.city" />
 
@@ -61,7 +65,7 @@
                             class="py-1 px-2 mx-3 inline-flex justify-center items-center gap-2 rounded-lg border border-red-500 font-medium bg-red-100 text-red-700 align-middle hover:bg-red-200 transition-all text-sm">
                             <Trash />
                         </button>
-                    </td> 
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -77,7 +81,8 @@
                     Tem certeza que deseja excluir a empresa:
                     <strong>{{ modalConpany.business_name }}</strong>?
                 </p>
-                <p class=" text-red-500">O cliente responsavel por gerenciar os pedidos para a empresa tambem sera excluido*</p>
+                <p class=" text-red-500">O cliente responsavel por gerenciar os pedidos para a empresa tambem sera
+                    excluido*</p>
             </div>
             <div class="bg-gray-100 p-4 flex justify-end gap-4">
                 <button @click="closeModal"

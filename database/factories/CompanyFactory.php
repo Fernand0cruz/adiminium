@@ -15,16 +15,18 @@ class CompanyFactory extends Factory
 
         return [
             'photo' => 'https://picsum.photos/seed/' . $this->faker->unique()->numberBetween(1, 1000) . '/640/480',
-            'cnpj' => str_pad($this->faker->randomNumber(9, true), 14, '0', STR_PAD_LEFT),
             'business_name' => $this->faker->company,
+            'cnpj' => str_pad($this->faker->randomNumber(9, true), 14, '0', STR_PAD_LEFT),
             'phone' => $this->faker->numerify('###########'),
+            'email' => $this->faker->unique()->safeEmail(),
+            'web_site' => 'https://' . $this->faker->domainName(),
             'address' => $this->faker->address,
-            'street' => $this->faker->streetName,
-            'neighborhood' => $this->faker->word,
             'state' => $this->faker->stateAbbr,
-            'number' => (string) $this->faker->buildingNumber,
             'city' => $this->faker->city,
             'zip_code' => $this->faker->postcode,
+            'neighborhood' => $this->faker->word,
+            'street' => $this->faker->streetName,
+            'number' => (string) $this->faker->buildingNumber,
         ];
     }
 }

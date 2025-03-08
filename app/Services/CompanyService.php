@@ -12,7 +12,8 @@ class CompanyService
 {
     public function getAllCompanies(): LengthAwarePaginator
     {
-        return Company::paginate(25);
+        return Company::select('id' ,'photo', 'business_name', 'cnpj', 'phone', 'email', 'city')
+        ->paginate(25);
     }
 
     public function createCompany(array $data): Company
@@ -22,6 +23,11 @@ class CompanyService
         $data['photo'] = $photoPath;
 
         return Company::create($data);
+    }
+
+    public function getCompanyById(int $id): Company
+    {
+        return Company::findOrFail($id);
     }
 
     private function handlePhotoUpload(array &$data): ?string

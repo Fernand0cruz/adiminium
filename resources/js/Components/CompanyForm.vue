@@ -84,6 +84,7 @@ import FormCnpjInput from "./FormCnpjInput.vue";
 import FormPhoneInput from "./FormPhoneInput.vue";
 import FormNumberInput from "./FormNumberInput.vue";
 import FormCepInput from "./FormCepInput.vue"
+import FormEmailInput from "./FormEmailInput.vue";
 import FormErrorInput from "./FormErrorInput.vue";
 import ErrorMessage from "./ErrorMessage.vue";
 import FormPhotoUpload from "./FormPhotoUpload.vue";
@@ -97,32 +98,36 @@ const toast = useToast();
 
 const form = ref({
     photo: null,
-    cnpj: "",
     business_name: "",
+    cnpj: "",
     phone: "",
+    email: "",
+    web_site: "",
     address: "",
-    street: "",
-    neighborhood: "",
     state: "",
-    number: "",
     city: "",
-    zip_code: ""
+    zip_code: "",
+    neighborhood: "",
+    street: "",
+    number: ""
 });
 
 const companyFields = [
-    { id: "cnpj", label: "CNPJ:", component: FormCnpjInput, bindings: { id: "cnpj" }, placeholder: "Informe o CNPJ da empresa..." },
     { id: "business_name", label: "Razão social:", component: FormTextInput, bindings: { id: "business_name" }, placeholder: "Informe a razão social da empresa..." },
+    { id: "cnpj", label: "CNPJ:", component: FormCnpjInput, bindings: { id: "cnpj" }, placeholder: "Informe o CNPJ da empresa..." },
     { id: "phone", label: "Telefone:", component: FormPhoneInput, bindings: { id: "phone" }, placeholder: "Informe o telefone da empresa..." },
+    { id: "email", label: "E-mail:", component: FormEmailInput, bindings: { id: "email" }, placeholder: "Informe o e-mail da empresa..." },
+    { id: "web_site", label: "WebSite(Rede social):", component: FormTextInput, bindings: { id: "web_site" }, placeholder: "Informe o website da empresa..." },
 ];
 
 const companyAddressFields = [
     { id: "address", label: "Endereço:", component: FormTextInput, bindings: { id: "address" }, placeholder: "Informe o endereço da empresa..." },
-    { id: "street", label: "Logradouro:", component: FormTextInput, bindings: { id: "street" }, placeholder: "Informe o logradouro da empresa..." },
-    { id: "neighborhood", label: "Bairro:", component: FormTextInput, bindings: { id: "neighborhood" }, placeholder: "Informe o bairro da empresa..." },
     { id: "state", label: "UF:", component: FormTextInput, bindings: { id: "state" }, placeholder: "Informe a UF da empresa..." },
-    { id: "number", label: "Número:", component: FormNumberInput, bindings: { id: "number" }, placeholder: "Informe o número da empresa..." },
     { id: "city", label: "Município:", component: FormTextInput, bindings: { id: "city" }, placeholder: "Informe o município da empresa..." },
     { id: "zip_code", label: "CEP:", component: FormCepInput, bindings: { id: "zip_code" }, placeholder: "Informe o CEP da empresa..." },
+    { id: "neighborhood", label: "Bairro:", component: FormTextInput, bindings: { id: "neighborhood" }, placeholder: "Informe o bairro da empresa..." },
+    { id: "street", label: "Logradouro:", component: FormTextInput, bindings: { id: "street" }, placeholder: "Informe o logradouro da empresa..." },
+    { id: "number", label: "Número:", component: FormNumberInput, bindings: { id: "number" }, placeholder: "Informe o número da empresa..." },
 ];
 
 const resetForm = () => {

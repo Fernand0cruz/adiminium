@@ -19,17 +19,12 @@ class UserFactory extends Factory
             'company_id' => null,
             'name' => $this->faker->name(),
             'email' => $this->faker->unique()->safeEmail(),
-            'phone' => $this->generatePhoneNumber(),
+            'phone' => $this->faker->numerify('###########'),
             'role' => 'client',
             'email_verified_at' => now(),
             'password' => Hash::make('password'), 
             'remember_token' => Str::random(10),
         ];
-    }
-
-    protected function generatePhoneNumber(): string
-    {
-        return $this->faker->numerify('###########'); 
     }
 
     public function unverified(): static

@@ -13,16 +13,18 @@ class Company extends Model
     protected $fillable = [
         'user_id',
         'photo',
-        'cnpj',
         'business_name',
+        'cnpj',
         'phone',
+        'email',
+        'web_site',
         'address',
-        'street',
-        'neighborhood',
         'state',
-        'number',
         'city',
         'zip_code',
+        'neighborhood',
+        'street',
+        'number',
     ];
 
     public function user(): BelongsTo

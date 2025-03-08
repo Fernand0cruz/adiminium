@@ -32,4 +32,11 @@ class CompanyController extends Controller
             $this->success($this->companyService->createCompany($request->validated()), 'Empresa criada com sucesso!', 201)
         );
     }
+
+    public function show(int $id): JsonResponse
+    {
+        return $this->handleExceptions(fn () => 
+            $this->success($this->companyService->getCompanyById($id), 'Produto carregado com sucesso!')
+        );
+    }
 }
