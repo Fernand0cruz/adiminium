@@ -9,10 +9,9 @@
 
             <!-- ADD NEW PRODUCT -->
             <div>
-                <Link :href="route('admin.products.create')"
-                    class="py-1 px-2 inline-flex justify-center items-center gap-2 rounded-lg border border-indigo-500 font-medium bg-indigo-100 text-indigo-700 align-middle hover:bg-indigo-200 transition-all text-sm">
-                <Package2 />
-                Novo Produto
+                <Link :href="route('admin.products.create')" class="py-1 px-2 inline-flex justify-center items-center gap-2 rounded-lg border border-indigo-500 font-medium bg-indigo-100 text-indigo-700 align-middle hover:bg-indigo-200 transition-all text-sm">
+                    <Package2 />
+                    Novo Produto
                 </Link>
             </div>
         </div>
@@ -28,16 +27,14 @@
         <ErrorMessage v-if="errorMessage" :errorMessage="errorMessage" />
 
         <!-- INFO MESSAGE -->
-        <InfoMessage v-if="!loading && !errorMessage && products.length === 0"
-            infoMessage="Não foi encontrado produtos no sistema!" />
+        <InfoMessage v-if="!loading && !errorMessage && products.length === 0" infoMessage="Não foi encontrado produtos no sistema!" />
 
         <div v-if="products && products.length > 0" class="space-y-4">
             <!-- PRODUCT TABLE -->
             <TableProducts :products="products" @productDeleted="loadData(currentPage)" />
 
             <!-- PAGINATION -->
-            <Pagination :currentPage="currentPage" :lastPage="pagination?.last_page"
-                @update:currentPage="handlePageChange" />
+            <Pagination :currentPage="currentPage" :lastPage="pagination?.last_page" @update:currentPage="handlePageChange" />
         </div>
     </AuthenticatedLayout>
 </template>
@@ -58,9 +55,7 @@ import { resetState } from "@/Utils/resetState";
 
 const products = ref([]);
 const errorMessage = ref(null);
-const pagination = ref({
-    last_page: 1,
-});
+const pagination = ref({ last_page: 1 }); 
 const currentPage = ref(1);
 const loading = ref(false);
 
@@ -70,9 +65,9 @@ const loadData = async (page = 1) => {
     resetState({ products, errorMessage, pagination, currentPage, loading });
 
     try {
-        const response = await Services.products.getAll(page);
-        products.value = response.data.data;
-        pagination.value = response.data;
+        const { data } = await Services.products.getAll(page);
+        products.value = data.data;
+        pagination.value = data;
         currentPage.value = page;
         window.scrollTo({ top: 0 });
     } catch (error) {

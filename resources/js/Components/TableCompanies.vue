@@ -89,7 +89,7 @@
                     class="py-1 px-2 inline-flex justify-center items-center gap-2 rounded-lg font-medium bg-gray-100 text-gray-700 align-middle hover:bg-gray-200 transition-all text-sm">
                     Cancelar
                 </button>
-                <button @click="deleteProduct"
+                <button @click="deleteCompany"
                     class="py-1 px-2 inline-flex justify-center items-center gap-2 rounded-lg border border-red-500 font-medium bg-red-100 text-red-700 align-middle hover:bg-red-200 transition-all text-sm">
                     <Trash />
                     Excluir
@@ -127,20 +127,20 @@ const closeModal = () => {
     modalConpany.value = null;
 };
 
-const emit = defineEmits(["productDeleted"]);
+const emit = defineEmits(["companyDeleted"]);
 
 const getProductPhotoUrl = (photoPath) =>
     photoPath && photoPath.startsWith("http")
         ? photoPath
         : `/storage/${photoPath}`;
 
-const deleteProduct = async () => {
+const deleteCompany = async () => {
     if (modalConpany.value) {
         try {
-            const response = await Services.products.delete(modalConpany.value.id);
+            const response = await Services.companies.delete(modalConpany.value.id)
             closeModal();
             toast.success(response.message);
-            emit("productDeleted");
+            emit("companyDeleted");
         } catch (error) {
             toast.error(error.message[0]);
         }

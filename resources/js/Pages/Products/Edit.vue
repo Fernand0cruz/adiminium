@@ -9,10 +9,9 @@
 
             <!-- UPDATE PRODUCT -->
             <div>
-                <Link :href="route('admin.products.show', { id: productId })"
-                    class="py-1 px-2 inline-flex justify-center items-center gap-2 rounded-lg border border-indigo-500 font-medium bg-indigo-100 text-indigo-700 align-middle hover:bg-indigo-200 transition-all text-sm">
-                <Package2 />
-                Ver Produto
+                <Link :href="route('admin.products.show', { id: productId })" class="py-1 px-2 inline-flex justify-center items-center gap-2 rounded-lg border border-indigo-500 font-medium bg-indigo-100 text-indigo-700 align-middle hover:bg-indigo-200 transition-all text-sm">
+                    <Package2 />
+                    Ver Produto
                 </Link>
             </div>
         </div>
@@ -47,10 +46,9 @@ const loading = ref(false);
 onMounted(async () => {
     loading.value = true;
     try {
-        const response = await Services.products.get(productId);
-        let formattedPrice = response.price.replace("R$", "").trim().replace(".", "").replace(",", ".");
-        response.price = parseFloat(formattedPrice);
-        product.value = response;
+        const { price, ...rest } = await Services.products.get(productId);
+        const formattedPrice = parseFloat(price.replace("R$", "").trim().replace(".", "").replace(",", "."));
+        product.value = { ...rest, price: formattedPrice };
     } catch (error) {
         errorMessage.value = error.message?.[0];
     } finally {

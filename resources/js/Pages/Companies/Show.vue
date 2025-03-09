@@ -9,10 +9,9 @@
 
             <!-- UPDATE COMPANY -->
             <div>
-                <Link :href="route('admin.companies.edit', { id: companyId })"
-                    class="py-1 px-2 inline-flex justify-center items-center gap-2 rounded-lg border border-indigo-500 font-medium bg-indigo-100 text-indigo-700 align-middle hover:bg-indigo-200 transition-all text-sm">
-                <SquareChartGantt />
-                Editar Empresa
+                <Link :href="route('admin.companies.edit', { id: companyId })" class="py-1 px-2 inline-flex justify-center items-center gap-2 rounded-lg border border-indigo-500 font-medium bg-indigo-100 text-indigo-700 align-middle hover:bg-indigo-200 transition-all text-sm">
+                    <SquareChartGantt />
+                    Editar Empresa
                 </Link>
             </div>
         </div>
@@ -31,8 +30,7 @@
         <div v-if="company.id" class="p-4 border rounded-lg flex flex-col md:flex-row gap-4">
             <div class="grid sm:grid-cols-12 gap-2 sm:gap-6">
                 <div class="sm:col-span-3">
-                    <img class="border object-cover size-50 rounded-lg ring-2 ring-white"
-                        :src="getProductPhotoUrl(company.photo)" />
+                    <img class="border object-cover size-50 rounded-lg ring-2 ring-white" :src="getProductPhotoUrl(company.photo)" />
                 </div>
                 <div class="sm:col-span-9">
                     <h3 class="mb-4 font-semibold">Dados da empresa:</h3>
@@ -79,8 +77,7 @@ const loading = ref(false);
 onMounted(async () => {
     loading.value = true;
     try {
-        const response = await Services.companies.get(companyId)
-        company.value = response;
+        company.value = await Services.companies.get(companyId)
     } catch (error) {
         errorMessage.value = error.message[0];
     } finally {

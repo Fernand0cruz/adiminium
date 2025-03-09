@@ -25,7 +25,10 @@ const createOrUpdateCompany = (companyData, method) => {
 
 const formatCompanyData = (company) => {
     const formatCNPJ = (cnpj) => {
-        return cnpj.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/, "$1.$2.$3/$4-$5");
+        return cnpj.replace(
+            /^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/,
+            "$1.$2.$3/$4-$5"
+        );
     };
 
     const formatPhone = (phone) => {
@@ -38,16 +41,6 @@ const formatCompanyData = (company) => {
         phone: formatPhone(company.phone),
     };
 };
-
-// Exemplo de uso
-const company = {
-    name: "Empresa XYZ",
-    cnpj: "12345678000195",
-    phone: "11987654321"
-};
-
-console.log(formatCompanyData(company));
-
 
 export default (httpClient) => ({
     create: async (productData) => {
@@ -84,6 +77,28 @@ export default (httpClient) => ({
             );
             const company = formatCompanyData(response.data.data);
             return company;
+        } catch (error) {
+            return handleRequestError(error);
+        }
+    },
+    update: async (companyId, companyData) => {
+        try {
+            const data = createOrUpdateCompany(companyData, "PATCH");
+            const response = await httpClient.post(
+                `/api/companies/${companyId}`,
+                data
+            );
+            return response.data;
+        } catch (error) {
+            return handleRequestError(error);
+        }
+    },
+    delete: async (companyId) => {
+        try {
+            const response = await httpClient.delete(
+                `/api/companies/${companyId}`
+            );
+            return response.data;
         } catch (error) {
             return handleRequestError(error);
         }

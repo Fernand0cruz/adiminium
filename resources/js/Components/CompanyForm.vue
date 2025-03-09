@@ -76,7 +76,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import FormLabel from "./FormLabel.vue";
 import { clearForm } from "@/Utils/clearForm";
 import FormTextInput from "./FormTextInput.vue";
@@ -90,6 +90,11 @@ import ErrorMessage from "./ErrorMessage.vue";
 import FormPhotoUpload from "./FormPhotoUpload.vue";
 import { useToast } from "vue-toastification";
 import Services from "@/Services";
+
+const props = defineProps({
+    company: Object,
+    errorMessage: String,
+});
 
 const isEditing = ref(false);
 const errorMessage = ref(null);
@@ -130,11 +135,32 @@ const companyAddressFields = [
     { id: "number", label: "Número:", component: FormNumberInput, bindings: { id: "number" }, placeholder: "Informe o número da empresa..." },
 ];
 
+watch(
+    () => props.company,
+    (newCompany) => {
+        if (newCompany) {
+            form.value = { ...newCompany, id: newCompany.id ?? null };
+            isEditing.value = true;
+        }
+    },
+    { immediate: true }
+);
+
+watch(
+    () => props.errorMessage,
+    (newError) => {
+        if (newError) {
+            errorMessage.value = props.errorMessage;
+        }
+    },
+    { immediate: true }
+);
+
 const resetForm = () => {
     clearForm(form, { photo: null });
 };
 
-const createOrUpdateCompany = async () => {
+const createOrUpdateCompany = async () => {    
     try {
         formErrors.value = {};
         const response = isEditing.value
@@ -143,7 +169,7 @@ const createOrUpdateCompany = async () => {
 
         toast.success(response.message);
         setTimeout(() => {
-            window.location.href = `/companies/${
+            window.location.href = `/admin/companies/${
                 isEditing.value ? form.value.id : response.data.id
             }`;
         }, 2500);

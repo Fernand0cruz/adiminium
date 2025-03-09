@@ -24,7 +24,7 @@ const formattedValue = computed({
         return props.modelValue ? props.modelValue.toString() : '';
     },
     set: (val) => {
-        const numericValue = Number(val.replace(/[^\d]/g, ""));
+        const numericValue = val.replace(/[^\d]/g, "");
         emit("update:modelValue", numericValue);
     },
 });
