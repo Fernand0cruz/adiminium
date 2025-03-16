@@ -22,7 +22,7 @@
                 </span>
             </div>
             <div class="ms-4">
-                <h3 class="font-extrabold text-xl">Informação!</h3>
+                <h3 class="font-extrabold text-xl">Atenção!</h3>
                 <p class="text-gray-500">
                     {{ props.infoMessage }}
                 </p>

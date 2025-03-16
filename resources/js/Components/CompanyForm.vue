@@ -1,78 +1,54 @@
 <template>
-     <!-- ERROR MESSAGE -->
-     <ErrorMessage v-if="errorMessage" :errorMessage="errorMessage" />
+    <!-- ERROR MESSAGE -->
+    <ErrorMessage v-if="errorMessage" :errorMessage="errorMessage" />
 
-     <form v-if="!isEditing || company.id" @submit.prevent="createOrUpdateCompany">
+    <form v-if="!isEditing || company.id" @submit.prevent="createOrUpdateCompany">
         <h3 class="mt-4 pt-2 font-semibold border-t">Dados da empresa:</h3>
         <div class="grid sm:grid-cols-12 gap-2 sm:gap-6">
             <div class="sm:col-span-3">
                 <FormLabel for="photo" label="Logo da empresa:" />
             </div>
             <div class="sm:col-span-9">
-                <FormPhotoUpload
-                    :key="form.photo"
-                    id="photo"
-                    v-model="form.photo"
-                    placeholderImage="/images/placeholder-product.png"
-                />
+                <FormPhotoUpload :key="form.photo" id="photo" v-model="form.photo"
+                    placeholderImage="/images/placeholder-product.png" />
                 <FormErrorInput :message="formErrors.photo?.[0]" />
             </div>
         </div>
-        <div
-            v-for="field in companyFields"
-            class="grid sm:grid-cols-12 mt-4 gap-2 sm:gap-6"
-        >
+        <div v-for="field in companyFields" class="grid sm:grid-cols-12 mt-4 gap-2 sm:gap-6">
             <div class="sm:col-span-3">
                 <FormLabel :for="field.id" :label="field.label" />
             </div>
             <div class="sm:col-span-9">
-                <Component
-                    :is="field.component"
-                    v-bind="field.bindings"
-                    v-model="form[field.id]"
-                    :placeholder="field.placeholder"
-                />
+                <Component :is="field.component" v-bind="field.bindings" v-model="form[field.id]"
+                    :placeholder="field.placeholder" />
                 <FormErrorInput :message="formErrors[field.id]?.[0]" />
             </div>
         </div>
 
         <h3 class="mt-4 pt-2 font-semibold border-t">Endereço da empresa:</h3>
 
-        <div
-            v-for="field in companyAddressFields"
-            class="grid sm:grid-cols-12 mt-4 gap-2 sm:gap-6"
-        >
+        <div v-for="field in companyAddressFields" class="grid sm:grid-cols-12 mt-4 gap-2 sm:gap-6">
             <div class="sm:col-span-3">
                 <FormLabel :for="field.id" :label="field.label" />
             </div>
             <div class="sm:col-span-9">
-                <Component
-                    :is="field.component"
-                    v-bind="field.bindings"
-                    v-model="form[field.id]"
-                    :placeholder="field.placeholder"
-                />
+                <Component :is="field.component" v-bind="field.bindings" v-model="form[field.id]"
+                    :placeholder="field.placeholder" />
                 <FormErrorInput :message="formErrors[field.id]?.[0]" />
             </div>
         </div>
 
         <div class="mt-4 flex justify-end gap-x-4">
-            <button
-                v-if="!isEditing"
-                type="button"
-                @click="resetForm"
-                class="py-[5px] px-2 inline-flex justify-center items-center gap-2 rounded-lg font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-all text-sm"
-            >
+            <button v-if="!isEditing" type="button" @click="resetForm"
+                class="py-[5px] px-2 inline-flex justify-center items-center gap-2 rounded-lg font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-all text-sm">
                 Limpar formulário
             </button>
-            <button
-                type="submit"
-                class="py-1.5 px-2 inline-flex justify-center items-center gap-2 rounded-lg border border-indigo-500 font-medium bg-indigo-100 text-indigo-700 hover:bg-indigo-200 transition-all text-sm"
-            >
+            <button type="submit"
+                class="py-1.5 px-2 inline-flex justify-center items-center gap-2 rounded-lg border border-indigo-500 font-medium bg-indigo-100 text-indigo-700 hover:bg-indigo-200 transition-all text-sm">
                 {{ isEditing ? "Atualizar Empresa" : "Criar Empresa" }}
             </button>
         </div>
-     </form>
+    </form>
 </template>
 
 <script setup>
@@ -89,7 +65,7 @@ import FormErrorInput from "./FormErrorInput.vue";
 import ErrorMessage from "./ErrorMessage.vue";
 import FormPhotoUpload from "./FormPhotoUpload.vue";
 import { useToast } from "vue-toastification";
-import Services from "@/Services";
+import Services from "@/Services/api/index.js";
 
 const props = defineProps({
     company: Object,
@@ -160,7 +136,7 @@ const resetForm = () => {
     clearForm(form, { photo: null });
 };
 
-const createOrUpdateCompany = async () => {    
+const createOrUpdateCompany = async () => {
     try {
         formErrors.value = {};
         const response = isEditing.value
@@ -169,9 +145,7 @@ const createOrUpdateCompany = async () => {
 
         toast.success(response.message);
         setTimeout(() => {
-            window.location.href = `/admin/companies/${
-                isEditing.value ? form.value.id : response.data.id
-            }`;
+            window.location.href = `/admin/companies/${isEditing.value ? form.value.id : response.data.id}`;
         }, 2500);
     } catch (error) {
         formErrors.value = error;

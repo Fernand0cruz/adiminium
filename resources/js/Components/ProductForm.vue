@@ -65,7 +65,7 @@ import FormCurrencyInput from "./FormCurrencyInput.vue";
 import FormPercentInput from "./FormPercentInput.vue";
 import FormNumberInput from "./FormNumberInput.vue";
 import FormPhotoUpload from "./FormPhotoUpload.vue";
-import Services from "@/Services";
+import Services from "@/Services/api/index.js";
 import ErrorMessage from "./ErrorMessage.vue";
 import { useToast } from "vue-toastification";
 import FormErrorInput from "./FormErrorInput.vue";
