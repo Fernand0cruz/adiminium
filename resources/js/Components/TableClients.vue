@@ -4,56 +4,54 @@
             <thead class="bg-gray-50">
                 <tr>
                     <TableHeader colTitle="#id" />
-                    <TableHeader colTitle="Logo" />
-                    <TableHeader colTitle="Razao Social" />
-                    <TableHeader colTitle="CNPJ" />
-                    <TableHeader colTitle="Telefone" />
+                    <TableHeader colTitle="Nome" />
                     <TableHeader colTitle="Email" />
-                    <TableHeader colTitle="Cidade" />
-                    <TableHeader colTitle="Responsavel" />
+                    <TableHeader colTitle="Telefone" />
+                    <TableHeader colTitle="Role" />
+                    <TableHeader colTitle="Empresa" />
                     <TableHeader colTitle="Ver" />
                     <TableHeader colTitle="Editar" />
                     <TableHeader colTitle="Excluir" />
                 </tr>
             </thead>
-
             <tbody class="divide-y divide-gray-200">
-                <tr v-for="company in props.companies" :key="company.id" class="bg-white hover:bg-gray-50">
+                <tr v-for="client in props.clients" :key="client.id" class="bg-white hover:bg-gray-50">
                     <td class="size-px whitespace-nowrap">
                         <span class="block px-3 py-2">
-                            <span class="font-mono text-sm text-blue-600">#{{ company.id }}</span>
+                            <span class="font-mono text-sm text-blue-600">#{{ client.id }}</span>
                         </span>
                     </td>
+
+                    <TableData :data="client.name" />
+
+                    <TableData :data="client.email" />
+
+                    <TableData :data="client.phone" />
 
                     <td class="size-px whitespace-nowrap">
-                        <span class="block pl-3">
-                            <img class="border object-cover size-10 rounded-lg ring-2 ring-white"
-                                :src="getProductPhotoUrl(company.photo)" />
+                        <span class="block px-3 py-2">
+                            <span :class="client.role === 'client'
+                                ? 'bg-green-100 text-green-800 '
+                                : 'bg-red-100 text-red-800'
+                                "
+                                class="inline-flex items-center gap-1.5 py-0.5 px-2 rounded-full text-xs font-medium">
+                                {{ client.role }}
+                            </span>
                         </span>
                     </td>
 
-                    <TableData :data="company.business_name" />
-
-                    <TableData :data="company.cnpj" />
-
-                    <TableData :data="company.phone" />
-
-                    <TableData :data="company.email" />
-
-                    <TableData :data="company.city" />
-
                     <td class="size-px whitespace-nowrap px-3">
-                        <template v-if="company.user">
-                            <Link :href="route('admin.clients.show', { id: company.user.id })" class="text-blue-800 underline capitalize">
-                            {{ company.user.name }}
+                        <template v-if="client.company">
+                            <Link :href="route('admin.companies.show', { id: client.company.id })"
+                                class="text-blue-800 underline capitalize">
+                            {{ client.company.business_name }}
                             </Link>
                         </template>
                         <span v-else class=" text-gray-400">-</span>
                     </td>
 
-
                     <td class="size-px whitespace-nowrap">
-                        <Link :href="route('admin.companies.show', { id: company.id })
+                        <Link :href="route('admin.clients.show', { id: client.id })
                             "
                             class="py-1 px-2 mx-3 inline-flex justify-center items-center gap-2 rounded-lg border border-indigo-500 font-medium bg-indigo-100 text-indigo-700 align-middle hover:bg-indigo-200 transition-all text-sm">
                         <ExternalLink />
@@ -61,7 +59,7 @@
                     </td>
 
                     <td class="size-px whitespace-nowrap">
-                        <Link :href="route('admin.companies.edit', { id: company.id })
+                        <Link :href="route('admin.clients.edit', { id: client.id })
                             "
                             class="py-1 px-2 mx-3 inline-flex justify-center items-center gap-2 rounded-lg border border-green-500 font-medium bg-green-100 text-green-700 align-middle hover:bg-green-200 transition-all text-sm">
                         <Clipboard />
@@ -69,13 +67,14 @@
                     </td>
 
                     <td class="size-px whitespace-nowrap">
-                        <button @click="openModal(company)"
+                        <button @click="openModal(client)"
                             class="py-1 px-2 mx-3 inline-flex justify-center items-center gap-2 rounded-lg border border-red-500 font-medium bg-red-100 text-red-700 align-middle hover:bg-red-200 transition-all text-sm">
                             <Trash />
                         </button>
                     </td>
                 </tr>
             </tbody>
+
         </table>
     </div>
 
@@ -84,19 +83,19 @@
         class="z-[75] top-[-17px] fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
         <div class="bg-white w-[650px] rounded-lg overflow-hidden border">
             <div class="p-4">
-                <h2 class="text-lg font-semibold mb-4">Excluir Empresa</h2>
+                <h2 class="text-lg font-semibold mb-4">Excluir Cliente</h2>
                 <p>
-                    Tem certeza que deseja excluir a empresa:
-                    <strong>{{ modalCompany.business_name }}</strong>?
+                    Tem certeza que deseja excluir o cliente:
+                    <strong>{{ modalClient.name }}</strong>?
                 </p>
-                <p class=" text-red-500">Ao excluir a empresa, o cliente responsável por gerenciar os pedidos também será excluído, juntamente com todos os dados relacionados à empresa.*</p>
+                <p class=" text-red-500">Ao excluir este cliente, a empresa {{ modalClient.company.business_name }} ficará sem nenhum representante, impossibilitando a realização de novos pedidos até que um novo cliente responsável seja inserido.*</p>
             </div>
             <div class="bg-gray-100 p-4 flex justify-end gap-4">
                 <button @click="closeModal"
                     class="py-1 px-2 inline-flex justify-center items-center gap-2 rounded-lg font-medium bg-gray-100 text-gray-700 align-middle hover:bg-gray-200 transition-all text-sm">
                     Cancelar
                 </button>
-                <button @click="deleteCompany"
+                <button @click="deleteClient"
                     class="py-1 px-2 inline-flex justify-center items-center gap-2 rounded-lg border border-red-500 font-medium bg-red-100 text-red-700 align-middle hover:bg-red-200 transition-all text-sm">
                     <Trash />
                     Excluir
@@ -116,38 +115,33 @@ import Services from "@/Services/api/index.js";
 import { useToast } from "vue-toastification";
 
 const props = defineProps({
-    companies: Array,
+    clients: Array,
 });
 
 const toast = useToast();
 
 const isModalOpen = ref(false);
-const modalCompany = ref(null);
+const modalClient = ref(null);
 
 const openModal = (product) => {
-    modalCompany.value = product;
+    modalClient.value = product;
     isModalOpen.value = true;
 };
 
 const closeModal = () => {
     isModalOpen.value = false;
-    modalCompany.value = null;
+    modalClient.value = null;
 };
 
-const emit = defineEmits(["companyDeleted"]);
+const emit = defineEmits(["clientsDeleted"]);
 
-const getProductPhotoUrl = (photoPath) =>
-    photoPath && photoPath.startsWith("http")
-        ? photoPath
-        : `/storage/${photoPath}`;
-
-const deleteCompany = async () => {
-    if (modalCompany.value) {
+const deleteClient = async () => {
+    if (modalClient.value) {
         try {
-            const response = await Services.companies.delete(modalCompany.value.id)
+            const response = await Services.clients.delete(modalClient.value.id)
             closeModal();
             toast.success(response.message);
-            emit("companyDeleted");
+            emit("clientDeleted");
         } catch (error) {
             toast.error(error.message[0]);
         }

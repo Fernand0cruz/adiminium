@@ -27,7 +27,7 @@
 
                     <td class="size-px whitespace-nowrap">
                         <span class="block pl-3">
-                            <img class="border object-cover size-10 rounded-lg ring-2 ring-white" :src="product.photo" />
+                            <img class="border object-cover size-10 rounded-lg ring-2 ring-white" :src="product.photo"  :alt="product.name"/>
                         </span>
                      </td>
 
@@ -119,7 +119,7 @@ import TableHeader from "./TableHeader.vue";
 import TableData from "./TableData.vue";
 import { Link } from "@inertiajs/vue3";
 import { ref } from "vue";
-import Services from "@/Services";
+import Services from "@/Services/api/index.js";
 import { useToast } from "vue-toastification";
 
 const props = defineProps({
