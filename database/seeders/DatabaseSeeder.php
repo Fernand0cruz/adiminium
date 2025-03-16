@@ -4,9 +4,10 @@ namespace Database\Seeders;
 
 use App\Models\Company;
 use App\Models\Product;
-use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -15,12 +16,42 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $companies = Company::factory()->count(75)->create();
 
-        User::factory()->firstUser()->create();
-        User::factory()->secondUser()->create();
-        User::factory()->count(50)->create();
+        $companies->each(function ($company, $index) {
 
-        Company::factory()->count(50)->create();
+            if ($index === 0) {
+                // Primeiro usuário (Admin)
+                $user = User::factory()->create([
+                    'company_id' => $company->id,
+                    'name' => 'User Admin',
+                    'email' => 'admin@gmail.com',
+                    'password' => Hash::make('adminpass'),
+                    'role' => 'admin',
+                ]);
+            } elseif ($index === 1) {
+                // Segundo usuário (Simples)
+                $user = User::factory()->create([
+                    'company_id' => $company->id,
+                    'name' => 'User Simples',
+                    'email' => 'user@gmail.com',
+                    'password' => Hash::make('userpass'),
+                    'role' => 'client',
+                ]);
+            } else {
+                // Demais usuários gerados aleatoriamente
+                $user = User::factory()->create([
+                    'company_id' => $company->id,
+                ]);
+            }
+
+            // Atualiza a empresa para vincular ao primeiro usuário criado
+            $company->user_id = $user->id;
+            $company->save();
+        });
+
+
+
 
         $peripherals = [
             [
@@ -173,7 +204,7 @@ class DatabaseSeeder extends Seeder
                 'photo' => 'https://utfs.io/f/ca45cb59-9332-4bb6-8e8d-08bfe81b9f84-1h1tqv.webp',
                 'price' => 1500,
                 'discount'=> 0,
-                'quantity' => 15, 
+                'quantity' => 15,
             ],
             [
                 'name' => 'Logitech Zone Wired Earbuds',
@@ -181,7 +212,7 @@ class DatabaseSeeder extends Seeder
                 'photo' => 'https://utfs.io/f/69e51318-6299-4c00-8c9c-073a28068407-a5n61x.webp',
                 'price' => 550,
                 'discount'=> 0,
-                'quantity' => 20, 
+                'quantity' => 20,
             ],
             [
                 'name' => 'Hyperx Cloud Stinger 2',
