@@ -3,60 +3,60 @@
 namespace App\Services;
 
 use App\Models\User;
+use App\Models\Company;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class ClientService
 {
-    public function getAllClients()
+    public function createClient(array $data): User
     {
-        // Retorna todos os clientes paginados, com 20 clientes por página.
-        return User::where('role', 'client')->paginate(20);
-    }
-
-    public function getClientById($id)
-    {
-        // Retorna o cliente com o ID fornecido.
-        return User::findOrFail($id);
-    }
-
-    public function createClient(array $data)
-    {
-        // Adiciona o papel do usuário como 'client'
-        $data['role'] = 'client';
-        // Criptografa a senha antes de salvar no banco de dados
         $data['password'] = Hash::make($data['password']);
 
-        // Cria um novo cliente com os dados fornecidos.
-        return User::create($data);
+        $user = User::create($data);
+
+        $company = Company::find($data['company_id']);
+
+        if ($company) {
+            $company->user_id = $user->id;
+            $company->save();
+        }
+
+        return $user;
     }
 
-    public function updateClient($id, array $data)
+    public function getAllClients(): LengthAwarePaginator
     {
-        // Recupera o cliente com o ID fornecido.
-        $client = User::findOrFail($id);
-        // Atualiza os dados do cliente com os novos dados fornecidos.
-        $client->fill($data);
-        // Atualiza a senha se um novo valor foi fornecido
-        if (!empty($data['password'])) {
-            // Criptografa a nova senha antes de salvar no banco de dados
-            $client->password = Hash::make($data['password']);
-        } else {
-            // Remove a senha do array de dados se não houver uma nova senha
-            unset($client->password);
-        }
-        // Salva o cliente atualizado no banco de dados.
-        $client->save();
+        return User::with('Company')
+            ->paginate(25);
+    }
 
-        // Retorna o cliente atualizado.
+    public function getClientById(int $id): User
+    {
+        return User::with('company')->findOrFail($id);
+    }
+
+    public function updateClient(int $id, array $data): User
+    {
+        $client = User::findOrFail($id);
+
+        if (!empty($data['password'])) {
+            $data['password'] = bcrypt($data['password']);
+        } else {
+            unset($data['password']);
+        }
+
+        $client->update($data);
+
         return $client;
     }
 
-    public function deleteClient($id)
+    public function deleteClient(int $id): User
     {
-        // Recupera o cliente com o ID fornecido.
         $client = User::findOrFail($id);
 
-        // Deleta o cliente do banco de dados.
         $client->delete();
+
+        return $client;
     }
 }

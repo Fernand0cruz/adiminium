@@ -5,7 +5,6 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules;
-use App\Models\User;
 
 class ClientUpdateRequest extends FormRequest
 {
@@ -24,14 +23,12 @@ class ClientUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
-        $id = $this->route('client'); 
-
         return [
-            'company' => ['required', 'string', 'max:255', Rule::unique(User::class)->ignore($id)],
+            'company_id' => ['required', 'integer', 'exists:companies,id'],
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', Rule::unique(User::class)->ignore($id)],  
-            'phone' => ['required', 'string', 'min:15',Rule::unique(User::class)->ignore($id)],
-            'password' => ['nullable', 'confirmed', Rules\Password::defaults()],
+            'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($this->route('client'))],
+            'phone' => ['required', 'string', 'size:11', Rule::unique('users')->ignore($this->route('client'))],
+            'password' => ['nullable', 'confirmed', 'min:8', Rules\Password::defaults()],
         ];
     }
 }

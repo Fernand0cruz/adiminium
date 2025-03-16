@@ -20,10 +20,17 @@ class ProductController extends Controller
         $this->productService = $productService;
     }
 
+    public function store(ProductStoreRequest $request): JsonResponse
+    {
+        return $this->handleExceptions(fn () => 
+            $this->success($this->productService->createProduct($request->validated()), 'Produto criado com sucesso!', 201)
+        );
+    }
+
     public function index(): JsonResponse
     {
         return $this->handleExceptions(fn () => 
-            $this->success($this->productService->getAllProducts(), 'Produtos carregados com sucesso!')
+            $this->success($this->productService->getAllProducts(),  'Produtos carregados com sucesso!')
         );
     }
 
@@ -31,13 +38,6 @@ class ProductController extends Controller
     {
         return $this->handleExceptions(fn () => 
             $this->success($this->productService->getProductById($id), 'Produto carregado com sucesso!')
-        );
-    }
-
-    public function store(ProductStoreRequest $request): JsonResponse
-    {
-        return $this->handleExceptions(fn () => 
-            $this->success($this->productService->createProduct($request->validated()), 'Produto criado com sucesso!', 201)
         );
     }
 

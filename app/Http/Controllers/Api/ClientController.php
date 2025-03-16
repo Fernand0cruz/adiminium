@@ -6,69 +6,52 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ClientStoreRequest;
 use App\Http\Requests\ClientUpdateRequest;
 use App\Services\ClientService;
-use Illuminate\Support\Facades\Log;
 use App\Traits\HandlesExceptions;
+use Illuminate\Http\JsonResponse;
 
 class ClientController extends Controller
 {
     use HandlesExceptions;
 
-    protected $clientService;
+    private ClientService $clientService;
 
     public function __construct(ClientService $clientService)
     {
         $this->clientService = $clientService;
     }
 
-    public function index()
+    public function store(ClientStoreRequest $request): JsonResponse
     {
-        return $this->handleExceptions(function () {
-            Log::info('Initiating fetch for all clients.');
-            $clients = $this->clientService->getAllClients();
-            Log::info('Successfully fetched clients.', ['clients_count' => count($clients)]);
-            return $this->success($clients, 'Clients fetched successfully.');
-        });
+        return $this->handleExceptions(fn () =>
+            $this->success($this->clientService->createClient($request->validated()), 'Cliente criado com sucesso!', 201)
+        );
     }
 
-    public function show($id)
+    public function index(): JsonResponse
     {
-        return $this->handleExceptions(function () use ($id) {
-            Log::info("Initiating fetch for client with ID: {$id}.");
-            $client = $this->clientService->getClientById($id);
-            Log::info('Successfully fetched client.', ['client_id' => $client->id]);
-            return $this->success($client, 'Client fetched successfully.');
-        }, 404, 'Client not found.');
+        return $this->handleExceptions(fn () => 
+            $this->success($this->clientService->getAllClients(), 'Clientes carregados com sucesso!')
+        );
     }
 
-    public function store(ClientStoreRequest $request)
+    public function show(int $id): JsonResponse
     {
-        return $this->handleExceptions(function () use ($request) {
-            Log::info('Initiating client creation.', ['request_data' => $request->all()]);
-            $validated = $request->validated();
-            $client = $this->clientService->createClient($validated);
-            Log::info('Client created successfully.', ['client_id' => $client->id, 'created_data' => $client]);
-            return $this->success($client, 'Client created successfully.', 201);
-        });
+        return $this->handleExceptions(fn () =>
+            $this->success($this->clientService->getClientById($id), 'Cliente carregado com sucesso!')
+        );
     }
 
-    public function update(ClientUpdateRequest $request, $id)
+    public function update(ClientUpdateRequest $request, int $id): JsonResponse
     {
-        return $this->handleExceptions(function () use ($request, $id) {
-            Log::info("Initiating update for client with ID: {$id}.", ['request_data' => $request->all()]);
-            $validated = $request->validated();
-            $client = $this->clientService->updateClient($id, $validated);
-            Log::info('Client updated successfully.', ['client_id' => $client->id, 'updated_data' => $client]);
-            return $this->success($client, 'Client updated successfully.');
-        }, 404, 'Client not found.');
+        return $this->handleExceptions(fn ()  =>
+            $this->success($this->clientService->updateClient($id, $request->validated()), 'Cliente atualizado com sucesso!')
+        );
     }
 
-    public function destroy($id)
+    public function destroy(int $id): JsonResponse
     {
-        return $this->handleExceptions(function () use ($id) {
-            Log::info("Initiating deletion for client with ID: {$id}.");
-            $this->clientService->deleteClient($id);
-            Log::info('Client deleted successfully.', ['client_id' => $id]);
-            return $this->success([], 'Client deleted successfully.');
-        }, 404, 'Client not found.');
+        return $this->handleExceptions(fn () =>
+            $this->success($this->clientService->deleteClient($id), 'Cliente excluido com sucesso!')
+        );
     }
 }

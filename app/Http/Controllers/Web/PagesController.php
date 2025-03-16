@@ -5,10 +5,11 @@ namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
+use Inertia\Response;
 
 class PagesController extends Controller
 {
-    public function welcome()
+    public function welcome(): Response
     {
         return Inertia::render('Welcome', [
             'canLogin' => Route::has('login'),
@@ -16,78 +17,73 @@ class PagesController extends Controller
         ]);
     }
 
-    public function dashboard()
+    public function dashboard(): Response
     {
         return Inertia::render('Dashboard');
     }
 
-    public function products()
+    public function products(): Response
     {
         return Inertia::render('Products/Index');
     }
 
-    public function listProducts()
+    public function listProducts(): Response
     {
         return Inertia::render('Products/List');
     }
 
-    public function createProduct()
+    public function createProduct(): Response
     {
         return Inertia::render('Products/Create');
     }
 
-    public function product()
+    public function product(): Response
     {
         return Inertia::render('Products/Show');
     }
 
-    public function editProduct()
+    public function editProduct(): Response
     {
         return Inertia::render('Products/Edit');
     }
 
-    public function listCompanies()
+    public function listCompanies(): Response
     {
         return Inertia::render('Companies/Index');
     }
 
-    public function createCompanies()
+    public function createCompanies(): Response
     {
         return Inertia::render('Companies/Create');
     }
 
-    public function company()
+    public function company(): Response
     {
         return Inertia::render('Companies/Show');
     }
 
-    public function editCompanies()
+    public function editCompanies(): Response
     {
         return Inertia::render('Companies/Edit');
     }
 
-    public function listClients()
+    public function listClients(): Response
     {
-        return Inertia::render('Clients/List');
+        return Inertia::render('Clients/Index');
     }
 
-    public function createClient()
+    public function createClients(): Response
     {
         return Inertia::render('Clients/Create');
     }
 
-    public function client()
+    public function Client(): Response
     {
         return Inertia::render('Clients/Show');
     }
 
-    public function orders()
+    public function editClients(): Response
     {
-        return Inertia::render('Orders/Index');
-    }
-
-    public function myOrders()
-    {
-        return Inertia::render('Orders/MyOrders');
+        return Inertia::render('Clients/Edit');
     }
 }

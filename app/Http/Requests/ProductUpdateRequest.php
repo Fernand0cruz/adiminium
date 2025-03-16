@@ -3,8 +3,10 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator as ValidatorFacade;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Illuminate\Validation\Rule;
 
 class ProductUpdateRequest extends FormRequest
 {
@@ -27,42 +29,26 @@ class ProductUpdateRequest extends FormRequest
             'photo' => [
                 'nullable',
                 function ($attribute, $value, $fail) {
-                   
-                    if (is_string($value)) {
-    
-                    } elseif ($value instanceof UploadedFile) {
-  
+                    if (is_string($value) && filter_var($value, FILTER_VALIDATE_URL)) {
+                        if (!URL::isValidUrl($value)) {
+                            $fail('The photo URL is invalid.');
+                        }
+                    }
+                    elseif ($value instanceof UploadedFile) {
                         $rules = ['image', 'mimes:jpeg,png,jpg,gif', 'max:2048'];
                         $validator = ValidatorFacade::make(['photo' => $value], ['photo' => $rules]);
 
                         if ($validator->fails()) {
                             $fail($validator->errors()->first('photo'));
                         }
-                    } 
+                    }
                 },
             ],
-            'name' => 'required|string|max:255',
-            'description' => 'required|string|max:1000',
-            'price' => 'required|numeric|min:1|max:10000',
-            'discount' => 'nullable|numeric|min:0|max:100',
-            'quantity' => 'required|integer|min:1|max:2500',
-        ];
-    }
-
-    /**
-     * Custom messages for validation rules.
-     *
-     * @return array<string, string>
-     */
-    public function messages()
-    {
-        return [
-            'photo.required' => 'The photo field is required.',
-            'photo.image' => 'The photo must be an image file.',
-            'photo.mimes' => 'The photo must be a jpeg, png, jpg, or gif image.',
-            'photo.max' => 'The photo may not be greater than 2 MB.',
-            'price.min' => 'The price must be at least R$ 1.00.',
-            'price.max' => 'The price cannot be greater than R$ 10,000.00.',
+            'name' => ['required', 'string', 'max:255', Rule::unique('products')->ignore($this->route('product'))],
+            'description' => ['required', 'string', 'max:1000'],
+            'price' => ['required', 'numeric', 'min:1', 'max:10000'],
+            'discount' => ['nullable', 'numeric', 'min:0', 'max:100'],
+            'quantity' => ['required', 'integer', 'min:1', 'max:2500'],
         ];
     }
 }

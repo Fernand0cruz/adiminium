@@ -3,9 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules;
-use App\Models\User;
 
 class ClientStoreRequest extends FormRequest
 {
@@ -24,13 +22,12 @@ class ClientStoreRequest extends FormRequest
      */
     public function rules(): array
     {
-        $id = $this->route('id');
-
         return [
+            'company_id' => ['required', 'integer', 'exists:companies,id'],
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', Rule::unique(User::class)->ignore($id)],
-            'phone' => ['required', 'string', 'min:15',Rule::unique(User::class)->ignore($id)],
-            'password' => ['nullable', 'confirmed', Rules\Password::defaults()],
+            'email' => ['required', 'email', 'max:255', 'unique:users,email'],
+            'phone' => ['required', 'string', 'size:11', 'unique:users,phone'],
+            'password' => ['required', 'confirmed', 'min:8', Rules\Password::defaults()],
         ];
     }
 }

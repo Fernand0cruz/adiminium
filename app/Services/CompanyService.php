@@ -3,20 +3,13 @@
 namespace App\Services;
 
 use App\Models\Company;
-
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Pagination\LengthAwarePaginator;
-
+use Illuminate\Support\Collection;
 
 class CompanyService
 {
-    public function getAllCompanies(): LengthAwarePaginator
-    {
-        return Company::select('id' ,'photo', 'business_name', 'cnpj', 'phone', 'email', 'city')
-        ->paginate(25);
-    }
-
     public function createCompany(array $data): Company
     {
         $photoPath = $this->handlePhotoUpload($data);
@@ -26,9 +19,20 @@ class CompanyService
         return Company::create($data);
     }
 
+    public function getAllCompanies(): LengthAwarePaginator
+    {
+        return Company::select('id', 'user_id', 'photo', 'business_name', 'cnpj', 'phone', 'email', 'city')
+            ->with([
+                'User' => function ($query) {
+                    $query->select('id', 'name');
+                }
+            ])
+            ->paginate(25);
+    }
+
     public function getCompanyById(int $id): Company
     {
-        return Company::findOrFail($id);
+        return Company::with('User')->findOrFail($id);
     }
 
     public function updateCompany(int $id, array $data): Company
@@ -56,7 +60,14 @@ class CompanyService
         return $company;
     }
 
-    private function handlePhotoUpload(array &$data): ?string
+    public function getCompaniesUnsign(): Collection
+    {
+        return Company::select('id', 'business_name')
+            ->whereNull('user_id')
+            ->get();
+    }
+
+    private function handlePhotoUpload(array $data): ?string
     {
         if (isset($data['photo']) && $data['photo'] instanceof UploadedFile) {
             return $data['photo']->store('photos', 'public');

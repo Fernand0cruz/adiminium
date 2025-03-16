@@ -9,6 +9,15 @@ use Illuminate\Support\Facades\Storage;
 
 class ProductService
 {
+    public function createProduct(array $data): Product
+    {
+        $photoPath = $this->handlePhotoUpload($data);
+
+        $data['photo'] = $photoPath;
+
+        return Product::create($data);
+    }
+
     public function getAllProducts(): LengthAwarePaginator
     {
         return Product::select('id', 'photo', 'name', 'description', 'price', 'discount', 'quantity')
@@ -20,21 +29,12 @@ class ProductService
         return Product::findOrFail($id);
     }
 
-    public function createProduct(array $data): Product
-    {
-        $photoPath = $this->handlePhotoUpload($data);
-
-        $data['photo'] = $photoPath;
-
-        return Product::create($data);
-    }
-
     public function updateProduct(int $id, array $data): Product
     {
         $product = Product::findOrFail($id);
 
         if (isset($data['photo']) && $data['photo'] instanceof UploadedFile) {
-            $this->deleteOldPhoto($product);
+            $this->deletePhoto($product);
             $data['photo'] = $this->handlePhotoUpload($data);
         }
 
@@ -47,7 +47,7 @@ class ProductService
     {
         $product = Product::findOrFail($id);
 
-        $this->deleteOldPhoto($product);
+        $this->deletePhoto($product);
 
         $product->delete();
 
@@ -63,7 +63,7 @@ class ProductService
         return null;
     }
 
-    private function deleteOldPhoto(Product $product): void
+    private function deletePhoto(Product $product): void
     {
         if ($product->photo) {
             Storage::disk('public')->delete($product->photo);

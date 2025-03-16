@@ -20,30 +20,30 @@ class CompanyController extends Controller
         $this->companyService = $companyService;
     }
 
-    public function index(): JsonResponse
+    public function store(CompanyStoreRequest $request): JsonResponse
     {
-        return $this->handleExceptions(fn () => 
-            $this->success($this->companyService->getAllCompanies(), 'Empresas carregadas com sucesso!')
+        return $this->handleExceptions(fn () =>
+            $this->success($this->companyService->createCompany($request->validated()), 'Empresa criada com sucesso!', 201)
         );
     }
 
-    public function store(CompanyStoreRequest $request): JsonResponse
+    public function index(): JsonResponse
     {
-        return $this->handleExceptions(fn () => 
-            $this->success($this->companyService->createCompany($request->validated()), 'Empresa criada com sucesso!', 201)
+        return $this->handleExceptions(fn () =>
+            $this->success($this->companyService->getAllCompanies(), 'Empresas carregadas com sucesso!')
         );
     }
 
     public function show(int $id): JsonResponse
     {
-        return $this->handleExceptions(fn () => 
+        return $this->handleExceptions(fn () =>
             $this->success($this->companyService->getCompanyById($id), 'Produto carregado com sucesso!')
         );
     }
 
     public function update(CompanyUpdateRequest $request, int $id): JsonResponse
-    { 
-        return $this->handleExceptions(fn () => 
+    {
+        return $this->handleExceptions(fn () =>
             $this->success($this->companyService->updateCompany($id, $request->validated()), 'Empresa atualizada com sucesso!')
         );
     }
@@ -52,6 +52,13 @@ class CompanyController extends Controller
     {
         return $this->handleExceptions(fn () =>
             $this->success($this->companyService->deleteCompany($id), 'Empresa excluida com sucesso!')
+        );
+    }
+
+    public function companiesUnsign(): JsonResponse
+    {
+        return $this->handleExceptions(fn () =>
+            $this->success($this->companyService->getCompaniesUnsign(), 'Empresas sem vínculo carregadas com sucesso!')
         );
     }
 }
