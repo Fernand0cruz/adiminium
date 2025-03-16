@@ -1,6 +1,7 @@
 import axios from "axios";
-import Products from "./Products";
-import Companies from "./Companies";
+import Products from "./Products/index.js";
+import Companies from "./Companies/index.js";
+import Clients from "./Clients/index.js";
 
 const token = localStorage.getItem("auth_token");
 
@@ -29,4 +30,5 @@ httpClient.interceptors.response.use(
 export default {
     products: Products(httpClient),
     companies: Companies(httpClient),
+    clients: Clients(httpClient),
 };

@@ -1,4 +1,4 @@
-import { handleRequestError } from "@/Utils/handleRequestError";
+import { handleRequestError } from "@/Utils/handleRequestError.js";
 
 const createOrUpdateCompany = (companyData, method) => {
     const formData = new FormData();
@@ -98,6 +98,14 @@ export default (httpClient) => ({
             const response = await httpClient.delete(
                 `/api/companies/${companyId}`
             );
+            return response.data;
+        } catch (error) {
+            return handleRequestError(error);
+        }
+    },
+    getCompanyWithoutTies: async () => {
+        try {
+            const response = await httpClient.get(`/api/companies/unsign`);
             return response.data;
         } catch (error) {
             return handleRequestError(error);

@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\OrderController;
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('products', ProductController::class);
 
+    Route::get('/companies/unsign', [CompanyController::class, 'companiesUnsign']);
     Route::apiResource('companies', CompanyController::class);
 
     Route::apiResource('clients', ClientController::class);

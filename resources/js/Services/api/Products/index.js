@@ -1,5 +1,5 @@
-import { formatCurrency } from "@/Utils/formatCurrency";
-import { handleRequestError } from "@/Utils/handleRequestError";
+import { formatCurrency } from "@/Utils/formatCurrency.js";
+import { handleRequestError } from "@/Utils/handleRequestError.js";
 
 const createOrUpdateProduct = (productData, method) => {
     const formData = new FormData();
@@ -7,7 +7,9 @@ const createOrUpdateProduct = (productData, method) => {
     formData.append("name", productData.name);
     formData.append("description", productData.description);
     formData.append("price", productData.price);
-    const discount = productData.discount ? parseFloat(productData.discount) : 0;
+    const discount = productData.discount
+        ? parseFloat(productData.discount)
+        : 0;
     formData.append("discount", discount);
     formData.append("quantity", productData.quantity);
 
@@ -15,7 +17,7 @@ const createOrUpdateProduct = (productData, method) => {
         formData.append("_method", "PATCH");
     }
 
-    return formData; 
+    return formData;
 };
 
 const formatProductData = (product) => {
@@ -34,7 +36,7 @@ const formatProductData = (product) => {
 export default (httpClient) => ({
     create: async (productData) => {
         try {
-            const data = createOrUpdateProduct(productData) 
+            const data = createOrUpdateProduct(productData);
             const response = await httpClient.post("/api/products", data);
             return response.data;
         } catch (error) {
@@ -44,7 +46,8 @@ export default (httpClient) => ({
     getAll: async (page = 1) => {
         try {
             const response = await httpClient.get(`/api/products?page=${page}`);
-            const formattedData = response.data.data.data.map(formatProductData);
+            const formattedData =
+                response.data.data.data.map(formatProductData);
             return {
                 ...response.data,
                 data: {
@@ -60,15 +63,18 @@ export default (httpClient) => ({
         try {
             const response = await httpClient.get(`/api/products/${productId}`);
             const product = formatProductData(response.data.data);
-            return product
+            return product;
         } catch (error) {
             return handleRequestError(error);
         }
     },
     update: async (productId, productData) => {
         try {
-            const data = createOrUpdateProduct(productData, "PATCH") 
-            const response = await httpClient.post(`/api/products/${productId}`, data);
+            const data = createOrUpdateProduct(productData, "PATCH");
+            const response = await httpClient.post(
+                `/api/products/${productId}`,
+                data
+            );
             return response.data;
         } catch (error) {
             return handleRequestError(error);
@@ -76,7 +82,9 @@ export default (httpClient) => ({
     },
     delete: async (productId) => {
         try {
-            const response = await httpClient.delete(`/api/products/${productId}`);
+            const response = await httpClient.delete(
+                `/api/products/${productId}`
+            );
             return response.data;
         } catch (error) {
             return handleRequestError(error);

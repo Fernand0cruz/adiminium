@@ -26,9 +26,10 @@ Route::middleware(['auth'])->group(function () {
         });
 
         Route::prefix('clients')->name('clients.')->group(function () {
-            Route::get('/create', [PagesController::class, 'createClient'])->name('create');
+            Route::get('/create', [PagesController::class, 'createClients'])->name('create');
             Route::get('/', [PagesController::class, 'listClients'])->name('index');
             Route::get('/{id}', [PagesController::class, 'client'])->name('show');
+            Route::get('/edit/{id}', [PagesController::class, 'editClients'])->name('edit');
         });
 
         Route::get('/orders', [PagesController::class, 'orders'])->name('orders.index');
@@ -47,7 +48,7 @@ Route::middleware(['auth'])->group(function () {
     });
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 
 
 
