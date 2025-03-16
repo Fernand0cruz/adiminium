@@ -9,9 +9,10 @@
 
             <!-- UPDATE PRODUCT -->
             <div>
-                <Link :href="route('admin.products.show', { id: productId })" class="py-1 px-2 inline-flex justify-center items-center gap-2 rounded-lg border border-indigo-500 font-medium bg-indigo-100 text-indigo-700 align-middle hover:bg-indigo-200 transition-all text-sm">
-                    <Package2 />
-                    Ver Produto
+                <Link :href="route('admin.products.show', { id: productId })"
+                    class="py-1 px-2 inline-flex justify-center items-center gap-2 rounded-lg border border-indigo-500 font-medium bg-indigo-100 text-indigo-700 align-middle hover:bg-indigo-200 transition-all text-sm">
+                <Package2 />
+                Ver Produto
                 </Link>
             </div>
         </div>
@@ -36,7 +37,7 @@ import ProductForm from '@/Components/ProductForm.vue';
 import { Link } from "@inertiajs/vue3";
 import { Package2 } from 'lucide-vue-next';
 import { onMounted, ref } from 'vue';
-import Services from '@/Services';
+import Services from '@/Services/api/index.js';
 
 const productId = route().params.id;
 const product = ref({});

@@ -9,9 +9,10 @@
 
             <!-- UPDATE PRODUCT -->
             <div v-if="userRole === 'admin'">
-                <Link :href="route('admin.products.edit', { id: productId })" class="py-1 px-2 inline-flex justify-center items-center gap-2 rounded-lg border border-indigo-500 font-medium bg-indigo-100 text-indigo-700 align-middle hover:bg-indigo-200 transition-all text-sm">
-                    <Package2 />
-                    Editar Produto
+                <Link :href="route('admin.products.edit', { id: productId })"
+                    class="py-1 px-2 inline-flex justify-center items-center gap-2 rounded-lg border border-indigo-500 font-medium bg-indigo-100 text-indigo-700 align-middle hover:bg-indigo-200 transition-all text-sm">
+                <Package2 />
+                Editar Produto
                 </Link>
             </div>
         </div>
@@ -19,8 +20,8 @@
         <!-- ERROR MESSAGE -->
         <ErrorMessage v-if="errorMessage" :errorMessage="errorMessage" />
 
-         <!-- LOADING DATA -->
-         <div v-if="loading">
+        <!-- LOADING DATA -->
+        <div v-if="loading">
             <p class="text-gray-500 text-center py-[31px]">
                 Carregando Produto...
             </p>
@@ -45,7 +46,8 @@
                     </p>
                     <p class="text-lg font-bold text-gray-500">
                         <span>Preço: </span>
-                        <span v-if="product.discount > 0">De <span class="line-through">{{ product.price }}</span> por </span>
+                        <span v-if="product.discount > 0">De <span class="line-through">{{ product.price }}</span> por
+                        </span>
                         <span class="text-black">{{ product.final_price }}</span>
                     </p>
                 </div>
@@ -56,13 +58,15 @@
                         <button @click="decrementQuantity" class="px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded-l">
                             -
                         </button>
-                        <input type="text" class="w-12 h-10 text-center border-x outline-none z-10" v-model="quantity" readonly />
+                        <input type="text" class="w-12 h-10 text-center border-x outline-none z-10" v-model="quantity"
+                            readonly />
                         <button @click="incrementQuantity" class="px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded-r">
                             +
                         </button>
                     </div>
-                    <Link href="" class="py-1 px-2 inline-flex justify-center items-center gap-2 rounded-lg border border-indigo-500 font-medium bg-indigo-100 text-indigo-700 align-middle hover:bg-indigo-200 transition-all text-sm">
-                        Adicionar ao pedido
+                    <Link href=""
+                        class="py-1 px-2 inline-flex justify-center items-center gap-2 rounded-lg border border-indigo-500 font-medium bg-indigo-100 text-indigo-700 align-middle hover:bg-indigo-200 transition-all text-sm">
+                    Adicionar ao pedido
                     </Link>
                 </div>
             </div>
@@ -78,7 +82,7 @@ import { Package2 } from "lucide-vue-next";
 import { Link } from "@inertiajs/vue3";
 import { usePage } from "@inertiajs/vue3";
 import { ref, onMounted } from "vue";
-import Services from "@/Services";
+import Services from "@/Services/api/index.js";
 import ErrorMessage from "@/Components/ErrorMessage.vue";
 
 const { props } = usePage();
