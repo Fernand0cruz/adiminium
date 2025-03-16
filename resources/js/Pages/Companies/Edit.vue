@@ -9,9 +9,10 @@
 
             <!-- UPDATE COMPANY -->
             <div>
-                <Link :href="route('admin.companies.show', { id: companyId })" class="py-1 px-2 inline-flex justify-center items-center gap-2 rounded-lg border border-indigo-500 font-medium bg-indigo-100 text-indigo-700 align-middle hover:bg-indigo-200 transition-all text-sm">
-                    <SquareChartGantt />
-                    Ver Empresa
+                <Link :href="route('admin.companies.show', { id: companyId })"
+                    class="py-1 px-2 inline-flex justify-center items-center gap-2 rounded-lg border border-indigo-500 font-medium bg-indigo-100 text-indigo-700 align-middle hover:bg-indigo-200 transition-all text-sm">
+                <SquareChartGantt />
+                Ver Empresa
                 </Link>
             </div>
         </div>
@@ -19,7 +20,7 @@
         <!-- LOADING DATA -->
         <div v-if="loading">
             <p class="text-gray-500 text-center py-[31px]">
-                Carregando Produtos...
+                Carregando Empresa...
             </p>
         </div>
 
@@ -35,7 +36,7 @@ import SectionSubTitle from "@/Components/SectionSubTitle.vue";
 import { Link } from "@inertiajs/vue3";
 import { SquareChartGantt } from "lucide-vue-next";
 import { onMounted, ref } from "vue";
-import Services from "@/Services";
+import Services from "@/Services/api/index.js";
 import CompanyForm from "@/Components/CompanyForm.vue";
 
 const companyId = route().params.id;
