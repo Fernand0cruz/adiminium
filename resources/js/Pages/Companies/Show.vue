@@ -27,7 +27,7 @@
         <!-- LOADING DATA -->
         <div v-if="loading">
             <p class="text-gray-500 text-center py-[31px]">
-                Carregando Produto...
+                Carregando Empresa...
             </p>
         </div>
 

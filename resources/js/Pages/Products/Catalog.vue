@@ -3,16 +3,16 @@
         <div class="flex justify-between items-end">
             <!-- TITLE -->
             <div>
-                <SectionTitle title="Produtos cadastrados no sistema" />
-                <SectionSubTitle subTitle="Listagem dos produtos com opção de deletar produto ou editar!" />
+                <SectionTitle title="Produtos disponíveis" />
+                <SectionSubTitle subTitle="Listagem dos produtos disponíveis, boas compras!" />
             </div>
 
             <!-- ADD NEW PRODUCT -->
             <div>
                 <Link :href="route('admin.products.create')"
-                      class="py-1 px-2 inline-flex justify-center items-center gap-2 rounded-lg border border-indigo-500 font-medium bg-indigo-100 text-indigo-700 align-middle hover:bg-indigo-200 transition-all text-sm">
-                    <Package2 />
-                    Novo Produto
+                    class="py-1 px-2 inline-flex justify-center items-center gap-2 rounded-lg border border-indigo-500 font-medium bg-indigo-100 text-indigo-700 align-middle hover:bg-indigo-200 transition-all text-sm">
+                <ShoppingBasket />
+                Ver Pedido Ativo
                 </Link>
             </div>
         </div>
@@ -29,15 +29,15 @@
 
         <!-- INFO MESSAGE -->
         <InfoMessage v-if="!loading && !errorMessage && products.length === 0"
-                     infoMessage="Não foi encontrado produtos no sistema!" />
+            infoMessage="Não foi encontrado produtos no sistema!" />
 
         <div v-if="products && products.length > 0" class="space-y-4">
-            <!-- PRODUCT TABLE -->
-            <TableProducts :products="products" @productDeleted="loadData(currentPage)" />
+            <!-- PRODUCT GRID -->
+            <ProductGrid :products="products" />
 
             <!-- PAGINATION -->
             <Pagination :currentPage="currentPage" :lastPage="pagination?.last_page"
-                        @update:currentPage="handlePageChange" />
+                @update:currentPage="handlePageChange" />
         </div>
     </AuthenticatedLayout>
 </template>
@@ -46,15 +46,15 @@
 import ErrorMessage from "@/Components/ErrorMessage.vue";
 import { ref, onMounted } from "vue";
 import Services from "@/Services/api/index.js";
-import TableProducts from "@/Components/TableProducts.vue";
 import SectionSubTitle from "@/Components/SectionSubTitle.vue";
 import SectionTitle from "@/Components/SectionTitle.vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import Pagination from "@/Components/Pagination.vue";
-import { Package2 } from "lucide-vue-next";
 import { Link } from "@inertiajs/vue3";
 import InfoMessage from "@/Components/InfoMessage.vue";
 import { resetState } from "@/Utils/resetState";
+import { ShoppingBasket } from "lucide-vue-next";
+import ProductGrid from "@/Components/ProductGrid.vue";
 
 const products = ref([]);
 const errorMessage = ref(null);
@@ -88,4 +88,3 @@ const handlePageChange = (page) => {
 
 onMounted(loadData);
 </script>
-

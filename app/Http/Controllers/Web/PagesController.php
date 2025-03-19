@@ -22,14 +22,18 @@ class PagesController extends Controller
         return Inertia::render('Dashboard');
     }
 
-    public function products(): Response
+    public function catalogProducts(): Response
     {
-        return Inertia::render('Products/Index');
+        return Inertia::render('Products/Catalog');
     }
+    //public function catalogProduct(): Response
+    //{
+        //return Inertia::render('Products/Show');
+        //}
 
     public function listProducts(): Response
     {
-        return Inertia::render('Products/List');
+        return Inertia::render('Products/Index');
     }
 
     public function createProduct(): Response

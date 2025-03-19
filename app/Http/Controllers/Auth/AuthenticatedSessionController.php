@@ -26,14 +26,14 @@ class AuthenticatedSessionController extends Controller
     {
         $request->authenticate();
         $request->session()->regenerate();
-        
+
         $user = $request->user();
         $token = $user->createToken($user->name . ' Auth-Token')->plainTextToken;
 
         return $this->success([
             'token_type' => 'Bearer',
             'token' => $token,
-            'redirect_url' => $user->role === 'admin' ? route('admin.dashboard') : route('products.list'),
+            'redirect_url' => $user->role === 'admin' ? route('admin.dashboard') : route('products.catalog.index'),
         ], 'Login successfully', 200);
     }
 

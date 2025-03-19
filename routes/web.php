@@ -31,16 +31,12 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/{id}', [PagesController::class, 'client'])->name('show');
             Route::get('/edit/{id}', [PagesController::class, 'editClients'])->name('edit');
         });
-
-        Route::get('/orders', [PagesController::class, 'orders'])->name('orders.index');
     });
 
-    Route::prefix('products')->name('products.')->group(function () {
-        Route::get('/', [PagesController::class, 'products'])->name('list');
-        Route::get('/{id}', [PagesController::class, 'product'])->name('view');
+    Route::prefix('producs-catalog')->name('products.catalog.')->group(function () {
+        Route::get('/', [PagesController::class, 'catalogProducts'])->name('index');
+//        Route::get('/{id}', [PagesController::class, 'catalogProduct'])->name('show');
     });
-
-    Route::get('/my-orders', [PagesController::class, 'myorders'])->name('orders.my');
 
     Route::prefix('profile')->group(function () {
         Route::get('/', [ProfileController::class, 'edit'])->name('profile.edit');

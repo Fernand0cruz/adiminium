@@ -11,7 +11,6 @@ import {
     ChevronRight,
     ChevronDown,
     Users,
-    Package,
     ScanBarcode,
     Package2,
 } from "lucide-vue-next";
@@ -31,7 +30,6 @@ const toggleSubmenus = ref({
     products: false,
     companies: false,
     clients: false,
-    orders: false,
 });
 
 const toggleSubmenu = (menu) => {
@@ -53,9 +51,6 @@ onMounted(() => {
         "admin.clients.index",
         "admin.clients.create",
     ].includes(currentRoute);
-    toggleSubmenus.value.order = ["listOrders", "createOrder"].includes(
-        currentRoute
-    );
 });
 
 const isActive = (routes) => {
@@ -119,7 +114,7 @@ const userRole = props.auth.user.role;
             <ol class="flex items-center whitespace-nowrap ml-3">
                 <Link :href="userRole === 'admin'
                         ? route('admin.dashboard')
-                        : route('products.list')
+                        : route('products.catalog.index')
                     " class="text-gray-800 hover:text-gray-500">
                 Adminium
                 </Link>
@@ -143,7 +138,7 @@ const userRole = props.auth.user.role;
             <div class="py-3 mx-auto">
                 <Link :href="userRole === 'admin'
                         ? route('admin.dashboard')
-                        : route('products.list')
+                        : route('products.catalog.index')
                     ">
                 <ApplicationLogo class="h-14" />
                 </Link>
@@ -156,12 +151,12 @@ const userRole = props.auth.user.role;
                                 class="flex items-center gap-x-3.5 py-2 px-2.5 text-gray-800 rounded-lg hover:bg-gray-100"
                                 :href="userRole === 'admin'
                                         ? route('admin.dashboard')
-                                        : route('products.list')
+                                        : route('products.catalog.index')
                                     " :class="{
                                     'bg-gray-100':
                                         userRole === 'admin'
                                             ? route().current('admin.dashboard')
-                                            : route().current('products.list'),
+                                            : route().current('products.catalog.index'),
                                 }">
                             <Home v-if="userRole === 'admin'" />
                             <ScanBarcode v-else />
@@ -307,65 +302,6 @@ const userRole = props.auth.user.role;
                                             }"
                                             class="block py-2 px-2.5 text-gray-700 hover:bg-gray-100 rounded-lg pl-[43px]">
                                         Novo Cliente</Link>
-                                    </li>
-                                </ul>
-                            </Transition>
-                        </li>
-                        <li>
-                            <button @click="toggleSubmenu('orders')"
-                                class="w-full flex justify-between items-center py-2 px-2.5 text-gray-800 rounded-lg hover:bg-gray-100"
-                                :class="{
-                                    'bg-gray-100': isActive(['', '']),
-                                }">
-                                <div class="flex items-center gap-3">
-                                    <Package />
-                                    Pedidos
-                                </div>
-                                <ChevronDown size="16" :class="{
-                                    'rotate-180': toggleSubmenus.orders,
-                                }" />
-                            </button>
-                            <Transition enter-active-class="transition-all duration-300 ease-out"
-                                enter-from-class="opacity-0 max-h-0 overflow-hidden"
-                                enter-to-class="opacity-100 max-h-40"
-                                leave-active-class="transition-all duration-200 ease-in"
-                                leave-from-class="opacity-100 max-h-40"
-                                leave-to-class="opacity-0 max-h-0 overflow-hidden">
-                                <ul v-if="toggleSubmenus.orders" class="mt-1 space-y-1">
-                                    <li v-show="userRole === 'client'">
-                                        <Link :class="{
-                                            'bg-gray-100': isActive(['']),
-                                        }"
-                                            class="block py-2 px-2.5 text-gray-700 hover:bg-gray-100 rounded-lg pl-[43px]">
-                                        Pedidos para enviar</Link>
-                                    </li>
-                                    <li v-show="userRole === 'client'">
-                                        <Link :class="{
-                                            'bg-gray-100': isActive(['']),
-                                        }"
-                                            class="block py-2 px-2.5 text-gray-700 hover:bg-gray-100 rounded-lg pl-[43px]">
-                                        Pedidos em Progresso</Link>
-                                    </li>
-                                    <li v-show="userRole === 'client'">
-                                        <Link :class="{
-                                            'bg-gray-100': isActive(['']),
-                                        }"
-                                            class="block py-2 px-2.5 text-gray-700 hover:bg-gray-100 rounded-lg pl-[43px]">
-                                        Pedidos Concluidos</Link>
-                                    </li>
-                                    <li v-show="userRole === 'client'">
-                                        <Link :class="{
-                                            'bg-gray-100': isActive(['']),
-                                        }"
-                                            class="block py-2 px-2.5 text-gray-700 hover:bg-gray-100 rounded-lg pl-[43px]">
-                                        Todos os Pedidos</Link>
-                                    </li>
-                                    <li v-show="userRole === 'admin'">
-                                        <Link :class="{
-                                            'bg-gray-100': isActive(['']),
-                                        }"
-                                            class="block py-2 px-2.5 text-gray-700 hover:bg-gray-100 rounded-lg pl-[43px]">
-                                        Pedidos em Andamento</Link>
                                     </li>
                                 </ul>
                             </Transition>
