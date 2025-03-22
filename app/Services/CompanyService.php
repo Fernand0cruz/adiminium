@@ -21,18 +21,14 @@ class CompanyService
 
     public function getAllCompanies(): LengthAwarePaginator
     {
-        return Company::select('id', 'user_id', 'photo', 'business_name', 'cnpj', 'phone', 'email', 'city')
-            ->with([
-                'User' => function ($query) {
-                    $query->select('id', 'name');
-                }
-            ])
+        return Company::with('user')
             ->paginate(25);
     }
 
     public function getCompanyById(int $id): Company
     {
-        return Company::with('User')->findOrFail($id);
+        return Company::with('User')
+            ->findOrFail($id);
     }
 
     public function updateCompany(int $id, array $data): Company

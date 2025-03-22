@@ -33,7 +33,8 @@ class ClientService
 
     public function getClientById(int $id): User
     {
-        return User::with('company')->findOrFail($id);
+        return User::with('company')
+            ->findOrFail($id);
     }
 
     public function updateClient(int $id, array $data): User

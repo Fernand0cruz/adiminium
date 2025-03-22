@@ -35,7 +35,11 @@ Route::middleware(['auth'])->group(function () {
 
     Route::prefix('producs-catalog')->name('products.catalog.')->group(function () {
         Route::get('/', [PagesController::class, 'catalogProducts'])->name('index');
-//        Route::get('/{id}', [PagesController::class, 'catalogProduct'])->name('show');
+        Route::get('/{id}', [PagesController::class, 'product'])->name('show');
+    });
+
+    Route::prefix('orders')->name('orders.')->group(function () {
+        Route::get('/active', [PagesController::class, 'activeOrder'])->name('active');
     });
 
     Route::prefix('profile')->group(function () {

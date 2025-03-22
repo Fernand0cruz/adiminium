@@ -20,8 +20,7 @@ class ProductService
 
     public function getAllProducts(): LengthAwarePaginator
     {
-        return Product::select('id', 'photo', 'name', 'description', 'price', 'discount', 'quantity')
-            ->paginate(25);
+        return Product::paginate(24);
     }
 
     public function getProductById(int $id): Product
@@ -66,7 +65,8 @@ class ProductService
     private function deletePhoto(Product $product): void
     {
         if ($product->photo) {
-            Storage::disk('public')->delete($product->photo);
+            Storage::disk('public')
+                ->delete($product->photo);
         }
     }
 }

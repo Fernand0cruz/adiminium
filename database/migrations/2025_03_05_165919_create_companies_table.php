@@ -12,7 +12,6 @@ return new class extends Migration {
     {
         Schema::create('companies', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->unique()->nullable()->constrained('users')->onDelete('set null');
             $table->string('photo')->nullable();
             $table->string('business_name');
             $table->string('cnpj', 14)->unique();

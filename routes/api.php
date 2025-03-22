@@ -13,5 +13,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('companies', CompanyController::class);
 
     Route::apiResource('clients', ClientController::class);
+
+    Route::apiResource('orders', OrderController::class);
 });
 

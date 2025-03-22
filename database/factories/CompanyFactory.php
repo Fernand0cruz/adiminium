@@ -14,7 +14,6 @@ class CompanyFactory extends Factory
         $this->faker = \Faker\Factory::create('pt_BR');
 
         return [
-            'user_id' => null,
             'photo' => 'https://picsum.photos/seed/' . $this->faker->unique()->numberBetween(1, 1000) . '/640/480',
             'business_name' => $this->faker->company,
             'cnpj' => str_pad($this->faker->randomNumber(9, true), 14, '0', STR_PAD_LEFT),

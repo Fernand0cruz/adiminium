@@ -90,4 +90,9 @@ class PagesController extends Controller
     {
         return Inertia::render('Clients/Edit');
     }
+
+    public function activeOrder(): Response
+    {
+        return Inertia::render('Orders/ActiveOrder');
+    }
 }

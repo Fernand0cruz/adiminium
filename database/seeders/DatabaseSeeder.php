@@ -17,41 +17,28 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $companies = Company::factory()->count(75)->create();
+        $firstCompany = $companies->first();
 
-        $companies->each(function ($company, $index) {
+        $companies->each(function ($company, $index) use ($firstCompany) {
+            $userData = [
+                'company_id' => $company->id,
+                'name' => fake()->name(),
+                'email' => fake()->unique()->safeEmail(),
+                'password' => Hash::make('password'),
+                'role' => 'client',
+            ];
 
             if ($index === 0) {
-                // Primeiro usuário (Admin)
-                $user = User::factory()->create([
-                    'company_id' => $company->id,
-                    'name' => 'User Admin',
-                    'email' => 'admin@gmail.com',
-                    'password' => Hash::make('adminpass'),
-                    'role' => 'admin',
-                ]);
+                $userData['name'] = 'User Admin';
+                $userData['email'] = 'admin@gmail.com';
+                $userData['role'] = 'admin';
             } elseif ($index === 1) {
-                // Segundo usuário (Simples)
-                $user = User::factory()->create([
-                    'company_id' => $company->id,
-                    'name' => 'User Simples',
-                    'email' => 'user@gmail.com',
-                    'password' => Hash::make('userpass'),
-                    'role' => 'client',
-                ]);
-            } else {
-                // Demais usuários gerados aleatoriamente
-                $user = User::factory()->create([
-                    'company_id' => $company->id,
-                ]);
+                $userData['name'] = 'User Simples';
+                $userData['email'] = 'user@gmail.com';
             }
 
-            // Atualiza a empresa para vincular ao primeiro usuário criado
-            $company->user_id = $user->id;
-            $company->save();
+            User::factory()->create($userData);
         });
-
-
-
 
         $peripherals = [
             [
