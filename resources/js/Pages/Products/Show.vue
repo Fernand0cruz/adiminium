@@ -28,9 +28,9 @@
         </div>
 
         <!-- PRODUCT DETAILS -->
-        <div v-if="product.id" class="p-4 border rounded-lg flex flex-col md:flex-row gap-4 md:min-h-[400px]">
+        <div v-if="product.id" class="p-4 bg-gray-100 border rounded-lg flex flex-col md:flex-row gap-4 md:min-h-[400px]">
             <!-- PRODUCT DETAILS PHOTO -->
-            <div class="w-full md:w-1/2 flex justify-center bg-gray-100 rounded-md border p-4">
+            <div class="w-full md:w-1/2 flex justify-center bg-white rounded-md border p-4">
                 <img :src="getProductPhotoUrl(product.photo)" alt="Produto" class="w-full max-w-sm object-contain" />
             </div>
 
@@ -64,7 +64,7 @@
                             +
                         </button>
                     </div>
-                    <Link href=""
+                    <Link v-if="userRole === 'client'" href=""
                         class="py-1 px-2 inline-flex justify-center items-center gap-2 rounded-lg border border-indigo-500 font-medium bg-indigo-100 text-indigo-700 align-middle hover:bg-indigo-200 transition-all text-sm">
                     Adicionar ao pedido
                     </Link>
