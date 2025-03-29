@@ -7,42 +7,38 @@ use App\Models\Order;
 use App\Models\OrderStatus;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Auth;
 
 class OrderService
 {
     public function createOrder(array $data): Order
     {
-        $totalPrice = 0;
-        $orderProducts = [];
+//        criar so se n existir order
 
-        foreach ($data['products'] as $item) {
-            $product = Product::findOrFail($item['product_id']);
-            $unitPrice = $product->price;
-            $discount = $product->discount;
+        $item = $data['products'][0];
 
-            $subtotal = $item['quantity'] * $unitPrice;
+        $product = Product::findOrFail($item['product_id']);
+        $unitPrice = $product->price;
+        $discount = $product->discount;
+        $quantity = $data['quantity'] ?? 1;
 
-            $discountedPrice = $subtotal - ($subtotal * $discount / 100);
-
-            $totalPrice += $discountedPrice;
-
-            $orderProducts[$product->id] = [
-                'quantity' => $item['quantity'],
-                'discount' => $discount,
-                'price' => $unitPrice,
-            ];
-        }
+        $discountedPrice = $unitPrice - ($unitPrice * $discount / 100);
 
         $order = Order::create([
             'company_id' => $data['company_id'],
-            'total_price' => $totalPrice,
+            'total_price' => $discountedPrice,
         ]);
 
-        $order->products()->attach($orderProducts);
+        $order->products()->attach([
+            $product->id => [
+                'quantity' => $quantity,
+                'discount' => $discount,
+                'price' => $unitPrice,
+            ],
+        ]);
 
         return $order->load('products');
     }
-
 
     public function getOrderActive(): Collection
     {
