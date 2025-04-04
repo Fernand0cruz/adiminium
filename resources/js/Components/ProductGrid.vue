@@ -4,8 +4,7 @@
 
     <div class="grid grid-cols-1 sm:grid-cols-2  xl:grid-cols-4 gap-4">
 
-        <div v-for="product in products" :key="product.id"
-            class="border rounded-lg p-4 bg-gray-100">
+        <div v-for="product in products" :key="product.id" class="border rounded-lg p-4 bg-gray-100">
             <div
                 class="relative h-[350px] sm:h-[250px] xl:h-[250px] border overflow-hidden rounded-lg p-4 flex justify-center items-center bg-white">
                 <img :src="getProductPhotoUrl(product.photo)" :alt="product.name"
@@ -41,11 +40,11 @@
     </div>
 
     <div v-if="isModalOpen"
-         class="z-[75] top-[-17px] fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
+        class="z-[75] top-[-17px] fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
         <div class="bg-white w-[650px] rounded-lg overflow-hidden border">
             <div class="p-4">
                 <h2 class="text-lg font-semibold mb-4">Adicionar ao pedido:</h2>
-                <p>Adicionar o produto {{ modalProduct.name}} ao pedido:</p>
+                <p>Adicionar o produto {{ modalProduct.name }} ao pedido:</p>
                 <p class="text-gray-500">Quantidade disponível: {{ modalProduct.quantity }}</p>
                 <div>
                     <p v-if="modalProduct.discount > 0" class="text-red-500">
@@ -53,7 +52,8 @@
                     </p>
                     <p class="text-lg font-bold text-gray-500">
                         <span>Preço: </span>
-                        <span v-if="modalProduct.discount > 0">De <span class="line-through">{{ modalProduct.price }}</span> por
+                        <span v-if="modalProduct.discount > 0">De <span class="line-through">{{ modalProduct.price
+                                }}</span> por
                         </span>
                         <span class="text-black">{{ modalProduct.final_price }}</span>
                     </p>
@@ -61,11 +61,11 @@
             </div>
             <div class="bg-gray-100 p-4 flex justify-end gap-4">
                 <button @click="closeModal"
-                        class="py-1 px-2 inline-flex justify-center items-center gap-2 rounded-lg font-medium bg-gray-100 text-gray-700 align-middle hover:bg-gray-200 transition-all text-sm">
+                    class="py-1 px-2 inline-flex justify-center items-center gap-2 rounded-lg font-medium bg-gray-100 text-gray-700 align-middle hover:bg-gray-200 transition-all text-sm">
                     Cancelar
                 </button>
                 <button @click="addProductToOrder(modalProduct)"
-                        class="py-1 px-2 inline-flex justify-center items-center gap-2 rounded-lg border border-indigo-500 font-medium bg-indigo-100 text-indigo-700 align-middle hover:bg-indigo-200 transition-all text-sm">
+                    class="py-1 px-2 inline-flex justify-center items-center gap-2 rounded-lg border border-indigo-500 font-medium bg-indigo-100 text-indigo-700 align-middle hover:bg-indigo-200 transition-all text-sm">
                     <ShoppingBasket />
                     Adicionar ao pedido
                 </button>
@@ -75,11 +75,12 @@
 </template>
 
 <script setup>
-import {ShoppingBasket, SquareArrowOutUpRight} from "lucide-vue-next";
-import {Link, usePage} from "@inertiajs/vue3";
-import {onMounted, ref} from "vue";
+import { ShoppingBasket, SquareArrowOutUpRight } from "lucide-vue-next";
+import { Link, usePage } from "@inertiajs/vue3";
+import { onMounted, ref } from "vue";
 import Services from '@/Services/api/index.js';
 import ErrorMessage from "@/Components/ErrorMessage.vue";
+import { useToast } from "vue-toastification";
 
 defineProps({
     products: Array
@@ -92,6 +93,7 @@ const order = ref([]);
 const errorMessage = ref(null);
 const { props } = usePage();
 const user = props.auth.user;
+const toast = useToast();
 
 const openModal = (product) => {
     modalProduct.value = product;
@@ -131,18 +133,38 @@ const addProductToOrder = async (product) => {
                 ]
             });
 
-            // toast sucess
+            toast.success(order.value.message);
+
             order.value = await Services.orders.getOrderActive();
         } else {
-            await Services.orders.update(order.value.id, {
-                product_id: product.id,
-                quantity: quantity.value,
-            });
+
+            const existingProduct = order.value[0].products.find(p => p.pivot.product_id === product.id)
+
+            if (existingProduct) {
+                const response = await Services.orders.update(order.value[0].id, {
+                    increment_product: {
+                        product_id: product.id,
+                        quantity: 1
+                    }
+                });
+                toast.success(response.data);
+
+            } else {
+                const response = await Services.orders.update(order.value[0].id, {
+                    add_product: {
+                        product_id: product.id,
+                        quantity: 1
+                    }
+                });
+                toast.success(response.data);
+            }
+
+            order.value = await Services.orders.getOrderActive();
         }
         closeModal();
     } catch (error) {
         closeModal();
-        errorMessage.value = error.message?.[0];
+        toast.error(error.message?.[0]);
     }
 };
 </script>

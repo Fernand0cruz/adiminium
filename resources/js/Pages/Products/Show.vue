@@ -28,7 +28,8 @@
         </div>
 
         <!-- PRODUCT DETAILS -->
-        <div v-if="product.id" class="p-4 bg-gray-100 border rounded-lg flex flex-col md:flex-row gap-4 md:min-h-[400px]">
+        <div v-if="product.id"
+            class="p-4 bg-gray-100 border rounded-lg flex flex-col md:flex-row gap-4 md:min-h-[400px]">
             <!-- PRODUCT DETAILS PHOTO -->
             <div class="w-full md:w-1/2 flex justify-center bg-white rounded-md border p-4">
                 <img :src="getProductPhotoUrl(product.photo)" alt="Produto" class="w-full max-w-sm object-contain" />
@@ -52,23 +53,10 @@
                     </p>
                 </div>
 
-                <!-- PRODUCT QUANTITY INCLEMENT AND DECLEMENT-->
-                <div class="mt-4 flex flex-wrap items-center gap-4">
-                    <div class="flex items-center border rounded-lg p-2">
-                        <button @click="decrementQuantity" class="px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded-l">
-                            -
-                        </button>
-                        <input type="text" class="w-12 h-10 text-center border-x outline-none z-10" v-model="quantity"
-                            readonly />
-                        <button @click="incrementQuantity" class="px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded-r">
-                            +
-                        </button>
-                    </div>
-                    <Link v-if="userRole === 'client'" href=""
-                        class="py-1 px-2 inline-flex justify-center items-center gap-2 rounded-lg border border-indigo-500 font-medium bg-indigo-100 text-indigo-700 align-middle hover:bg-indigo-200 transition-all text-sm">
+                <button v-if="userRole === 'client'" @click="addProductToOrder(product)"
+                    class="py-1 px-2 inline-flex justify-center items-center gap-2 rounded-lg border border-indigo-500 font-medium bg-indigo-100 text-indigo-700 align-middle hover:bg-indigo-200 transition-all text-sm">
                     Adicionar ao pedido
-                    </Link>
-                </div>
+                </button>
             </div>
         </div>
     </AuthenticatedLayout>
@@ -84,14 +72,16 @@ import { usePage } from "@inertiajs/vue3";
 import { ref, onMounted } from "vue";
 import Services from "@/Services/api/index.js";
 import ErrorMessage from "@/Components/ErrorMessage.vue";
+import { useToast } from "vue-toastification";
 
 const { props } = usePage();
 const userRole = props.auth.user.role;
 const product = ref({});
 const errorMessage = ref(null);
 const productId = route().params.id;
-const quantity = ref(1);
 const loading = ref(false);
+const toast = useToast();
+const user = props.auth.user;
 
 onMounted(async () => {
     loading.value = true;
@@ -109,15 +99,50 @@ const getProductPhotoUrl = (photoPath) =>
         ? photoPath
         : `/storage/${photoPath}`;
 
-const incrementQuantity = () => {
-    if (quantity.value < product.value.quantity) {
-        quantity.value++;
-    }
-};
+const addProductToOrder = async (product) => {
 
-const decrementQuantity = () => {
-    if (quantity.value > 1) {
-        quantity.value--;
+    let order = await Services.orders.getOrderActive()
+
+    try {
+        if (!order || order.length === 0) {
+
+            const response = await Services.orders.create({
+                company_id: user.company_id,
+                products: [
+                    {
+                        product_id: product.id,
+                        quantity: 1
+                    }
+                ]
+            });
+
+            toast.success(response.message);
+        } else {
+            const existingProduct = order[0].products.find(p => p.pivot.product_id === product.id)
+
+            if (existingProduct) {
+                const response = await Services.orders.update(order[0].id, {
+                    increment_product: {
+                        product_id: product.id,
+                        quantity: 1
+                    }
+                });
+
+                toast.success(response.data);
+            } else {
+                const response = await Services.orders.update(order[0].id, {
+                    add_product: {
+                        product_id: product.id,
+                        quantity: 1
+                    }
+                });
+
+                toast.success(response.data);
+            }
+        }
+
+    } catch (error) {
+        toast.error(error.message?.[0]);
     }
 };
 </script>

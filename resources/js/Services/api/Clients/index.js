@@ -25,8 +25,6 @@ export default (httpClient) => ({
         }
     },
     update: async (clientId, clientData) => {
-        console.log(clientData);
-
         try {
             const response = await httpClient.patch(
                 `/api/clients/${clientId}`,

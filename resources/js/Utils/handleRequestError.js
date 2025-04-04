@@ -17,7 +17,7 @@ export function handleRequestError(error) {
 
         console.error("Erro do servidor:", error.response.status, error.response.data);
         throw {
-            message: ["Ocorreu um erro no servidor. Tente novamente mais tarde!"],
+            message: [error.response.data.message] || ["Ocorreu um erro no servidor. Tente novamente mais tarde!"],
         };
     }
 

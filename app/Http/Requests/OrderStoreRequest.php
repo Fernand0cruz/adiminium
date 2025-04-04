@@ -25,8 +25,8 @@ class OrderStoreRequest extends FormRequest
         return [
             'company_id' => ['required', 'exists:companies,id'],
             'products' => ['required', 'array', 'min:1'],
-            'products.*.product_id' => ['required', 'exists:products,id'],
-            'products.*.quantity' => ['required', 'integer', 'min:1'],
+            'products.*.product_id' => ['required_with:products', 'exists:products,id'],
+            'products.*.quantity' => ['required_with:products', 'integer', 'min:1'],
         ];
     }
 }

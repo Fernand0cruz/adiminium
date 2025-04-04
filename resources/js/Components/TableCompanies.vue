@@ -124,8 +124,8 @@ const toast = useToast();
 const isModalOpen = ref(false);
 const modalCompany = ref(null);
 
-const openModal = (product) => {
-    modalCompany.value = product;
+const openModal = (company) => {
+    modalCompany.value = company;
     isModalOpen.value = true;
 };
 

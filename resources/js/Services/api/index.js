@@ -2,6 +2,7 @@ import axios from "axios";
 import Products from "./Products/index.js";
 import Companies from "./Companies/index.js";
 import Clients from "./Clients/index.js";
+import Orders from "./Orders/index.js";
 
 const token = localStorage.getItem("auth_token");
 
@@ -31,4 +32,5 @@ export default {
     products: Products(httpClient),
     companies: Companies(httpClient),
     clients: Clients(httpClient),
+    orders: Orders(httpClient)
 };

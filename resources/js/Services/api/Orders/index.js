@@ -16,4 +16,12 @@ export default (httpClient) => ({
             return handleRequestError(error);
         }
     },
+    update: async (orderId, orderData) => {
+        try {
+            const response = await httpClient.patch(`/api/orders/${orderId}`, orderData);
+            return response.data;
+        } catch (error) {
+            return handleRequestError(error);
+        }
+    }
 });

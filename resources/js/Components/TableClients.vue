@@ -123,8 +123,8 @@ const toast = useToast();
 const isModalOpen = ref(false);
 const modalClient = ref(null);
 
-const openModal = (product) => {
-    modalClient.value = product;
+const openModal = (client) => {
+    modalClient.value = client;
     isModalOpen.value = true;
 };
 
@@ -133,7 +133,7 @@ const closeModal = () => {
     modalClient.value = null;
 };
 
-const emit = defineEmits(["clientsDeleted"]);
+const emit = defineEmits(["clientDeleted"]);
 
 const deleteClient = async () => {
     if (modalClient.value) {

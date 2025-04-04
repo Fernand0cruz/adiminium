@@ -7,8 +7,10 @@ import {
     Home,
     SquareChartGantt,
     Menu,
+    ChartNoAxesGantt,
     CircleUserRound,
     ChevronRight,
+    ShoppingBasket,
     ChevronDown,
     Users,
     ScanBarcode,
@@ -159,7 +161,7 @@ const userRole = props.auth.user.role;
                                             : route().current('products.catalog.index'),
                                 }">
                             <Home v-if="userRole === 'admin'" />
-                            <ScanBarcode v-else />
+                            <ChartNoAxesGantt v-else />
                             {{
                                 userRole === "admin"
                                     ? "Dashboard"
@@ -167,6 +169,19 @@ const userRole = props.auth.user.role;
                             }}
                             </Link>
                         </li>
+
+                        <li v-show="userRole === 'client'">
+                            <Link
+                                class="flex items-center gap-x-3.5 py-2 px-2.5 text-gray-800 rounded-lg hover:bg-gray-100"
+                                :href="route('orders.active')" :class="{
+                                    'bg-gray-100':
+                                        route().current('orders.active')
+                                }">
+                                <ShoppingBasket />
+                                Pedido ativo
+                            </Link>
+                        </li>
+
                         <li v-show="userRole === 'admin'">
                             <button @click="toggleSubmenu('products')"
                                 class="w-full flex justify-between items-center py-2 px-2.5 text-gray-800 rounded-lg hover:bg-gray-100"
