@@ -47,7 +47,7 @@ class DatabaseSeeder extends Seeder
                 'price' => 650.00,
                 'discount'=> 5,
                 'quantity' => 30,
-                'photo' => 'https://utfs.io/f/18d74d9f-8767-459f-800f-361b0630a241-nng1v9.webp',
+                'image' => 'https://utfs.io/f/18d74d9f-8767-459f-800f-361b0630a241-nng1v9.webp',
             ],
             [
                 'name' => 'Logitech Pro X Superlight',
@@ -55,7 +55,7 @@ class DatabaseSeeder extends Seeder
                 'price' => 750.00,
                 'discount'=> 10,
                 'quantity' => 22,
-                'photo' => 'https://utfs.io/f/d9c2db1a-ce79-4cec-8b83-6f81feb43221-yqn8tn.webp',
+                'image' => 'https://utfs.io/f/d9c2db1a-ce79-4cec-8b83-6f81feb43221-yqn8tn.webp',
             ],
             [
                 'name' => 'Logitech G305 Lightspeed',
@@ -63,7 +63,7 @@ class DatabaseSeeder extends Seeder
                 'price' => 300.00,
                 'discount'=> 15,
                 'quantity' => 40,
-                'photo' => 'https://utfs.io/f/6b63e551-7ded-4125-86de-dc033abd8378-n1k78m.webp',
+                'image' => 'https://utfs.io/f/6b63e551-7ded-4125-86de-dc033abd8378-n1k78m.webp',
             ],
             [
                 'name' => 'Cobra Cherry',
@@ -71,7 +71,7 @@ class DatabaseSeeder extends Seeder
                 'price' => 250.00,
                 'discount'=> 5,
                 'quantity' => 15,
-                'photo' => 'https://utfs.io/f/86b0c661-1508-447b-bcc3-56771c15925d-ki2thc.webp',
+                'image' => 'https://utfs.io/f/86b0c661-1508-447b-bcc3-56771c15925d-ki2thc.webp',
             ],
             [
                 'name' => 'Cooler Master MM730',
@@ -79,7 +79,7 @@ class DatabaseSeeder extends Seeder
                 'price' => 350.00,
                 'discount'=> 25,
                 'quantity' => 25,
-                'photo' => 'https://utfs.io/f/07a0a8fb-ddae-4a42-987f-a1cf3bdf1a90-5fdm5p.png',
+                'image' => 'https://utfs.io/f/07a0a8fb-ddae-4a42-987f-a1cf3bdf1a90-5fdm5p.png',
             ],
             [
                 'name' => 'SuperFrame Flick Pro',
@@ -87,7 +87,7 @@ class DatabaseSeeder extends Seeder
                 'price' => 500.00,
                 'discount'=> 2,
                 'quantity' => 35,
-                'photo' => 'https://utfs.io/f/f39b468b-4482-4113-b755-eb59319c6b01-6zubvz.png',
+                'image' => 'https://utfs.io/f/f39b468b-4482-4113-b755-eb59319c6b01-6zubvz.png',
             ],
             [
                 'name' => 'Corsair Elite RGB',
@@ -95,7 +95,7 @@ class DatabaseSeeder extends Seeder
                 'price' => 600.00,
                 'discount'=> 10,
                 'quantity' => 18,
-                'photo' => 'https://utfs.io/f/f8c443a3-0761-496f-8e1a-c0df815890e1-x1xk42.png',
+                'image' => 'https://utfs.io/f/f8c443a3-0761-496f-8e1a-c0df815890e1-x1xk42.png',
             ],
             [
                 'name' => 'Force One Lynx',
@@ -103,7 +103,7 @@ class DatabaseSeeder extends Seeder
                 'price' => 460.00,
                 'discount'=> 0,
                 'quantity' => 20,
-                'photo' => 'https://utfs.io/f/ea5d2dc5-7f00-4112-baac-d56069dbe7bc-xx02t3.png',
+                'image' => 'https://utfs.io/f/ea5d2dc5-7f00-4112-baac-d56069dbe7bc-xx02t3.png',
             ],
             [
                 'name' => 'Marvo M727',
@@ -111,7 +111,7 @@ class DatabaseSeeder extends Seeder
                 'price' => 300.00,
                 'discount'=> 0,
                 'quantity' => 28,
-                'photo' => 'https://utfs.io/f/57a73f67-da5c-40c9-bf20-c703695301e2-4zyakk.png',
+                'image' => 'https://utfs.io/f/57a73f67-da5c-40c9-bf20-c703695301e2-4zyakk.png',
             ],
             [
                 'name' => 'Logitech Pop Keys',
@@ -120,7 +120,7 @@ class DatabaseSeeder extends Seeder
                 'price' => 440.00,
                 'discount'=> 15,
                 'quantity' => 34,
-                'photo' => 'https://utfs.io/f/21a558e0-9983-4a9f-8d59-843be44a42f4-pafepz.webp',
+                'image' => 'https://utfs.io/f/21a558e0-9983-4a9f-8d59-843be44a42f4-pafepz.webp',
             ],
             [
                 'name' => 'Logitech MX Mechanical',
@@ -129,7 +129,7 @@ class DatabaseSeeder extends Seeder
                 'price' => 700.00,
                 'discount'=> 15,
                 'quantity' => 27,
-                'photo' => 'https://utfs.io/f/a10e0417-9ba0-4628-8efe-40f62a6e7609-vquxtz.webp',
+                'image' => 'https://utfs.io/f/a10e0417-9ba0-4628-8efe-40f62a6e7609-vquxtz.webp',
             ],
             [
                 'name' => 'Redragon Gamer Ashe',
@@ -138,7 +138,7 @@ class DatabaseSeeder extends Seeder
                 'price' => 400.00,
                 'discount'=> 0,
                 'quantity' => 18,
-                'photo' => 'https://utfs.io/f/ceffcf86-81db-4a97-a45e-75dc64477427-ay233f.png',
+                'image' => 'https://utfs.io/f/ceffcf86-81db-4a97-a45e-75dc64477427-ay233f.png',
             ],
             [
                 'name' => 'Ninja Black Noir',
@@ -147,7 +147,7 @@ class DatabaseSeeder extends Seeder
                 'price' => 130.00,
                 'discount'=> 5,
                 'quantity' => 12,
-                'photo' => 'https://utfs.io/f/22e4c854-d678-4aa0-93a5-11aca999e44e-iczfcd.webp',
+                'image' => 'https://utfs.io/f/22e4c854-d678-4aa0-93a5-11aca999e44e-iczfcd.webp',
             ],
             [
                 'name' => 'Redragon Lakshmi',
@@ -156,7 +156,7 @@ class DatabaseSeeder extends Seeder
                 'price' => 300.00,
                 'discount'=> 0,
                 'quantity' => 20,
-                'photo' => 'https://utfs.io/f/32855a52-16eb-4df9-b48b-e50b44f0846a-ihyv3.png',
+                'image' => 'https://utfs.io/f/32855a52-16eb-4df9-b48b-e50b44f0846a-ihyv3.png',
             ],
             [
                 'name' => 'Redragon Kumara Pro',
@@ -165,7 +165,7 @@ class DatabaseSeeder extends Seeder
                 'price' => 550.00,
                 'discount'=> 2,
                 'quantity' => 15,
-                'photo' => 'https://utfs.io/f/a5f03c79-80da-4532-a02e-80ec125b73b0-14cozz.png',
+                'image' => 'https://utfs.io/f/a5f03c79-80da-4532-a02e-80ec125b73b0-14cozz.png',
             ],
             [
                 'name' => 'Akko Naruto Shippuden Sasuke',
@@ -174,7 +174,7 @@ class DatabaseSeeder extends Seeder
                 'price' => 780.00,
                 'discount'=> 10,
                 'quantity' => 22,
-                'photo' => 'https://utfs.io/f/f375172d-157e-4d43-b7ed-cbc61c285ae5-497eca.webp',
+                'image' => 'https://utfs.io/f/f375172d-157e-4d43-b7ed-cbc61c285ae5-497eca.webp',
             ],
             [
                 'name' => 'SuperFrame Ferz',
@@ -183,12 +183,12 @@ class DatabaseSeeder extends Seeder
                 'price' => 330.00,
                 'discount'=> 15,
                 'quantity' => 14,
-                'photo' => 'https://utfs.io/f/2542a069-7585-4ec9-8c61-728e31617ff6-h7dqwc.png',
+                'image' => 'https://utfs.io/f/2542a069-7585-4ec9-8c61-728e31617ff6-h7dqwc.png',
             ],
             [
                 'name' => 'Logitech Astro A30',
                 'description' => 'Com design revolucionário, acústica avançada e conforto ergonômico, o A50 Wireless + Base Station oferece uma experiência de jogo inesquecível.',
-                'photo' => 'https://utfs.io/f/ca45cb59-9332-4bb6-8e8d-08bfe81b9f84-1h1tqv.webp',
+                'image' => 'https://utfs.io/f/ca45cb59-9332-4bb6-8e8d-08bfe81b9f84-1h1tqv.webp',
                 'price' => 1500,
                 'discount'=> 0,
                 'quantity' => 15,
@@ -196,7 +196,7 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Logitech Zone Wired Earbuds',
                 'description' => 'Ofereça sua melhor imagem e um som excelente nas videochamadas com os Zone Wired Earbuds. Os avançados microfones com redução de ruídos localizados no fone esquerdo capturam claramente cada palavra. Com som integrado com qualidade de estúdio.',
-                'photo' => 'https://utfs.io/f/69e51318-6299-4c00-8c9c-073a28068407-a5n61x.webp',
+                'image' => 'https://utfs.io/f/69e51318-6299-4c00-8c9c-073a28068407-a5n61x.webp',
                 'price' => 550,
                 'discount'=> 0,
                 'quantity' => 20,
@@ -204,7 +204,7 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Hyperx Cloud Stinger 2',
                 'description' => 'HyperX Cloud Stinger 2 - Headset gamer (preto).',
-                'photo' => 'https://utfs.io/f/7e51327b-bd7b-440c-a98b-0e9aa23bfafb-qmfx3g.png',
+                'image' => 'https://utfs.io/f/7e51327b-bd7b-440c-a98b-0e9aa23bfafb-qmfx3g.png',
                 'price' => 250,
                 'discount'=> 15,
                 'quantity' => 25,
@@ -212,7 +212,7 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Dell P2723QE',
                 'description' => 'O ComfortView Plus, uma tela integrada com baixa emissão de luz azul e sempre ativa, reduz as emissões potencialmente nocivas de luz azul sem prejudicar as cores. O incrível acabamento preto e a base pequena complementam um sistema de gerenciamento de cabos aprimorado que oculta os cabos no riser do monitor. Experimente o conforto feito para você ao inclinar, girar, rodar e ajustar a altura do monitor (máx. de 150 mm) e encontrar o conforto ideal para visualização.',
-                'photo' => 'https://utfs.io/f/e39eb655-1bcb-429a-abc9-c124fa638be8-n4q7lt.png',
+                'image' => 'https://utfs.io/f/e39eb655-1bcb-429a-abc9-c124fa638be8-n4q7lt.png',
                 'price' => 2500,
                 'discount'=> 0,
                 'quantity' => 19,
@@ -220,7 +220,7 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Dell S3422DWG',
                 'description' => 'Monitor curvo WQHD de 34” com VESA DisplayHDR 400 e taxa de atualização de 144 Hz que proporciona uma experiência gamer realmente imersiva.',
-                'photo' => 'https://utfs.io/f/14ea65fd-b17e-40fa-b1b5-29bc6d911047-tm0366.png',
+                'image' => 'https://utfs.io/f/14ea65fd-b17e-40fa-b1b5-29bc6d911047-tm0366.png',
                 'price' => 3200,
                 'discount'=> 0,
                 'quantity' => 21,
@@ -228,7 +228,7 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Dell S3222DGM',
                 'description' => 'Monitor curvo QHD de 31,5 com tempo de resposta de 1 ms (MPRT)/2 ms (cinza a cinza), taxa de atualização de 165 Hz e cores 99% sRGB para oferecer imagens nítidas aos games e tornar a jogabilidade imersiva.',
-                'photo' => 'https://utfs.io/f/13103244-dbda-4667-a885-11d368aa528c-x091g8.png',
+                'image' => 'https://utfs.io/f/13103244-dbda-4667-a885-11d368aa528c-x091g8.png',
                 'price' => 3500,
                 'discount'=> 0,
                 'quantity' => 17,
@@ -236,7 +236,7 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Sony HT-S200F Soundbar',
                 'description' => 'Introduzindo a Sony HT-200F Soundbar: sua solução sonora definitiva para transformar sua sala de estar em um verdadeiro cinema em casa. Projetada com a lendária qualidade de áudio da Sony, esta elegante e compacta soundbar oferece uma experiência de áudio imersiva que complementa perfeitamente qualquer ambiente. Com sua potência de saída de 80W, a HT-200F preenche o espaço com um som nítido e envolvente, que torna cada momento de entretenimento uma experiência emocionante. Graças à tecnologia S-Force Front Surround, você desfrutará de um campo sonoro expansivo que simula a experiência de som surround sem a necessidade de alto-falantes adicionais. A conectividade Bluetooth integrada permite que você transmita facilmente música de seus dispositivos compatíveis, enquanto a entrada HDMI ARC simplifica a conexão com sua TV para uma configuração rápida e fácil. Além disso, com o design fino e discreto da HT-200F, ela se integra perfeitamente ao seu espaço de entretenimento, proporcionando um visual elegante e moderno. Desfrute de filmes, música e jogos como nunca antes com a Sony HT-200F Soundbar - onde o áudio excepcional encontra o design sofisticado.',
-                'photo' => 'https://utfs.io/f/73c66027-3668-4de8-97bd-576b460052fc-k1xrbb.webp',
+                'image' => 'https://utfs.io/f/73c66027-3668-4de8-97bd-576b460052fc-k1xrbb.webp',
                 'price' => 2500,
                 'discount'=> 0,
                 'quantity' => 14,
@@ -244,7 +244,7 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Sony XB23 Extra Bass',
                 'description' => 'Desfrute de som potente e portabilidade incomparável com a Caixa de Som Sony SRS-XB23. Projetada para os verdadeiros amantes da música que não querem comprometer a qualidade sonora, esta caixa de som combina um design robusto com recursos avançados, garantindo uma experiência auditiva excepcional em qualquer ambiente.',
-                'photo' => 'https://utfs.io/f/909d2979-a874-4172-922f-2937f8573489-sh030b.png',
+                'image' => 'https://utfs.io/f/909d2979-a874-4172-922f-2937f8573489-sh030b.png',
                 'price' => 3500,
                 'discount'=> 5,
                 'quantity' => 19,
@@ -252,7 +252,7 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Sony SA-Z9R Speakers',
                 'description' => 'Os alto-falantes Sony SA-Z9R foram projetados para elevar a sua experiência auditiva a novos patamares, oferecendo um áudio imersivo e envolvente que coloca você no centro da ação. Como parte do sistema de áudio Sony HT-Z9F, esses alto-falantes traseiros sem fio foram meticulosamente projetados para complementar e aprimorar o desempenho do seu sistema de home theater, proporcionando um som surround realista e emocionante.',
-                'photo' => 'https://utfs.io/f/f41fd707-a43d-4135-93b0-034039954e95-n3vzru.webp',
+                'image' => 'https://utfs.io/f/f41fd707-a43d-4135-93b0-034039954e95-n3vzru.webp',
                 'price' => 4000,
                 'discount'=> 10,
                 'quantity' => 21,
@@ -260,7 +260,7 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => '8BitDo Fami Edition',
                 'description' => 'Domine o jogo com o Teclado Mecânico Gamer 8BitDo Fami Edition. Este teclado sem fio Bluetooth combina o melhor do estilo retrô com a tecnologia moderna, oferecendo uma experiência de digitação excepcional para jogadores exigentes.',
-                'photo' => 'https://utfs.io/f/d780c0f1-064f-4ef8-b07e-6b0be4813f93-ig2w57.png',
+                'image' => 'https://utfs.io/f/d780c0f1-064f-4ef8-b07e-6b0be4813f93-ig2w57.png',
                 'price' => 750,
                 'discount'=> 8,
                 'quantity' => 32,
@@ -268,7 +268,7 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Logitech G740',
                 'description' => 'A espessura preferida pelos jogadores profissionais para uma superfície de mesa mais consistente e melhores jogos em LANS e torneios. Obtenha a quantidade certa de resistência aos pés do seu mouse. Perfeito para todos os movimentos de partida, parada e movimentos bruscos e rápidos que vêm com jogos de baixo DPI. A textura de superfície perfeita fornece a imagem ideal para o sensor do seu mouse, para que ele possa traduzir o movimento do mouse para o movimento do cursor.',
-                'photo' => 'https://utfs.io/f/b1d8cb8b-8559-40cc-aac6-774dc32f24b9-rdtluz.webp',
+                'image' => 'https://utfs.io/f/b1d8cb8b-8559-40cc-aac6-774dc32f24b9-rdtluz.webp',
                 'price' => 200,
                 'discount'=> 8,
                 'quantity' => 12,
@@ -276,7 +276,7 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Force One Skyhawk Dark',
                 'description' => 'Mousepad Force One Skyhawk Dark XXL (900x400mm)',
-                'photo' => 'https://utfs.io/f/6ca36f1a-1062-406f-b5e6-6a695268c37f-11g5.webp',
+                'image' => 'https://utfs.io/f/6ca36f1a-1062-406f-b5e6-6a695268c37f-11g5.webp',
                 'price' => 300,
                 'discount'=> 10,
                 'quantity' => 16,
