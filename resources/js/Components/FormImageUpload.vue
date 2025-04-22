@@ -1,6 +1,6 @@
 <template>
     <div class="flex items-center gap-4">
-        <img class="border object-cover size-40 rounded-lg ring-2 ring-white" :src="photoPreview || placeholderImage" />
+        <img class="border object-cover size-40 rounded-lg ring-2 ring-white" :src="imagePreview || placeholderImage" />
 
         <div class="flex gap-x-4">
             <label :for="id"
@@ -9,7 +9,7 @@
                 Enviar foto
             </label>
 
-            <input :id="id" type="file" class="hidden" ref="fileInput" @change="handlePhotoChange" accept="image/*" />
+            <input :id="id" type="file" class="hidden" ref="fileInput" @change="handleimageChange" accept="image/*" />
         </div>
     </div>
 </template>
@@ -27,10 +27,10 @@ const props = defineProps({
 const emits = defineEmits(["update:modelValue"]);
 
 const fileInput = ref(null);
-const photoPreview = ref(null);
+const imagePreview = ref(null);
 let objectUrl = null;
 
-const handlePhotoChange = (e) => {
+const handleimageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
         emits("update:modelValue", file);
@@ -46,13 +46,13 @@ const updatePreview = (value) => {
 
     if (value instanceof File) {
         objectUrl = URL.createObjectURL(value);
-        photoPreview.value = objectUrl;
+        imagePreview.value = objectUrl;
     } else if (typeof value === "string" && value.trim() !== "") {
-        photoPreview.value = value.startsWith("http")
+        imagePreview.value = value.startsWith("http")
             ? value
             : `/storage/${value}`;
     } else {
-        photoPreview.value = props.placeholderImage;
+        imagePreview.value = props.placeholderImage;
     }
 };
 

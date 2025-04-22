@@ -1,9 +1,9 @@
 <template>
     <div class="border p-4 rounded-lg">
-        <div v-for="product in order[0].products" :key="product.id"
+        <div v-for="product in order.products" :key="product.id"
             class="border p-4 rounded-lg bg-gray-100 flex items-center mb-4">
             <div>
-                <img class="object-cover size-16 rounded-lg bg-white border" :src="product.photo" :alt="product.name" />
+                <img class="object-cover size-16 rounded-lg bg-white border" :src="product.image" :alt="product.name" />
             </div>
 
             <div class="flex-grow px-4">
@@ -41,7 +41,8 @@
 
         <div class="flex justify-between items-center mt-4">
             <div class="text-lg font-semibold">
-                Preço total do Pedido: {{ totalPrice }}
+                Preço total do Pedido:
+                {{ formatCurrency(totalPrice) }}
             </div>
             <div>
                 <Link href="route('#')"
@@ -62,7 +63,7 @@ import { useToast } from "vue-toastification";
 import { computed } from "vue";
 
 const props = defineProps({
-    order: Array
+    order: Object
 });
 
 const toast = useToast();
@@ -70,26 +71,29 @@ const emit = defineEmits();
 
 const incrementQuantity = async (order) => {
     try {
-        await Services.orders.update(order.pivot.order_id, {
-            increment_product: {
-                product_id: order.id,
-                quantity: 1
-            }
+        await Services.orders.incrementProductToOrderActive(order.pivot.order_id, {
+            products: [
+                {
+                    product_id: order.id,
+                    quantity: 1
+                }
+            ]
         });
 
         order.pivot.quantity++
-
     } catch (error) {
         toast.error(error.message[0]);
     }
 };
 
 const decrementQuantity = async (order) => {
-    await Services.orders.update(order.pivot.order_id, {
-        decrement_product: {
-            product_id: order.id,
-            quantity: 1
-        }
+    await Services.orders.decrementProductToOrderActive(order.pivot.order_id, {
+        products: [
+            {
+                product_id: order.id,
+                quantity: 1
+            }
+        ]
     });
 
     if (order.pivot.quantity <= 1) {
@@ -100,21 +104,23 @@ const decrementQuantity = async (order) => {
 };
 
 const deleteProduct = async (product) => {
-    await Services.orders.update(product.pivot.order_id, {
-        delete_product: {
-            product_id: product.id
-        }
+    await Services.orders.removeProductToOrderActive(product.pivot.order_id, {
+        products: [
+            {
+                product_id: product.id,
+                quantity: product.pivot.quantity
+            }
+        ]
     });
 
     emit('update-order', { isLoading: true });
 };
 
 const totalPrice = computed(() => {
-    let total = 0;
-    props.order[0].products.forEach((product) => {
+    return props.order?.products?.reduce((total, product) => {
         const discountedPrice = product.pivot.price * (1 - product.pivot.discount / 100);
-        total += discountedPrice * product.pivot.quantity;
-    });
-    return formatCurrency(total);
+        return total + (discountedPrice * product.pivot.quantity);
+    }, 0) || 0;
 });
+
 </script>

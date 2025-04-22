@@ -27,7 +27,7 @@
 
                     <td class="size-px whitespace-nowrap">
                         <span class="block pl-3">
-                            <img class="border object-cover size-10 rounded-lg ring-2 ring-white" :src="product.photo"  :alt="product.name"/>
+                            <img class="border object-cover size-10 rounded-lg ring-2 ring-white" :src="getProductimageUrl(product.image)"  :alt="product.name"/>
                         </span>
                      </td>
 
@@ -130,6 +130,11 @@ const toast = useToast();
 
 const isModalOpen = ref(false);
 const modalProduct = ref(null);
+
+const getProductimageUrl = (imagePath) =>
+    imagePath && imagePath.startsWith("http")
+        ? imagePath
+        : `/storage/${imagePath}`;
 
 const openModal = (product) => {
     modalProduct.value = product;

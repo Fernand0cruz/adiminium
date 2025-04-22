@@ -1,8 +1,3 @@
-<script setup>
-import ApplicationLogo from '@/Components/ApplicationLogo.vue';
-import { Link } from '@inertiajs/vue3';
-</script>
-
 <template>
     <div class="flex min-h-screen flex-col items-center bg-gray-100 pt-6 sm:justify-center">
         <div>
@@ -11,8 +6,13 @@ import { Link } from '@inertiajs/vue3';
             </Link>
         </div>
 
-        <div class="my-6 w-full overflow-hidden bg-white px-6 py-4 border sm:max-w-md sm:rounded-lg">
+        <div class="my-4 w-full overflow-hidden bg-white px-4 py-4 border sm:max-w-xl sm:rounded-xl">
             <slot />
         </div>
     </div>
 </template>
+
+<script setup>
+import ApplicationLogo from '@/Components/ApplicationLogo.vue';
+import { Link } from '@inertiajs/vue3';
+</script>

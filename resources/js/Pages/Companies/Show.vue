@@ -35,7 +35,7 @@
         <div v-if="company.id" class="border rounded-lg p-4">
             <div class="grid sm:grid-cols-12 gap-4">
                 <div class="sm:col-span-3">
-                    <img class="object-cover rounded-lg" :src="getProductPhotoUrl(company.photo)"
+                    <img class="object-cover rounded-lg" :src="getProductimageUrl(company.image)"
                         alt="Logo da empresa" />
                 </div>
                 <div class="sm:col-span-9">
@@ -94,8 +94,8 @@ onMounted(async () => {
     }
 });
 
-const getProductPhotoUrl = (photoPath) =>
-    photoPath && photoPath.startsWith("http")
-        ? photoPath
-        : `/storage/${photoPath}`;
+const getProductimageUrl = (imagePath) =>
+    imagePath && imagePath.startsWith("http")
+        ? imagePath
+        : `/storage/${imagePath}`;
 </script>

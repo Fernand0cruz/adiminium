@@ -7,7 +7,7 @@
         <div v-for="product in products" :key="product.id" class="border rounded-lg p-4 bg-gray-100">
             <div
                 class="relative h-[350px] sm:h-[250px] xl:h-[250px] border overflow-hidden rounded-lg p-4 flex justify-center items-center bg-white">
-                <img :src="getProductPhotoUrl(product.photo)" :alt="product.name"
+                <img :src="getProductimageUrl(product.image)" :alt="product.name"
                     class="max-h-full max-w-full object-contain" />
                 <div v-if="product.discount > 0"
                     class="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">
@@ -53,7 +53,7 @@
                     <p class="text-lg font-bold text-gray-500">
                         <span>Preço: </span>
                         <span v-if="modalProduct.discount > 0">De <span class="line-through">{{ modalProduct.price
-                                }}</span> por
+                        }}</span> por
                         </span>
                         <span class="text-black">{{ modalProduct.final_price }}</span>
                     </p>
@@ -107,10 +107,10 @@ const closeModal = () => {
     quantity.value = 1
 };
 
-const getProductPhotoUrl = (photoPath) =>
-    photoPath && photoPath.startsWith("http")
-        ? photoPath
-        : `/storage/${photoPath}`;
+const getProductimageUrl = (imagePath) =>
+    imagePath && imagePath.startsWith("http")
+        ? imagePath
+        : `/storage/${imagePath}`;
 
 onMounted(async () => {
     try {
@@ -122,7 +122,8 @@ onMounted(async () => {
 
 const addProductToOrder = async (product) => {
     try {
-        if (!order.value || !order.value.length) {
+        if (!order.value || !order.value.id) {
+
             order.value = await Services.orders.create({
                 company_id: user.company_id,
                 products: [
@@ -137,26 +138,31 @@ const addProductToOrder = async (product) => {
 
             order.value = await Services.orders.getOrderActive();
         } else {
+            const existingProduct = order.value.products.find(p => p.pivot.product_id === product.id)
 
-            const existingProduct = order.value[0].products.find(p => p.pivot.product_id === product.id)
-
+            // increment product in the order
             if (existingProduct) {
-                const response = await Services.orders.update(order.value[0].id, {
-                    increment_product: {
-                        product_id: product.id,
-                        quantity: 1
-                    }
+                const response = await Services.orders.incrementProductToOrderActive(order.value.id, {
+                    products: [
+                        {
+                            product_id: product.id,
+                            quantity: 1
+                        }
+                    ]
                 });
-                toast.success(response.data);
+                toast.success(response.message);
 
             } else {
-                const response = await Services.orders.update(order.value[0].id, {
-                    add_product: {
-                        product_id: product.id,
-                        quantity: 1
-                    }
+                // add product in the order
+                const response = await Services.orders.addProductToOrderActive(order.value.id, {
+                    products: [
+                        {
+                            product_id: product.id,
+                            quantity: 1
+                        }
+                    ]
                 });
-                toast.success(response.data);
+                toast.success(response.message);
             }
 
             order.value = await Services.orders.getOrderActive();

@@ -6,12 +6,12 @@
         <h3 class="mt-4 pt-2 font-semibold border-t">Dados da empresa:</h3>
         <div class="grid sm:grid-cols-12 gap-2 sm:gap-6">
             <div class="sm:col-span-3">
-                <FormLabel for="photo" label="Logo da empresa:" />
+                <FormLabel for="image" label="Logo da empresa:" />
             </div>
             <div class="sm:col-span-9">
-                <FormPhotoUpload :key="form.photo" id="photo" v-model="form.photo"
+                <FormImageUpload :key="form.image" id="image" v-model="form.image"
                     placeholderImage="/images/placeholder-product.png" />
-                <FormErrorInput :message="formErrors.photo?.[0]" />
+                <FormErrorInput :message="formErrors.image?.[0]" />
             </div>
         </div>
         <div v-for="field in companyFields" class="grid sm:grid-cols-12 mt-4 gap-2 sm:gap-6">
@@ -63,7 +63,7 @@ import FormCepInput from "./FormCepInput.vue"
 import FormEmailInput from "./FormEmailInput.vue";
 import FormErrorInput from "./FormErrorInput.vue";
 import ErrorMessage from "./ErrorMessage.vue";
-import FormPhotoUpload from "./FormPhotoUpload.vue";
+import FormImageUpload from "./FormImageUpload.vue";
 import { useToast } from "vue-toastification";
 import Services from "@/Services/api/index.js";
 
@@ -78,7 +78,7 @@ const formErrors = ref({});
 const toast = useToast();
 
 const form = ref({
-    photo: null,
+    image: null,
     business_name: "",
     cnpj: "",
     phone: "",
@@ -133,7 +133,7 @@ watch(
 );
 
 const resetForm = () => {
-    clearForm(form, { photo: null });
+    clearForm(form, { image: null });
 };
 
 const createOrUpdateCompany = async () => {

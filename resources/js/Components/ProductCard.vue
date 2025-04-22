@@ -5,8 +5,8 @@ const props = defineProps({
     product: Object,
 });
 
-const getProductPhotoUrl = (photoPath) =>
-    photoPath.startsWith("http") ? photoPath : `/storage/${photoPath}`;
+const getProductimageUrl = (imagePath) =>
+    imagePath.startsWith("http") ? imagePath : `/storage/${imagePath}`;
 
 const formatCurrency = (value) => {
     if (!value) return "R$ 0,00"; 
@@ -29,8 +29,8 @@ const formatCurrency = (value) => {
             >
                 <img
                     class="mx-auto"
-                    v-if="product.photo"
-                    :src="getProductPhotoUrl(product.photo)"
+                    v-if="product.image"
+                    :src="getProductimageUrl(product.image)"
                     alt="Product image"
                 />
             </div>

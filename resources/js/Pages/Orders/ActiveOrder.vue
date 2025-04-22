@@ -28,13 +28,18 @@
         <ErrorMessage v-if="errorMessage" :errorMessage="errorMessage" />
 
         <!-- INFO MESSAGE -->
-        <InfoMessage v-if="!errorMessage && !loading && order.length === 0"
-            infoMessage="Não foi encontrado produtos no seu pedido, adicione produtos no pedido para realizar uma compra!" />
+        <InfoMessage
+            v-else-if="!loading && (!order || (order.products && order.products.length === 0))"
+            infoMessage="Não foi encontrado produtos no seu pedido, adicione produtos no pedido para realizar uma compra!"
+        />
 
         <!-- COMPONENT ORDER -->
-        <div v-if="!loading && order && order.length > 0">
-            <Order v-if="order && order.length > 0" :order="order" @update-order="fetchOrder" />
-        </div>
+        <Order
+            v-else-if="!loading && order && order.products && order.products.length > 0"
+            :order="order"
+            @update-order="fetchOrder"
+        />
+
     </AuthenticatedLayout>
 </template>
 
@@ -56,6 +61,8 @@ const errorMessage = ref(null);
 
 const fetchOrder = async () => {
     loading.value = true;
+    errorMessage.value = null;
+
     try {
         order.value = await Services.orders.getOrderActive();
     } catch (error) {
@@ -64,6 +71,7 @@ const fetchOrder = async () => {
         loading.value = false;
     }
 };
+
 
 onMounted(() => {
     fetchOrder();

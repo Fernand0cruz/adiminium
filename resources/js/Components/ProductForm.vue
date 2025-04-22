@@ -6,16 +6,16 @@
         <h3 class="mt-4 pt-2 font-semibold border-t">Dados do produto:</h3>
         <div class="grid sm:grid-cols-12 gap-2 sm:gap-6">
             <div class="sm:col-span-3">
-                <FormLabel for="photo" label="Foto do Produto:" />
+                <FormLabel for="image" label="Foto do Produto:" />
             </div>
             <div class="sm:col-span-9">
-                <FormPhotoUpload
-                    :key="form.photo"
-                    id="photo"
-                    v-model="form.photo"
+                <FormImageUpload
+                    :key="form.image"
+                    id="image"
+                    v-model="form.image"
                     placeholderImage="/images/placeholder-product.png"
                 />
-                <FormErrorInput :message="formErrors.photo?.[0]" />
+                <FormErrorInput :message="formErrors.image?.[0]" />
             </div>
         </div>
         <div
@@ -64,7 +64,7 @@ import FormTextArea from "./FormTextArea.vue";
 import FormCurrencyInput from "./FormCurrencyInput.vue";
 import FormPercentInput from "./FormPercentInput.vue";
 import FormNumberInput from "./FormNumberInput.vue";
-import FormPhotoUpload from "./FormPhotoUpload.vue";
+import FormImageUpload from "./FormImageUpload.vue";
 import Services from "@/Services/api/index.js";
 import ErrorMessage from "./ErrorMessage.vue";
 import { useToast } from "vue-toastification";
@@ -81,7 +81,7 @@ const formErrors = ref({});
 const isEditing = ref(false);
 
 const form = ref({
-    photo: null,
+    image: null,
     name: "",
     description: "",
     price: "",
@@ -119,7 +119,7 @@ watch(
 );
 
 const resetForm = () => {
-    clearForm(form, { photo: null });
+    clearForm(form, { image: null });
 };
 
 const createOrUpdateProduct = async () => {
@@ -131,7 +131,7 @@ const createOrUpdateProduct = async () => {
 
         toast.success(response.message);
         setTimeout(() => {
-            window.location.href = `/products/${
+            window.location.href = `/admin/products/${
                 isEditing.value ? form.value.id : response.data.id
             }`;
         }, 2500);

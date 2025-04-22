@@ -81,17 +81,16 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import {onMounted, ref, watch} from "vue";
 import FormLabel from "./FormLabel.vue";
-import { clearForm } from "@/Utils/clearForm";
+import {clearForm} from "@/Utils/clearForm";
 import FormTextInput from "./FormTextInput.vue";
 import FormPhoneInput from "./FormPhoneInput.vue";
 import FormEmailInput from "./FormEmailInput.vue";
 import FormErrorInput from "./FormErrorInput.vue";
 import ErrorMessage from "./ErrorMessage.vue";
-import { useToast } from "vue-toastification";
+import {useToast} from "vue-toastification";
 import Services from "@/Services/api/index.js";
-import { onMounted } from "vue";
 import FormPasswordInput from "./FormPasswordInput.vue";
 
 const props = defineProps({
@@ -169,8 +168,7 @@ const createOrUpdateClients = async () => {
 
 const loadCompanies = async () => {
     try {
-        const response = await Services.companies.getCompanyWithoutTies();
-        companiesUnsign.value = response;
+        companiesUnsign.value = await Services.companies.getCompaniesWithoutUsers();
     } catch (error) {
         console.log(error);
     }

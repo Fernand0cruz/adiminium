@@ -28,7 +28,7 @@
                     <td class="size-px whitespace-nowrap">
                         <span class="block pl-3">
                             <img class="border object-cover size-10 rounded-lg ring-2 ring-white"
-                                :src="getProductPhotoUrl(company.photo)" />
+                                :src="getProductimageUrl(company.image)" />
                         </span>
                     </td>
 
@@ -136,10 +136,10 @@ const closeModal = () => {
 
 const emit = defineEmits(["companyDeleted"]);
 
-const getProductPhotoUrl = (photoPath) =>
-    photoPath && photoPath.startsWith("http")
-        ? photoPath
-        : `/storage/${photoPath}`;
+const getProductimageUrl = (imagePath) =>
+    imagePath && imagePath.startsWith("http")
+        ? imagePath
+        : `/storage/${imagePath}`;
 
 const deleteCompany = async () => {
     if (modalCompany.value) {
