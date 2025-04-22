@@ -7,7 +7,7 @@ export function handleRequestError(error) {
 
         if (error.response.status === 413) {
             console.warn("Erro: Arquivo muito grande.");
-            throw { photo: ["O arquivo de imagem é muito grande."] };
+            throw { image: ["O arquivo de imagem é muito grande."] };
         }
 
         if (error.response.status === 404) {

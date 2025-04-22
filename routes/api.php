@@ -9,11 +9,18 @@ use App\Http\Controllers\Api\OrderController;
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('products', ProductController::class);
 
-    Route::get('/companies/unsign', [CompanyController::class, 'companiesUnsign']);
+    Route::get('companies/without-user', [CompanyController::class, 'findCompaniesWithoutUser']);
     Route::apiResource('companies', CompanyController::class);
 
     Route::apiResource('clients', ClientController::class);
 
-    Route::apiResource('orders', OrderController::class);
+    Route::prefix('orders')->group(function () {
+        Route::post('', [OrderController::class, 'store']);
+        Route::get('', [OrderController::class, 'show']);
+        Route::patch('{id}/add-product', [OrderController::class, 'addToOrder']);
+        Route::patch('{id}/increment-product', [OrderController::class, 'incrementProduct']);
+        Route::patch('{id}/decrement-product', [OrderController::class, 'decrementProduct']);
+        Route::patch('{id}/remove-product', [OrderController::class, 'removeProduct']);
+    });
 });
 

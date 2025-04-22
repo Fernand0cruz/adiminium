@@ -26,10 +26,6 @@ class PagesController extends Controller
     {
         return Inertia::render('Products/Catalog');
     }
-    //public function catalogProduct(): Response
-    //{
-        //return Inertia::render('Products/Show');
-        //}
 
     public function listProducts(): Response
     {

@@ -2,80 +2,20 @@
 
 namespace App\Services;
 
-use App\Models\Company;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Collection;
+
+use App\Repositories\Interfaces\CompanyRepositoryInterface;
 
 class CompanyService
 {
-    public function createCompany(array $data): Company
+    protected CompanyRepositoryInterface $repository;
+
+    public function __construct(CompanyRepositoryInterface $repository)
     {
-        $photoPath = $this->handlePhotoUpload($data);
-
-        $data['photo'] = $photoPath;
-
-        return Company::create($data);
+        $this->repository = $repository;
     }
 
-    public function getAllCompanies(): LengthAwarePaginator
+    public function getCompaniesWithoutUser()
     {
-        return Company::with('user')
-            ->paginate(25);
-    }
-
-    public function getCompanyById(int $id): Company
-    {
-        return Company::with('User')
-            ->findOrFail($id);
-    }
-
-    public function updateCompany(int $id, array $data): Company
-    {
-        $company = Company::findOrFail($id);
-
-        if (isset($data['photo']) && $data['photo'] instanceof UploadedFile) {
-            $this->deleteOldPhoto($company);
-            $data['photo'] = $this->handlePhotoUpload($data);
-        }
-
-        $company->update($data);
-
-        return $company;
-    }
-
-    public function deleteCompany(int $id): Company
-    {
-        $company = Company::findOrFail($id);
-
-        $this->deleteOldPhoto($company);
-
-        $company->delete();
-
-        return $company;
-    }
-
-    public function getCompaniesUnsign(): Collection
-    {
-        return Company::select('id', 'business_name')
-            ->whereNull('user_id')
-            ->get();
-    }
-
-    private function handlePhotoUpload(array $data): ?string
-    {
-        if (isset($data['photo']) && $data['photo'] instanceof UploadedFile) {
-            return $data['photo']->store('photos', 'public');
-        }
-
-        return null;
-    }
-
-    private function deleteOldPhoto(Company $company): void
-    {
-        if ($company->photo) {
-            Storage::disk('public')->delete($company->photo);
-        }
+        return $this->repository->companiesWithoutUser();
     }
 }

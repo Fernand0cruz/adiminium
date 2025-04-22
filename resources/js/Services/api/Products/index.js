@@ -3,7 +3,7 @@ import { handleRequestError } from "@/Utils/handleRequestError.js";
 
 const createOrUpdateProduct = (productData, method) => {
     const formData = new FormData();
-    formData.append("photo", productData.photo);
+    formData.append("image", productData.image);
     formData.append("name", productData.name);
     formData.append("description", productData.description);
     formData.append("price", productData.price);

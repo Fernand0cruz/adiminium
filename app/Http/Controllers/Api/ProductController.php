@@ -5,53 +5,51 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductStoreRequest;
 use App\Http\Requests\ProductUpdateRequest;
-use App\Services\ProductService;
-use App\Traits\HandlesExceptions;
+use App\Repositories\Interfaces\ProductRepositoryInterface;
+use App\Services\FileUploadService;
+use App\Services\FormRequestHandlerService;
+use App\Traits\HasControllerActions;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\UploadedFile;
 
 class ProductController extends Controller
 {
-    use HandlesExceptions;
+    use HasControllerActions;
 
-    private ProductService $productService;
+    protected ProductRepositoryInterface $repository;
+    protected FormRequestHandlerService $formRequestHandler;
+    protected FileUploadService $fileUploadService;
 
-    public function __construct(ProductService $productService)
+    public function __construct(
+        ProductRepositoryInterface $repository,
+        FormRequestHandlerService  $formRequestHandler,
+        FileUploadService $fileUploadService
+    )
     {
-        $this->productService = $productService;
+        $this->repository = $repository;
+        $this->formRequestHandler = $formRequestHandler;
+        $this->fileUploadService = $fileUploadService;
     }
 
     public function store(ProductStoreRequest $request): JsonResponse
     {
-        return $this->handleExceptions(fn () => 
-            $this->success($this->productService->createProduct($request->validated()), 'Produto criado com sucesso!', 201)
-        );
+        $validated = $this->formRequestHandler->getValidatedData($request);
+
+        if (isset($validated['image']) && $validated['image'] instanceof UploadedFile) {
+            $validated['image'] = $this->fileUploadService->upload($validated['image'], 'images');
+        }
+
+        return $this->storeItem($validated);
     }
 
-    public function index(): JsonResponse
+    public function update(ProductUpdateRequest $request, $id): JsonResponse
     {
-        return $this->handleExceptions(fn () => 
-            $this->success($this->productService->getAllProducts(),  'Produtos carregados com sucesso!')
-        );
-    }
+        $validated = $this->formRequestHandler->getValidatedData($request);
 
-    public function show(int $id): JsonResponse
-    {
-        return $this->handleExceptions(fn () => 
-            $this->success($this->productService->getProductById($id), 'Produto carregado com sucesso!')
-        );
-    }
+        if (isset($validated['image']) && $validated['image'] instanceof UploadedFile) {
+            $validated['image'] = $this->fileUploadService->upload($validated['image'], 'images');
+        }
 
-    public function update(ProductUpdateRequest $request, int $id): JsonResponse
-    { 
-        return $this->handleExceptions(fn () => 
-            $this->success($this->productService->updateProduct($id, $request->validated()), 'Produto atualizado com sucesso!')
-        );
-    }
-
-    public function destroy(int $id): JsonResponse
-    {
-        return $this->handleExceptions(fn () =>
-            $this->success($this->productService->deleteProduct($id), 'Produto excluido com sucesso!')
-        );
+        return $this->updateItem($validated, $id);
     }
 }

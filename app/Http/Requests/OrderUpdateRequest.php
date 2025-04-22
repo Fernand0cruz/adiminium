@@ -22,20 +22,9 @@ class OrderUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'increment_product' => ['array'],
-            'increment_product.product_id' => ['required_with:increment_product', 'exists:products,id'],
-            'increment_product.quantity' => ['required_with:increment_product', 'integer', 'min:1'],
-
-            'add_product' => ['array'],
-            'add_product.product_id' => ['required_with:add_product', 'exists:products,id'],
-            'add_product.quantity' => ['required_with:add_product', 'integer', 'min:1'],
-
-            'decrement_product' => ['array'],
-            'decrement_product.product_id' => ['required_with:decrement_product', 'exists:products,id'],
-            'decrement_product.quantity' => ['required_with:decrement_product', 'integer', 'min:1'],
-
-            'delete_product' => ['array'],
-            'delete_product.product_id' => ['required_with:delete_product', 'exists:products,id'],
+            'products' => ['required', 'array', 'min:1'],
+            'products.*.product_id' => ['required_with:products', 'exists:products,id'],
+            'products.*.quantity' => ['required_with:products', 'integer', 'min:1'],
         ];
     }
 }

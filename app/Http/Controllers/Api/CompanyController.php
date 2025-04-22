@@ -2,63 +2,65 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Repositories\Interfaces\CompanyRepositoryInterface;
 use App\Services\CompanyService;
-use App\Traits\HandlesExceptions;
+use App\Services\FileUploadService;
+use App\Services\FormRequestHandlerService;
+use App\Traits\HasControllerActions;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CompanyStoreRequest;
 use App\Http\Requests\CompanyUpdateRequest;
+use Illuminate\Http\UploadedFile;
 
 class CompanyController extends Controller
 {
-    use HandlesExceptions;
+    use HasControllerActions;
 
-    private CompanyService $companyService;
+    protected CompanyRepositoryInterface $repository;
+    protected CompanyService $companyService;
+    protected FormRequestHandlerService $formRequestHandler;
+    protected FileUploadService $fileUploadService;
 
-    public function __construct(CompanyService $companyService)
+    public function __construct(
+        CompanyRepositoryInterface $repository,
+        CompanyService             $companyService,
+        FormRequestHandlerService  $formRequestHandler,
+        FileUploadService          $fileUploadService
+    )
     {
+        $this->repository = $repository;
         $this->companyService = $companyService;
+        $this->formRequestHandler = $formRequestHandler;
+        $this->fileUploadService = $fileUploadService;
     }
 
     public function store(CompanyStoreRequest $request): JsonResponse
     {
-        return $this->handleExceptions(fn () =>
-            $this->success($this->companyService->createCompany($request->validated()), 'Empresa criada com sucesso!', 201)
-        );
+        $validated = $this->formRequestHandler->getValidatedData($request);
+
+        if (isset($validated['image']) && $validated['image'] instanceof UploadedFile) {
+            $validated['image'] = $this->fileUploadService->upload($validated['image'], 'images');
+        }
+
+        return $this->storeItem($validated);
     }
 
-    public function index(): JsonResponse
+    public function update(CompanyUpdateRequest $request, $id): JsonResponse
     {
-        return $this->handleExceptions(fn () =>
-            $this->success($this->companyService->getAllCompanies(), 'Empresas carregadas com sucesso!')
-        );
+        $validated = $this->formRequestHandler->getValidatedData($request);
+
+        if (isset($validated['image']) && $validated['image'] instanceof UploadedFile) {
+            $validated['image'] = $this->fileUploadService->upload($validated['image'], 'images');
+        }
+
+        return $this->updateItem($validated, $id);
     }
 
-    public function show(int $id): JsonResponse
+    public function findCompaniesWithoutUser(): JsonResponse
     {
-        return $this->handleExceptions(fn () =>
-            $this->success($this->companyService->getCompanyById($id), 'Produto carregado com sucesso!')
-        );
-    }
+        $companiesWithoutUser = $this->companyService->getCompaniesWithoutUser();
 
-    public function update(CompanyUpdateRequest $request, int $id): JsonResponse
-    {
-        return $this->handleExceptions(fn () =>
-            $this->success($this->companyService->updateCompany($id, $request->validated()), 'Empresa atualizada com sucesso!')
-        );
-    }
-
-    public function destroy(int $id): JsonResponse
-    {
-        return $this->handleExceptions(fn () =>
-            $this->success($this->companyService->deleteCompany($id), 'Empresa excluida com sucesso!')
-        );
-    }
-
-    public function companiesUnsign(): JsonResponse
-    {
-        return $this->handleExceptions(fn () =>
-            $this->success($this->companyService->getCompaniesUnsign(), 'Empresas sem vínculo carregadas com sucesso!')
-        );
+        return $this->successResponse($companiesWithoutUser);
     }
 }

@@ -2,7 +2,7 @@ import { handleRequestError } from "@/Utils/handleRequestError.js";
 
 const createOrUpdateCompany = (companyData, method) => {
     const formData = new FormData();
-    formData.append("photo", companyData.photo);
+    formData.append("image", companyData.image);
     formData.append("cnpj", companyData.cnpj);
     formData.append("business_name", companyData.business_name);
     formData.append("phone", companyData.phone);
@@ -103,9 +103,9 @@ export default (httpClient) => ({
             return handleRequestError(error);
         }
     },
-    getCompanyWithoutTies: async () => {
+    getCompaniesWithoutUsers: async () => {
         try {
-            const response = await httpClient.get(`/api/companies/unsign`);
+            const response = await httpClient.get(`/api/companies/without-user`);
             return response.data;
         } catch (error) {
             return handleRequestError(error);

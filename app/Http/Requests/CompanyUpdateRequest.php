@@ -26,20 +26,20 @@ class CompanyUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'photo' => [
+            'image' => [
                 'nullable',
                 function ($attribute, $value, $fail) {
                     if (is_string($value) && filter_var($value, FILTER_VALIDATE_URL)) {
                         if (!URL::isValidUrl($value)) {
-                            $fail('The photo URL is invalid.');
+                            $fail('The image URL is invalid.');
                         }
                     }
                     elseif ($value instanceof UploadedFile) {
                         $rules = ['image', 'mimes:jpeg,png,jpg,gif', 'max:2048'];
-                        $validator = ValidatorFacade::make(['photo' => $value], ['photo' => $rules]);
+                        $validator = ValidatorFacade::make(['image' => $value], ['image' => $rules]);
 
                         if ($validator->fails()) {
-                            $fail($validator->errors()->first('photo'));
+                            $fail($validator->errors()->first('image'));
                         }
                     }
                 },

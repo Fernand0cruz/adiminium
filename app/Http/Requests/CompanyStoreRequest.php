@@ -22,7 +22,7 @@ class CompanyStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'photo' => ['required', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
+            'image' => ['required', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
             'business_name' => ['required', 'string', 'max:250', 'unique:companies,business_name'],
             'cnpj' => ['required', 'string', 'size:14', 'unique:companies,cnpj'],
             'phone' => ['required', 'string', 'size:11'],
