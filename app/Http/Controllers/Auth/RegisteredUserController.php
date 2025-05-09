@@ -5,22 +5,17 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\StoreUserRequest;
 use App\Models\User;
-use App\Traits\HandlesExceptions;
+use App\Traits\HasApiResponse;
+use Exception;
 use Illuminate\Http\JsonResponse;
-use App\Services\UserService;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class RegisteredUserController extends Controller
 {
-    use HandlesExceptions;
-
-    protected $userService;
-
-    public function __construct(UserService $userService)
-    {
-        $this->userService = $userService;
-    }
+    use HasApiResponse;
 
     public function create(): Response
     {
@@ -29,15 +24,25 @@ class RegisteredUserController extends Controller
 
     public function store(StoreUserRequest $request): JsonResponse
     {
-        return $this->handleExceptions(function () use ($request) {
-            $validated = $request->validated();
-            $user = $this->userService->createAdminUser($validated);
-            $token = $user->createToken($user->name . ' Auth-Token')->plainTextToken;
-            return $this->success([
-                'token_type' => 'Bearer',
-                'token' => $token,
-                'redirect_url' => route('admin.dashboard'),
-            ], 'User created successfully.', 201);
-        });
+        $validated = $request->validated();
+
+        if (User::where('role', 'admin')->exists()) {
+            throw new Exception('O sistema já possui um administrador registrado!');
+        }
+
+        $validated['role'] = 'admin';
+        $validated['password'] = Hash::make($validated['password']);
+
+        $user = User::create($validated);
+        Auth::login($user);
+
+        $token = $user->createToken($user->name . ' auth_token')->plainTextToken;
+
+        return $this->successResponse([
+            'token_type' => 'Bearer',
+            'token' => $token,
+            'user' => $user,
+            'redirect_url' => route('admin.dashboard'),
+        ], 'Created', 201);
     }
 }

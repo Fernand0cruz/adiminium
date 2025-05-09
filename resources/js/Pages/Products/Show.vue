@@ -30,9 +30,9 @@
         <!-- PRODUCT DETAILS -->
         <div v-if="product.id"
             class="p-4 bg-gray-100 border rounded-lg flex flex-col md:flex-row gap-4 md:min-h-[400px]">
-            <!-- PRODUCT DETAILS PHOTO -->
+            <!-- PRODUCT DETAILS image -->
             <div class="w-full md:w-1/2 flex justify-center bg-white rounded-md border p-4">
-                <img :src="getProductPhotoUrl(product.photo)" alt="Produto" class="w-full max-w-sm object-contain" />
+                <img :src="getProductimageUrl(product.image)" alt="Produto" class="w-full max-w-sm object-contain" />
             </div>
 
             <!-- PRODUCT DETAILS INFO -->
@@ -94,18 +94,17 @@ onMounted(async () => {
     }
 });
 
-const getProductPhotoUrl = (photoPath) =>
-    photoPath && photoPath.startsWith("http")
-        ? photoPath
-        : `/storage/${photoPath}`;
+const getProductimageUrl = (imagePath) =>
+    imagePath && imagePath.startsWith("http")
+        ? imagePath
+        : `/storage/${imagePath}`;
 
 const addProductToOrder = async (product) => {
 
-    let order = await Services.orders.getOrderActive()
+    const order = await Services.orders.getOrderActive()
 
     try {
-        if (!order || order.length === 0) {
-
+        if (!order || !order.id) {
             const response = await Services.orders.create({
                 company_id: user.company_id,
                 products: [
@@ -117,30 +116,32 @@ const addProductToOrder = async (product) => {
             });
 
             toast.success(response.message);
+
         } else {
-            const existingProduct = order[0].products.find(p => p.pivot.product_id === product.id)
+            const existingProduct = order.products.find(p => p.pivot.product_id === product.id)
 
             if (existingProduct) {
-                const response = await Services.orders.update(order[0].id, {
-                    increment_product: {
-                        product_id: product.id,
-                        quantity: 1
-                    }
+                const response = await Services.orders.incrementProductToOrderActive(order.id, {
+                    products: [
+                        {
+                            product_id: product.id,
+                            quantity: 1
+                        }
+                    ]
                 });
-
-                toast.success(response.data);
+                toast.success(response.message);
             } else {
-                const response = await Services.orders.update(order[0].id, {
-                    add_product: {
-                        product_id: product.id,
-                        quantity: 1
-                    }
+                const response = await Services.orders.addProductToOrderActive(order.id, {
+                    products: [
+                        {
+                            product_id: product.id,
+                            quantity: 1
+                        }
+                    ]
                 });
-
-                toast.success(response.data);
+                toast.success(response.message);
             }
         }
-
     } catch (error) {
         toast.error(error.message?.[0]);
     }

@@ -3,14 +3,14 @@
         <form @submit.prevent="submit">
             <div v-for="field in userFields" :key="field.id" class="grid sm:grid-cols-12 mt-4 gap-2 sm:gap-6">
                 <div class="sm:col-span-3">
-                    <FormLabel :for="field.id" :label="field.label" />
+                    <FormLabel :for="field.id" :label="field.label"/>
                 </div>
                 <div class="sm:col-span-9">
                     <template v-if="field.component">
                         <Component :is="field.component" v-bind="field.bindings" v-model="form[field.id]"
-                                   :placeholder="field.placeholder" />
+                                   :placeholder="field.placeholder"/>
                     </template>
-                    <FormErrorInput :message="form.errors[field.id]" />
+                    <FormErrorInput :message="form.errors[field.id]"/>
                 </div>
             </div>
 
@@ -34,7 +34,7 @@
 <script setup>
 import GuestLayout from "@/Layouts/GuestLayout.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
-import { Link, useForm } from "@inertiajs/vue3";
+import {Link, useForm} from "@inertiajs/vue3";
 import FormErrorInput from "@/Components/FormErrorInput.vue";
 import FormEmailInput from "@/Components/FormEmailInput.vue";
 import FormPasswordInput from "@/Components/FormPasswordInput.vue";
@@ -46,8 +46,8 @@ const form = useForm({
 });
 
 const userFields = [
-    { id: "email", label: "Email:", component: FormEmailInput, bindings: { id: "email" }},
-    { id: "password", label: "Senha:", component: FormPasswordInput, bindings: { id: "password" }},
+    {id: "email", label: "Email:", component: FormEmailInput, bindings: {id: "email"}},
+    {id: "password", label: "Senha:", component: FormPasswordInput, bindings: {id: "password"}},
 ]
 
 const submit = async () => {
@@ -61,18 +61,14 @@ const submit = async () => {
             form.setError("error", response.data.message);
         }
     } catch (error) {
-        if (error.response) {
-            if (error.response.data.errors) {
-                for (const [key, messages] of Object.entries(
-                    error.response.data.errors
-                )) {
+        if (error.response.data.errors) {
+            Object.entries(error.response.data.errors).forEach(
+                ([key, messages]) => {
                     form.setError(key, messages[0]);
                 }
-            } else {
-                form.setError("error", error.response.data.message);
-            }
+            );
         } else {
-            console.error("An unexpected error occurred:", error);
+            console.error("error", error.response.data.message);
         }
     }
 };

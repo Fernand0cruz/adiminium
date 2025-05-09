@@ -16,6 +16,9 @@ class OrderService
         $this->orderRepository = $orderRepository;
     }
 
+    /**
+     * @throws Exception
+     */
     public function createOrder(array $data)
     {
         $order = $this->orderRepository->create([
@@ -58,11 +61,17 @@ class OrderService
         return $order;
     }
 
+    /**
+     * @throws Exception
+     */
     public function incrementProductQuantity(int $orderId, array $data)
     {
         return $this->modifyProductQuantity($orderId, $data, 'increment');
     }
 
+    /**
+     * @throws Exception
+     */
     public function decrementProductQuantity(int $orderId, array $data)
     {
         return $this->modifyProductQuantity($orderId, $data, 'decrement');
@@ -92,6 +101,9 @@ class OrderService
         return $order;
     }
 
+    /**
+     * @throws Exception
+     */
     private function modifyProductQuantity(int $orderId, array $data, string $operation)
     {
         $order = $this->orderRepository->find($orderId);
@@ -140,7 +152,7 @@ class OrderService
         return $unitPrice - ($unitPrice * $discount / 100);
     }
 
-    private function updateOrderTotal($order)
+    private function updateOrderTotal($order): void
     {
         $total = 0;
 
